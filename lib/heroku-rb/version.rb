@@ -1,3 +1,5 @@
 module Heroku
-  VERSION = "0.0.1"
+  class Connection < Excon::Connection
+    VERSION = "0.0.1"
+  end
 end
