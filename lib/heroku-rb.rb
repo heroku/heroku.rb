@@ -5,6 +5,7 @@ require 'base64'
 require 'excon'
 
 require "heroku-rb/connection"
+require "heroku-rb/mock"
 require "heroku-rb/version"
 
 require "heroku-rb/vendor/heroku/okjson"
