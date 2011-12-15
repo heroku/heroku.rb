@@ -1,3 +1,5 @@
+require 'heroku-rb/apps'
+
 module Heroku
   class Connection < Excon::Connection
 
@@ -21,14 +23,7 @@ module Heroku
     end
 
     def apps
-      request(:method => :get, :path => '/apps').body
-    end
-
-    Excon.stub({:method => :get, :path => '/apps'}) do |params|
-      {
-        :body   => Heroku::OkJson.encode(Heroku::Connection.mock_data[:apps]),
-        :status => 200
-      }
+      Heroku::Apps.new(self)
     end
 
     def request(params, &block)
