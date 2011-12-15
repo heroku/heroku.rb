@@ -4,7 +4,7 @@ require "heroku-rb/version"
 
 Gem::Specification.new do |s|
   s.name        = "heroku-rb"
-  s.version     = Heroku::VERSION
+  s.version     = Heroku::Connection::VERSION
   s.authors     = ["geemus (Wesley Beary)"]
   s.email       = ["wesley@heroku.com"]
   s.homepage    = ""
