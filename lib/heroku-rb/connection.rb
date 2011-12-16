@@ -22,19 +22,29 @@ module Heroku
       super("#{options[:scheme]}://#{options[:host]}", options)
     end
 
-    def apps
-      Heroku::Apps.new(self)
-    end
-
     def request(params, &block)
       if params[:body]
-        params[:body] = Heroku::OkJson.encode(params[:body])
+        params[:body] = format_body(params[:body])
       end
       response = super
       if response.body && !response.body.empty?
         response.body = Heroku::OkJson.decode(response.body)
       end
       response
+    end
+
+    private
+
+    # takes { 'type' => { 'key' => 'value, ... } }
+    # and returns "type[key]=value&..."
+    def format_body(body)
+      formatted_body = ''
+      body.each do |type, data|
+        data.each do |key, value|
+          formatted_body << "#{type}[#{key}]=#{value}&"
+        end
+      end
+      formatted_body.chop!
     end
 
   end
