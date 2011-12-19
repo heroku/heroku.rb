@@ -124,8 +124,8 @@ module Heroku
 
       if app.nil?
         {
-          :body => Heroku::OkJson.encode('error' => "You do not have access to #{name}"),
-          :status => 403
+          :body => Heroku::OkJson.encode('error' => 'App not found.'),
+          :status => 404
         }
       else
         case data['maintenance_mode'].first
@@ -137,6 +137,35 @@ module Heroku
 
         {
           :status => 200
+        }
+      end
+    end
+
+    # PUT /apps/:name
+    def put_app(name, params)
+      request(:body => {'app' => params}, :expects => 200, :method => :put, :path => "/apps/#{name}")
+    end
+
+    # stub PUT /apps/:name
+    Excon.stub(:expects => 200, :method => :put, :path => %r{/apps/\S+}) do |params|
+      name = %r{/apps/(\S+)}.match(params[:path]).captures.first
+
+      if params[:body]
+        data = CGI.parse(params[:body])
+      else
+        data = {}
+      end
+
+      if app = mock_data[:apps].detect {|app| app['name'] == name}
+        app['name'] = data['app[name]']
+        {
+          :body   => Heroku::OkJson.encode({'name' => data['app[name]']),
+          :status => 200
+        }
+      else
+        {
+          :body   => 'App not found.',
+          :status => 404
         }
       end
     end
