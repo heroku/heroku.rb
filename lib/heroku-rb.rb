@@ -5,11 +5,11 @@ require 'base64'
 require 'cgi'
 require 'excon'
 
-require "heroku-rb/connection"
-require "heroku-rb/mock"
-require "heroku-rb/version"
+require "heroku/connection"
+require "heroku/mock"
+require "heroku/version"
 
-require "heroku-rb/vendor/heroku/okjson"
+require "heroku/vendor/heroku/okjson"
 
 srand
 
