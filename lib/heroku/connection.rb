@@ -1,11 +1,12 @@
-require 'heroku-rb/apps'
+require 'heroku/apps'
+require 'heroku/mock'
 
 module Heroku
   class Connection < Excon::Connection
 
     def initialize(options={})
-      api_key = options.delete(:heroku_api_key) || ENV['HEROKU_API_KEY']
-      user_pass = ":#{api_key}"
+      @api_key = options.delete(:heroku_api_key) || ENV['HEROKU_API_KEY']
+      user_pass = ":#{@api_key}"
       options = {
         :headers  => {},
         :host     => 'api.heroku.com',
@@ -52,6 +53,10 @@ module Heroku
       else
         raise("Can not format body '#{body.inspect}'.")
       end
+    end
+
+    def mock_data
+      Heroku::Connection.mock_data[@api_key]
     end
 
   end

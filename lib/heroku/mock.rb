@@ -1,10 +1,14 @@
 module Heroku
   class Connection < Excon::Connection
 
+    @mock_data = Hash.new do |hash, key|
+      hash[key] = {
+        :apps             => [],
+        :maintenance_mode => []
+      }
+    end
+
     # store of info to use for mocks
-    @mock_data = {
-      :apps => []
-    }
     def self.mock_data
       @mock_data
     end
