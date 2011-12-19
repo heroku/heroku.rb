@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "heroku-rb/version"
+require "heroku/version"
 
 Gem::Specification.new do |s|
   s.name        = "heroku-rb"
@@ -22,4 +22,6 @@ Gem::Specification.new do |s|
   # s.add_development_dependency "rspec"
   # s.add_runtime_dependency "rest-client"
   s.add_runtime_dependency 'excon'
+
+  s.add_development_dependency 'minitest'
 end
