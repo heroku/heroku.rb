@@ -12,7 +12,15 @@ module Heroku
       api_key = Base64.decode64(params[:headers]['Authorization']).split(':').last
 
       parsed = params.dup
-      parsed[:body] = parsed[:body] && CGI.parse(parsed[:body]) || {}
+      if parsed[:body]
+        parsed[:body] = CGI.parse(parsed[:body])
+        # returns key => ['value'], so we now remove from arrays
+        parsed[:body].each do |key, value|
+          parsed[:body][key] = value.first
+        end
+      else
+        parsed[:body] = {}
+      end
 
       [parsed, @mock_data[api_key]]
     end

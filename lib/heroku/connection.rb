@@ -39,7 +39,7 @@ module Heroku
     # takes { 'type' => { 'key' => 'value, ... } }
     # and returns "type[key]=value&..."
     def format_body(body)
-      case formatted_body
+      case body
       when Hash
         formatted_body = ''
         body.each do |type, data|
