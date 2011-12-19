@@ -1,5 +1,6 @@
 module Heroku
   class Connection < Excon::Connection
+    APP_REGEX = %r{/apps/([^/]+)}
 
     # DELETE /apps/:name
     def delete_app(name)
@@ -7,8 +8,8 @@ module Heroku
     end
 
     # stub DELETE /apps/:name
-    Excon.stub(:expects => 200, :method => :delete, :path => %r{/apps/\S+}) do |params|
-      name = %r{/apps/(\S+)}.match(params[:path]).captures.first
+    Excon.stub(:expects => 200, :method => :delete, :path => APP_REGEX) do |params|
+      name = APP_REGEX.match(params[:path]).captures.first
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         mock_data[:apps].delete(app)
         {
@@ -42,8 +43,8 @@ module Heroku
     end
 
     # stub GET /apps/:name
-    Excon.stub(:expects => 200, :method => :get, :path => %r{/apps/\S+}) do |params|
-      name = %r{/apps/(\S+)}.match(params[:path]).captures.first
+    Excon.stub(:expects => 200, :method => :get, :path => APP_REGEX) do |params|
+      name = APP_REGEX.match(params[:path]).captures.first
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         {
           :body   => Heroku::OkJson.encode(app),
@@ -111,8 +112,8 @@ module Heroku
     end
 
     # stub POST /apps/:name/server/maintenance
-    Excon.stub(:expects => 200, :method => :post, :path => %r{/apps/[^/]+/server/maintenance}) do |params|
-      name = %r{/apps/([^/]+)}.match(params[:path]).captures.first
+    Excon.stub(:expects => 200, :method => :post, :path => %r{#{APP_REGEX}/server/maintenance}) do |params|
+      name = %r{#{APP_REGEX}/server/maintenance}.match(params[:path]).captures.first
 
       if params[:body]
         data = CGI.parse(params[:body])
@@ -123,11 +124,6 @@ module Heroku
       app = mock_data[:apps].detect {|app| app['name'] == name}
 
       if app.nil?
-        {
-          :body => Heroku::OkJson.encode('error' => 'App not found.'),
-          :status => 404
-        }
-      else
         case data['maintenance_mode'].first
         when '0'
           mock_data[:maintenance_mode] -= [name]
@@ -138,6 +134,11 @@ module Heroku
         {
           :status => 200
         }
+      else
+        {
+          :body => Heroku::OkJson.encode('error' => 'App not found.'),
+          :status => 404
+        }
       end
     end
 
@@ -147,8 +148,8 @@ module Heroku
     end
 
     # stub PUT /apps/:name
-    Excon.stub(:expects => 200, :method => :put, :path => %r{/apps/\S+}) do |params|
-      name = %r{/apps/(\S+)}.match(params[:path]).captures.first
+    Excon.stub(:expects => 200, :method => :put, :path => APP_REGEX) do |params|
+      name = APP_REGEX.match(params[:path]).captures.first
 
       if params[:body]
         data = CGI.parse(params[:body])
