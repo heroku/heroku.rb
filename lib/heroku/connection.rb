@@ -55,9 +55,5 @@ module Heroku
       end
     end
 
-    def mock_data
-      Heroku::Connection.mock_data[@api_key]
-    end
-
   end
 end

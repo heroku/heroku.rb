@@ -9,7 +9,8 @@ module Heroku
 
     # stub DELETE /apps/:name
     Excon.stub(:expects => 200, :method => :delete, :path => APP_REGEX) do |params|
-      name = APP_REGEX.match(params[:path]).captures.first
+      request_params, mock_data = parse_stub_params(params)
+      name = APP_REGEX.match(data[:path]).captures.first
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         mock_data[:apps].delete(app)
         {
@@ -31,8 +32,9 @@ module Heroku
 
     # stub GET /apps/
     Excon.stub(:expects => 200, :method => :get, :path => '/apps') do |params|
+      request_params, mock_data = parse_stub_params(params)
       {
-        :body   => Heroku::OkJson.encode(Heroku::Connection.mock_data[:apps]),
+        :body   => Heroku::OkJson.encode(mock_data[:apps]),
         :status => 200
       }
     end
@@ -44,7 +46,8 @@ module Heroku
 
     # stub GET /apps/:name
     Excon.stub(:expects => 200, :method => :get, :path => APP_REGEX) do |params|
-      name = APP_REGEX.match(params[:path]).captures.first
+      request_params, mock_data = parse_stub_params(params)
+      name = APP_REGEX.match(data[:path]).captures.first
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         {
           :body   => Heroku::OkJson.encode(app),
@@ -65,8 +68,8 @@ module Heroku
 
     # stub POST /apps
     Excon.stub(:expects => 202, :method => :post, :path => '/apps') do |params|
-      data = params[:body] && CGI.parse(params[:body]) || {}
-      name = data['app[name]'].first || "generated-name-#{rand(999)}"
+      request_params, mock_data = parse_stub_params(params)
+      name = request_params[:body]['app[name]'].first || "generated-name-#{rand(999)}"
 
       if mock_data[:apps].detect {|app| app['name'] == name}
         {
@@ -80,7 +83,7 @@ module Heroku
           'id'                  => rand(99999),
           'name'                => name,
           'owner_email'         => 'email@example.com',
-          'stack'               => data['app[stack]'].first || 'bamboo-mri-1.9.2',
+          'stack'               => request_params['app[stack]'].first || 'bamboo-mri-1.9.2',
           'slug_size'           => nil,
           'requested_stack'     => nil,
           'git_url'             => "git@heroku.com:#{name}.git",
@@ -108,17 +111,17 @@ module Heroku
 
     # stub POST /apps/:name/server/maintenance
     Excon.stub(:expects => 200, :method => :post, :path => %r{#{APP_REGEX}/server/maintenance}) do |params|
-      name = %r{#{APP_REGEX}/server/maintenance}.match(params[:path]).captures.first
+      request_params, mock_data = parse_stub_params(params)
+      name = %r{#{APP_REGEX}/server/maintenance}.match(data[:path]).captures.first
 
       app = mock_data[:apps].detect {|app| app['name'] == name}
-      data = params[:body] && CGI.parse(params[:body]) || {}
 
       if app.nil?
-        case data['maintenance_mode'].first
+        case request_params[:body]['maintenance_mode'].first
         when '0'
-          mock_data[:maintenance_mode] -= [name]
+          mock_data[:body][:maintenance_mode] -= [name]
         when '1'
-          mock_data[:maintenance_mode] |= [name]
+          mock_data[:body][:maintenance_mode] |= [name]
         end
 
         {
@@ -139,13 +142,13 @@ module Heroku
 
     # stub PUT /apps/:name
     Excon.stub(:expects => 200, :method => :put, :path => APP_REGEX) do |params|
-      data = params[:body] && CGI.parse(params[:body]) || {}
-      name = APP_REGEX.match(params[:path]).captures.first
+      request_params, mock_data = parse_stub_params(params)
+      name = APP_REGEX.match(data[:path]).captures.first
 
       if app = mock_data[:apps].detect {|app| app['name'] == name}
-        app['name'] = data['app[name]']
+        app['name'] = request_params[:body]['app[name]']
         {
-          :body   => Heroku::OkJson.encode({'name' => data['app[name]']),
+          :body   => Heroku::OkJson.encode('name' => request_params['app[name]']),
           :status => 200
         }
       else

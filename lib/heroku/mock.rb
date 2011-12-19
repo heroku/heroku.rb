@@ -8,9 +8,13 @@ module Heroku
       }
     end
 
-    # store of info to use for mocks
-    def self.mock_data
-      @mock_data
+    def self.parse_stub_params(params)
+      api_key = Base64.decode64(params[:headers]['Authorization']).split(':').last
+
+      parsed = params.dup
+      parsed[:body] = parsed[:body] && CGI.parse(parsed[:body]) || {}
+
+      [parsed, @mock_data[api_key]]
     end
 
   end
