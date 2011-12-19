@@ -104,5 +104,11 @@ module Heroku
       end
     end
 
+    # POST /apps/:name/server/maintenance
+    def post_app_server_maintenance(name, new_server_maintenance)
+      body = "maintenance_mode=#{new_server_maintenance}"
+      request(:body => body, :expects => 200, :method => :post, :path => "/apps/#{name}/server/maintenance").body
+    end
+
   end
 end

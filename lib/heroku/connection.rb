@@ -38,13 +38,20 @@ module Heroku
     # takes { 'type' => { 'key' => 'value, ... } }
     # and returns "type[key]=value&..."
     def format_body(body)
-      formatted_body = ''
-      body.each do |type, data|
-        data.each do |key, value|
-          formatted_body << "#{type}[#{key}]=#{value}&"
+      case formatted_body
+      when Hash
+        formatted_body = ''
+        body.each do |type, data|
+          data.each do |key, value|
+            formatted_body << "#{type}[#{key}]=#{value}&"
+          end
         end
+        formatted_body.chop!
+      when String
+        body
+      else
+        raise("Can not format body '#{body.inspect}'.")
       end
-      formatted_body.chop!
     end
 
   end
