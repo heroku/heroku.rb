@@ -1,5 +1,6 @@
 module Heroku
   class Connection < Excon::Connection
+    APP_NOT_FOUND = { :body => 'App not found.', :status => 404 }
     APP_REGEX = %r{/apps/([^/]+)}
 
     # DELETE /apps/:name
@@ -18,10 +19,7 @@ module Heroku
           :status => 200
         }
       else
-        {
-          :body   => 'App not found.',
-          :status => 404
-        }
+        APP_NOT_FOUND
       end
     end
 
@@ -54,10 +52,7 @@ module Heroku
           :status => 200
         }
       else
-        {
-          :body   => 'App not found.',
-          :status => 404
-        }
+        APP_NOT_FOUND
       end
     end
 
@@ -128,10 +123,7 @@ module Heroku
           :status => 200
         }
       else
-        {
-          :body => Heroku::OkJson.encode('error' => 'App not found.'),
-          :status => 404
-        }
+        APP_NOT_FOUND
       end
     end
 
@@ -152,10 +144,7 @@ module Heroku
           :status => 200
         }
       else
-        {
-          :body   => 'App not found.',
-          :status => 404
-        }
+        APP_NOT_FOUND
       end
     end
 
