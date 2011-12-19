@@ -21,13 +21,11 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_get_apps
-    name = @heroku.post_app.body['name']
-
-    response = @heroku.get_apps
-    assert_equal(200, response.status)
-    assert_equal(name, response.body.first['name'])
-
-    @heroku.delete_app(name)
+    with_app do |data|
+      response = @heroku.get_apps
+      assert_equal(200, response.status)
+      assert_equal(data['name'], response.body.first['name'])
+    end
   end
 
   def test_get_apps_empty
@@ -37,13 +35,11 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_get_app
-    name = @heroku.post_app.body['name']
-
-    response = @heroku.get_app(name)
-    assert_equal(200, response.status)
-    assert_equal(name, response.body['name'])
-
-    @heroku.delete_app(name)
+    with_app do |data|
+      response = @heroku.get_app(data['name'])
+      assert_equal(200, response.status)
+      assert_equal(data['name'], response.body['name'])
+    end
   end
 
   def test_get_app_not_found
@@ -70,11 +66,11 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_post_app_with_duplicate_name
-    @heroku.post_app('name' => @name)
-    assert_raises(Excon::Errors::UnprocessableEntity) do
-      @heroku.post_app('name' => @name)
+    with_app('name' => @name) do
+      assert_raises(Excon::Errors::UnprocessableEntity) do
+        @heroku.post_app('name' => @name)
+      end
     end
-    @heroku.delete_app(@name)
   end
 
   def test_post_app_with_stack
@@ -94,14 +90,13 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_put_app_with_name
-    name = @heroku.post_app.body['name']
-    new_name = "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}"
+    with_app do |data|
+      new_name = "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}"
 
-    response = @heroku.put_app(name, 'name' => new_name)
-    assert_equal(200, response.status)
-    assert_equal(new_name, response.body['name'])
-
-    @heroku.delete_app(new_name)
+      response = @heroku.put_app(data['name'], 'name' => new_name)
+      assert_equal(200, response.status)
+      assert_equal(new_name, response.body['name'])
+    end
   end
 
 end
