@@ -110,5 +110,36 @@ module Heroku
       request(:body => body, :expects => 200, :method => :post, :path => "/apps/#{name}/server/maintenance")
     end
 
+    # stub POST /apps/:name/server/maintenance
+    Excon.stub(:expects => 200, :method => :post, :path => %r{/apps/[^/]+/server/maintenance}) do |params|
+      name = %r{/apps/([^/]+)}.match(params[:path]).captures.first
+
+      if params[:body]
+        data = CGI.parse(params[:body])
+      else
+        data = {}
+      end
+
+      app = mock_data[:apps].detect {|app| app['name'] == name}
+
+      if app.nil?
+        {
+          :body => Heroku::OkJson.encode('error' => "You do not have access to #{name}"),
+          :status => 403
+        }
+      else
+        case data['maintenance_mode'].first
+        when '0'
+          mock_data[:maintenance_mode] -= [name]
+        when '1'
+          mock_data[:maintenance_mode] |= [name]
+        end
+
+        {
+          :status => 200
+        }
+      end
+    end
+
   end
 end
