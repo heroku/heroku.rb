@@ -65,12 +65,7 @@ module Heroku
 
     # stub POST /apps
     Excon.stub(:expects => 202, :method => :post, :path => '/apps') do |params|
-      if params[:body]
-        data = CGI.parse(params[:body])
-      else
-        data = {}
-      end
-
+      data = params[:body] && CGI.parse(params[:body]) || {}
       name = data['app[name]'].first || "generated-name-#{rand(999)}"
 
       if mock_data[:apps].detect {|app| app['name'] == name}
@@ -115,13 +110,8 @@ module Heroku
     Excon.stub(:expects => 200, :method => :post, :path => %r{#{APP_REGEX}/server/maintenance}) do |params|
       name = %r{#{APP_REGEX}/server/maintenance}.match(params[:path]).captures.first
 
-      if params[:body]
-        data = CGI.parse(params[:body])
-      else
-        data = {}
-      end
-
       app = mock_data[:apps].detect {|app| app['name'] == name}
+      data = params[:body] && CGI.parse(params[:body]) || {}
 
       if app.nil?
         case data['maintenance_mode'].first
@@ -149,13 +139,8 @@ module Heroku
 
     # stub PUT /apps/:name
     Excon.stub(:expects => 200, :method => :put, :path => APP_REGEX) do |params|
+      data = params[:body] && CGI.parse(params[:body]) || {}
       name = APP_REGEX.match(params[:path]).captures.first
-
-      if params[:body]
-        data = CGI.parse(params[:body])
-      else
-        data = {}
-      end
 
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         app['name'] = data['app[name]']
