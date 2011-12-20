@@ -4,7 +4,8 @@ module Heroku
     @mock_data = Hash.new do |hash, key|
       hash[key] = {
         :apps             => [],
-        :maintenance_mode => []
+        :maintenance_mode => [],
+        :config_vars      => {}
       }
     end
 
@@ -13,10 +14,14 @@ module Heroku
 
       parsed = params.dup
       if parsed[:body]
-        parsed[:body] = CGI.parse(parsed[:body])
-        # returns key => ['value'], so we now remove from arrays
-        parsed[:body].each do |key, value|
-          parsed[:body][key] = value.first
+        begin # try to JSON decode
+          parsed[:body] = Heroku::OkJson.decode(parsed[:body])
+        rescue # else CGI parse
+          parsed[:body] = CGI.parse(parsed[:body])
+          # returns key => ['value'], so we now remove from arrays
+          parsed[:body].each do |key, value|
+            parsed[:body][key] = value.first
+          end
         end
       else
         parsed[:body] = {}
