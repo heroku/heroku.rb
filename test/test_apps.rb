@@ -3,20 +3,19 @@ require "#{File.dirname(__FILE__)}/test_helper"
 class TestApps < MiniTest::Unit::TestCase
   def setup
     @heroku = Heroku.new(:api_key => 'API_KEY', :mock => true)
-    @name = "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}"
   end
 
   def test_delete_app
-    name = @heroku.post_app.body['name']
-
-    response = @heroku.delete_app(name)
-    assert_equal({}, response.body)
-    assert_equal(200, response.status)
+    with_app do |data|
+      response = @heroku.delete_app(data['name'])
+      assert_equal({}, response.body)
+      assert_equal(200, response.status)
+    end
   end
 
   def test_delete_app_not_found
     assert_raises(Excon::Errors::NotFound) do
-      @heroku.delete_app(@name)
+      @heroku.delete_app("heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}")
     end
   end
 
@@ -44,7 +43,7 @@ class TestApps < MiniTest::Unit::TestCase
 
   def test_get_app_not_found
     assert_raises(Excon::Errors::NotFound) do
-      @heroku.get_app(@name)
+      @heroku.get_app("heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}")
     end
   end
 
@@ -57,20 +56,24 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_post_app_with_name
-    response = @heroku.post_app('name' => @name)
+    name = "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}"
+    response = @heroku.post_app('name' => name)
 
     assert_equal(202, response.status)
-    assert_equal(@name, response.body['name'])
+    assert_equal(name, response.body['name'])
 
-    @heroku.delete_app(@name)
+    @heroku.delete_app(name)
   end
 
   def test_post_app_with_duplicate_name
-    with_app('name' => @name) do
-      assert_raises(Excon::Errors::UnprocessableEntity) do
-        @heroku.post_app('name' => @name)
-      end
+    name = "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}"
+    response = @heroku.post_app('name' => name)
+
+    assert_raises(Excon::Errors::UnprocessableEntity) do
+      @heroku.post_app('name' => name)
     end
+
+    @heroku.delete_app(name)
   end
 
   def test_post_app_with_stack
@@ -83,9 +86,9 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_put_app_not_found
-    new_name = "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}"
+    name = "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}"
     assert_raises(Excon::Errors::NotFound) do
-      @heroku.put_app(@name, 'name' => new_name)
+      @heroku.put_app(name, 'name' => "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}")
     end
   end
 
@@ -96,6 +99,8 @@ class TestApps < MiniTest::Unit::TestCase
       response = @heroku.put_app(data['name'], 'name' => new_name)
       assert_equal(200, response.status)
       assert_equal(new_name, response.body['name'])
+
+      @heroku.delete_app(new_name)
     end
   end
 

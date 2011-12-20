@@ -4,9 +4,9 @@ require 'minitest/autorun'
 def with_app(params={}, &block)
   begin
     data = @heroku.post_app(params).body
-    name = data['name']
+    @name = data['name']
     yield(data)
   ensure
-    @heroku.delete_app(name) rescue nil
+    @heroku.delete_app(@name) rescue nil
   end
 end
