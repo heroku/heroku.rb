@@ -1,5 +1,8 @@
 require "bundler/gem_tasks"
 
-task :default do
-  sh "bundle exec turn test"
+require 'rake/testtask'
+
+Rake::TestTask.new do |task|
+  task.name = :default
+  task.test_files = FileList['test/test*.rb']
 end
