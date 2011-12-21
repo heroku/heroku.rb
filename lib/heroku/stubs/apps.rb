@@ -1,11 +1,10 @@
 module Heroku
   class API < Excon::Connection
-    APP_REGEX = %r{^/apps/([^/]+)$}
 
     # stub DELETE /apps/:name
-    Excon.stub(:expects => 200, :method => :delete, :path => APP_REGEX) do |params|
+    Excon.stub(:expects => 200, :method => :delete, :path => %r{^/apps/([^/]+)$} ) do |params|
       request_params, mock_data = parse_stub_params(params)
-      name, _ = APP_REGEX.match(request_params[:path]).captures
+      name, _ = request_params[:captures][:path]
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         mock_data[:apps].delete(app)
         mock_data[:config_vars].delete(name)
@@ -28,9 +27,9 @@ module Heroku
     end
 
     # stub GET /apps/:name
-    Excon.stub(:expects => 200, :method => :get, :path => APP_REGEX) do |params|
+    Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)$} ) do |params|
       request_params, mock_data = parse_stub_params(params)
-      name, _ = APP_REGEX.match(request_params[:path]).captures
+      name, _ = request_params[:captures][:path]
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         {
           :body   => Heroku::OkJson.encode(app),
@@ -80,9 +79,9 @@ module Heroku
     end
 
     # stub POST /apps/:name/server/maintenance
-    Excon.stub(:expects => 200, :method => :post, :path => %r{#{APP_REGEX.to_s.gsub('$')}/server/maintenance$}) do |params|
+    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/server/maintenance$}) do |params|
       request_params, mock_data = parse_stub_params(params)
-      name, _ = %r{#{APP_REGEX.to_s.gsub('$','')}/server/maintenance$}.match(request_params[:path]).captures
+      name, _ = request_params[:captures][:path].first
 
       app = mock_data[:apps].detect {|app| app['name'] == name}
 
@@ -103,9 +102,9 @@ module Heroku
     end
 
     # stub PUT /apps/:name
-    Excon.stub(:expects => 200, :method => :put, :path => APP_REGEX) do |params|
+    Excon.stub(:expects => 200, :method => :put, :path => %r{^/apps/([^/]+)$} ) do |params|
       request_params, mock_data = parse_stub_params(params)
-      name, _ = APP_REGEX.match(request_params[:path]).captures
+      name, _ = request_params[:captures][:path]
 
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         app['name'] = request_params[:body]['app[name]']

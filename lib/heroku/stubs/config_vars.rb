@@ -1,11 +1,10 @@
 module Heroku
   class API < Excon::Connection
-    CONFIG_VAR_REGEX = %r{^/apps/([^/]+)/config_vars$}
 
     # stub DELETE /apps/:name/config_vars/:key
-    Excon.stub(:expects => 200, :method => :delete, :path => %r{#{CONFIG_VAR_REGEX.to_s.gsub('$','')}/([^/]+)$}) do |params|
+    Excon.stub(:expects => 200, :method => :delete, :path => %r{^/apps/([^/]+)/config_vars/([^/]+)$}) do |params|
       request_params, mock_data = parse_stub_params(params)
-      name, key, _ = %r{#{CONFIG_VAR_REGEX.to_s.gsub('$','')}/([^/]+)$}.match(request_params[:path]).captures
+      name, key, _ = request_params[:captures][:path]
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         mock_data[:config_vars][name].delete(key)
         {
@@ -18,9 +17,9 @@ module Heroku
     end
 
     # stub GET /apps/:name/config_vars
-    Excon.stub(:expects => 200, :method => :get, :path => CONFIG_VAR_REGEX) do |params|
+    Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)/config_vars$}) do |params|
       request_params, mock_data = parse_stub_params(params)
-      name, _ = CONFIG_VAR_REGEX.match(request_params[:path]).captures
+      name, _ = request_params[:captures][:path]
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         {
           :body   => Heroku::OkJson.encode(mock_data[:config_vars][name]),
@@ -32,9 +31,9 @@ module Heroku
     end
 
     # stub PUT /apps/:name/config_vars
-    Excon.stub(:expects => 200, :method => :put, :path => CONFIG_VAR_REGEX) do |params|
+    Excon.stub(:expects => 200, :method => :put, :path => %r{^/apps/([^/]+)/config_vars$}) do |params|
       request_params, mock_data = parse_stub_params(params)
-      name, _ = CONFIG_VAR_REGEX.match(request_params[:path]).captures
+      name, _ = request_params[:captures][:path]
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         mock_data[:config_vars][name].merge!(request_params[:body])
         {
