@@ -1,6 +1,7 @@
 require 'heroku/apps'
 require 'heroku/config_vars'
 require 'heroku/mock'
+require "heroku/version"
 
 module Heroku
   class Connection < Excon::Connection
@@ -17,7 +18,7 @@ module Heroku
       options[:headers] = {
         'Accept'                => 'application/json',
         'Authorization'         => "Basic #{Base64.encode64(user_pass).gsub("\n", '')}",
-        'User-Agent'            => "heroku-rb/#{VERSION}",
+        'User-Agent'            => "heroku-rb/#{Heroku::VERSION}",
         'X-Heroku-API-Version'  => '3',
         'X-Ruby-Version'        => RUBY_VERSION,
         'X-Ruby-Platform'       => RUBY_PLATFORM

@@ -6,7 +6,6 @@ require 'cgi'
 require 'excon'
 
 require "heroku/connection"
-require "heroku/version"
 
 require "heroku/vendor/heroku/okjson"
 
