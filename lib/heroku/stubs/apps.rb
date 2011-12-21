@@ -1,11 +1,6 @@
 module Heroku
-  class Connection < Excon::Connection
+  class API < Excon::Connection
     APP_REGEX = %r{^/apps/([^/]+)$}
-
-    # DELETE /apps/:name
-    def delete_app(name)
-      request(:expects => 200, :method => :delete, :path => "/apps/#{name}")
-    end
 
     # stub DELETE /apps/:name
     Excon.stub(:expects => 200, :method => :delete, :path => APP_REGEX) do |params|
@@ -23,11 +18,6 @@ module Heroku
       end
     end
 
-    # GET /apps
-    def get_apps
-      request(:expects => 200, :method => :get, :path => "/apps")
-    end
-
     # stub GET /apps/
     Excon.stub(:expects => 200, :method => :get, :path => '/apps') do |params|
       request_params, mock_data = parse_stub_params(params)
@@ -35,11 +25,6 @@ module Heroku
         :body   => Heroku::OkJson.encode(mock_data[:apps]),
         :status => 200
       }
-    end
-
-    # GET /apps/:name
-    def get_app(name)
-      request(:expects => 200, :method => :get, :path => "/apps/#{name}")
     end
 
     # stub GET /apps/:name
@@ -54,11 +39,6 @@ module Heroku
       else
         APP_NOT_FOUND
       end
-    end
-
-    # POST /apps
-    def post_app(params={})
-      request(:body => {'app' => params}, :expects => 202, :method => :post, :path => '/apps')
     end
 
     # stub POST /apps
@@ -99,12 +79,6 @@ module Heroku
       end
     end
 
-    # POST /apps/:name/server/maintenance
-    def post_app_server_maintenance(name, new_server_maintenance)
-      body = "maintenance_mode=#{new_server_maintenance}"
-      request(:body => body, :expects => 200, :method => :post, :path => "/apps/#{name}/server/maintenance")
-    end
-
     # stub POST /apps/:name/server/maintenance
     Excon.stub(:expects => 200, :method => :post, :path => %r{#{APP_REGEX.to_s.gsub('$')}/server/maintenance$}) do |params|
       request_params, mock_data = parse_stub_params(params)
@@ -126,11 +100,6 @@ module Heroku
       else
         APP_NOT_FOUND
       end
-    end
-
-    # PUT /apps/:name
-    def put_app(name, params)
-      request(:body => {'app' => params}, :expects => 200, :method => :put, :path => "/apps/#{name}")
     end
 
     # stub PUT /apps/:name

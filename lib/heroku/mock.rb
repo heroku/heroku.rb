@@ -1,5 +1,6 @@
 module Heroku
-  class Connection < Excon::Connection
+  class API < Excon::Connection
+    APP_NOT_FOUND = { :body => 'App not found.', :status => 404 }
 
     @mock_data = Hash.new do |hash, key|
       hash[key] = {

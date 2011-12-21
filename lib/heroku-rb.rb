@@ -5,7 +5,7 @@ require 'base64'
 require 'cgi'
 require 'excon'
 
-require "heroku/connection"
+require "heroku/api"
 
 require "heroku/vendor/heroku/okjson"
 
@@ -13,6 +13,6 @@ srand
 
 module Heroku
   def self.new(options={})
-    Connection.new(options)
+    API.new(options)
   end
 end

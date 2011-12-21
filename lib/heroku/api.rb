@@ -1,11 +1,12 @@
-require 'heroku/apps'
-require 'heroku/config_vars'
+require 'heroku/api/apps'
+require 'heroku/api/config_vars'
 require 'heroku/mock'
+require 'heroku/stubs/apps'
+require 'heroku/stubs/config_vars'
 require "heroku/version"
 
 module Heroku
-  class Connection < Excon::Connection
-    APP_NOT_FOUND = { :body => 'App not found.', :status => 404 }
+  class API < Excon::Connection
 
     def initialize(options={})
       @api_key = options.delete(:heroku_api_key) || ENV['HEROKU_API_KEY']
