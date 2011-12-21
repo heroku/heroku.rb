@@ -1,9 +1,9 @@
 module Heroku
   class API < Excon::Connection
 
-    # DELETE /apps/:name
-    def delete_app(name)
-      request(:expects => 200, :method => :delete, :path => "/apps/#{name}")
+    # DELETE /apps/:app
+    def delete_app(app)
+      request(:expects => 200, :method => :delete, :path => "/apps/#{app}")
     end
 
     # GET /apps
@@ -11,9 +11,9 @@ module Heroku
       request(:expects => 200, :method => :get, :path => "/apps")
     end
 
-    # GET /apps/:name
-    def get_app(name)
-      request(:expects => 200, :method => :get, :path => "/apps/#{name}")
+    # GET /apps/:app
+    def get_app(app)
+      request(:expects => 200, :method => :get, :path => "/apps/#{app}")
     end
 
     # POST /apps
@@ -21,15 +21,15 @@ module Heroku
       request(:body => {'app' => params}, :expects => 202, :method => :post, :path => '/apps')
     end
 
-    # POST /apps/:name/server/maintenance
-    def post_app_server_maintenance(name, new_server_maintenance)
+    # POST /apps/:app/server/maintenance
+    def post_app_server_maintenance(app, new_server_maintenance)
       body = "maintenance_mode=#{new_server_maintenance}"
-      request(:body => body, :expects => 200, :method => :post, :path => "/apps/#{name}/server/maintenance")
+      request(:body => body, :expects => 200, :method => :post, :path => "/apps/#{app}/server/maintenance")
     end
 
-    # PUT /apps/:name
-    def put_app(name, params)
-      request(:body => {'app' => params}, :expects => 200, :method => :put, :path => "/apps/#{name}")
+    # PUT /apps/:app
+    def put_app(app, params)
+      request(:body => {'app' => params}, :expects => 200, :method => :put, :path => "/apps/#{app}")
     end
 
   end
