@@ -49,8 +49,6 @@ module Heroku
     # stub PUT /apps/:name/config_vars
     Excon.stub(:expects => 200, :method => :put, :path => CONFIG_VAR_REGEX) do |params|
       request_params, mock_data = parse_stub_params(params)
-      puts params
-      puts request_params
       name, _ = CONFIG_VAR_REGEX.match(request_params[:path]).captures
       if app = mock_data[:apps].detect {|app| app['name'] == name}
         mock_data[:config_vars][name].merge!(request_params[:body])
