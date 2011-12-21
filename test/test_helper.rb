@@ -1,4 +1,7 @@
 require "#{File.dirname(__FILE__)}/../lib/heroku-rb"
+
+require 'rubygems'
+gem 'minitest' # ensure we are using the gem version
 require 'minitest/autorun'
 
 def random_app_name
