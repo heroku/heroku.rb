@@ -19,7 +19,7 @@ class TestCollaborators < MiniTest::Unit::TestCase
 
   def test_delete_collaborator_app_not_found
     assert_raises(Excon::Errors::NotFound) do
-      heroku.delete_collaborator(random_app_name, random_email_address)
+      heroku.delete_collaborator(random_name, random_email_address)
     end
   end
 
@@ -45,7 +45,7 @@ class TestCollaborators < MiniTest::Unit::TestCase
 
   def test_get_collaborators_app_not_found
     assert_raises(Excon::Errors::NotFound) do
-      heroku.get_collaborators(random_app_name)
+      heroku.get_collaborators(random_name)
     end
   end
 
@@ -66,7 +66,7 @@ class TestCollaborators < MiniTest::Unit::TestCase
 
   def test_post_collaborator_app_not_found
     assert_raises(Excon::Errors::NotFound) do
-      heroku.post_collaborator(random_app_name, random_email_address)
+      heroku.post_collaborator(random_name, random_email_address)
     end
   end
 

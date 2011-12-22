@@ -8,16 +8,12 @@ def heroku
   Heroku.new(:api_key => 'API_KEY', :mock => true)
 end
 
-def random_app_name
-  "heroku-rb-#{now}"
+def random_name
+  "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}"
 end
 
 def random_email_address
-  "heroku-rb@#{now}.com"
-end
-
-def now
-  Time.now.to_f.to_s.gsub('.','')
+  "email@#{random_name}.com"
 end
 
 def with_app(params={}, &block)

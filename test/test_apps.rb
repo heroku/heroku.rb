@@ -12,7 +12,7 @@ class TestApps < MiniTest::Unit::TestCase
 
   def test_delete_app_not_found
     assert_raises(Excon::Errors::NotFound) do
-      heroku.delete_app(random_app_name)
+      heroku.delete_app(random_name)
     end
   end
 
@@ -40,7 +40,7 @@ class TestApps < MiniTest::Unit::TestCase
 
   def test_get_app_not_found
     assert_raises(Excon::Errors::NotFound) do
-      heroku.get_app(random_app_name)
+      heroku.get_app(random_name)
     end
   end
 
@@ -53,7 +53,7 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_post_app_with_name
-    name = random_app_name
+    name = random_name
     response = heroku.post_app('name' => name)
 
     assert_equal(202, response.status)
@@ -63,7 +63,7 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_post_app_with_duplicate_name
-    name = random_app_name
+    name = random_name
     response = heroku.post_app('name' => name)
 
     assert_raises(Excon::Errors::UnprocessableEntity) do
@@ -83,15 +83,15 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_put_app_not_found
-    name = random_app_name
+    name = random_name
     assert_raises(Excon::Errors::NotFound) do
-      heroku.put_app(name, 'name' => random_app_name)
+      heroku.put_app(name, 'name' => random_name)
     end
   end
 
   def test_put_app_with_name
     with_app do |app_data|
-      new_name = random_app_name
+      new_name = random_name
 
       response = heroku.put_app(app_data['name'], 'name' => new_name)
       assert_equal(200, response.status)
