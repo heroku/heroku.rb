@@ -28,9 +28,6 @@ module Heroku
     end
 
     def request(params, &block)
-      if params[:body]
-        params[:body] = format_body(params[:body])
-      end
       response = super
       reset
       if response.body && !response.body.empty?
@@ -45,23 +42,12 @@ module Heroku
 
     private
 
-    # takes { 'type' => { 'key' => 'value, ... } }
-    # and returns "type[key]=value&..."
-    def format_body(body)
-      case body
-      when Hash
-        formatted_body = ''
-        body.each do |type, data|
-          data.each do |key, value|
-            formatted_body << "#{type}[#{key}]=#{CGI.escape(value)}&"
-          end
-        end
-        formatted_body.chop!
-      when String
-        body
-      else
-        raise("Can not format body '#{body.inspect}'.")
+    def app_params(params)
+      app_params = {}
+      params.each do |key, value|
+        app_params["app[#{key}]"] = value
       end
+      app_params
     end
 
   end

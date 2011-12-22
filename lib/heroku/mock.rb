@@ -21,18 +21,9 @@ module Heroku
         api_key = Base64.decode64(params[:headers]['Authorization']).split(':').last
 
         parsed = params.dup
-        if parsed[:body]
-          begin # try to JSON decode
-            parsed[:body] = Heroku::OkJson.decode(parsed[:body])
-          rescue # else CGI parse
-            parsed[:body] = CGI.parse(parsed[:body])
-            # returns key => ['value'], so we now remove from arrays
-            parsed[:body].each do |key, value|
-              parsed[:body][key] = value.first
-            end
-          end
-        else
-          parsed[:body] = {}
+        begin # try to JSON decode
+          parsed[:body] &&= Heroku::OkJson.decode(parsed[:body])
+        rescue # else leave as is
         end
 
         [parsed, @mock_data[api_key]]

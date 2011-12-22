@@ -41,7 +41,7 @@ module Heroku
       # stub POST /apps
       Excon.stub(:expects => 202, :method => :post, :path => '/apps') do |params|
         request_params, mock_data = parse_stub_params(params)
-        app = request_params[:body].has_key?('app[name]') && request_params[:body]['app[name]'] || "generated-name-#{rand(999)}"
+        app = request_params[:query].has_key?('app[name]') && request_params[:query]['app[name]'] || "generated-name-#{rand(999)}"
 
         if get_mock_app(mock_data, app)
           {
@@ -55,7 +55,7 @@ module Heroku
             'id'                  => rand(99999),
             'name'                => app,
             'owner_email'         => 'email@example.com',
-            'stack'               => request_params[:body].has_key?('app[stack]') && request_params[:body]['app[stack]'] || 'bamboo-mri-1.9.2',
+            'stack'               => request_params[:query].has_key?('app[stack]') && request_params[:query]['app[stack]'] || 'bamboo-mri-1.9.2',
             'slug_size'           => nil,
             'requested_stack'     => nil,
             'git_url'             => "git@heroku.com:#{app}.git",
@@ -86,11 +86,11 @@ module Heroku
         app, _ = request_params[:captures][:path].first
 
         with_mock_app(mock_data, app) do
-          case request_params[:body]['maintenance_mode']
+          case request_params[:query]['maintenance_mode']
           when '0'
-            mock_data[:body][:maintenance_mode] -= [app]
+            mock_data[:maintenance_mode] -= [app]
           when '1'
-            mock_data[:body][:maintenance_mode] |= [app]
+            mock_data[:maintenance_mode] |= [app]
           end
 
           {
@@ -105,9 +105,9 @@ module Heroku
         app, _ = request_params[:captures][:path]
 
         with_mock_app(mock_data, app) do |app_data|
-          app_data['name'] = request_params[:body]['app[name]']
+          app_data['name'] = request_params[:query]['app[name]']
           {
-            :body   => Heroku::OkJson.encode('name' => request_params[:body]['app[name]']),
+            :body   => Heroku::OkJson.encode('name' => app_data['name']),
             :status => 200
           }
         end
