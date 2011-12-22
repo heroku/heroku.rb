@@ -58,6 +58,10 @@ module Heroku
         end
       end
 
+      def self.timestamp
+        Time.now.strftime("%G/%d/%m %H:%M:%S %z")
+      end
+
     end
   end
 end

@@ -50,7 +50,7 @@ module Heroku
           }
         else
           app_data = {
-            'created_at'          => Time.now.strftime("%G/%d/%m %H:%M:%S %z"),
+            'created_at'          => timestamp,
             'create_status'       => 'complete',
             'id'                  => rand(99999),
             'name'                => app,
