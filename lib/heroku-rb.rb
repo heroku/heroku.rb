@@ -4,6 +4,7 @@ $:.unshift(File.dirname(__FILE__)) unless
 require 'base64'
 require 'cgi'
 require 'excon'
+require 'securerandom'
 
 require "heroku/api"
 require "heroku/mock"

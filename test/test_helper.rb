@@ -9,7 +9,7 @@ def heroku
 end
 
 def random_name
-  "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}"
+  "heroku-rb-#{SecureRandom.hex(10)}"
 end
 
 def random_email_address
