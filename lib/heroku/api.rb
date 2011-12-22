@@ -32,6 +32,7 @@ module Heroku
         params[:body] = format_body(params[:body])
       end
       response = super
+      reset
       if response.body && !response.body.empty?
         begin
           response.body = Heroku::OkJson.decode(response.body)
