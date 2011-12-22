@@ -2,7 +2,8 @@ module Heroku
   class API < Excon::Connection
     module Mock
 
-      APP_NOT_FOUND = { :body => 'App not found.', :status => 404 }
+      APP_NOT_FOUND  = { :body => 'App not found.',   :status => 404 }
+      USER_NOT_FOUND = { :body => 'User not found.',  :status => 404 }
 
       @mock_data = Hash.new do |hash, key|
         hash[key] = {
@@ -15,6 +16,10 @@ module Heroku
 
       def self.get_mock_app(mock_data, app)
         mock_data[:apps].detect {|app_data| app_data['name'] == app}
+      end
+
+      def self.get_mock_collaborator(mock_data, app, email)
+        mock_data[:collaborators][app].detect {|collaborator_data| collaborator_data['email'] == email}
       end
 
       def self.parse_stub_params(params)

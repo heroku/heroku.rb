@@ -9,7 +9,15 @@ def heroku
 end
 
 def random_app_name
-  "heroku-rb-#{Time.now.to_f.to_s.gsub('.','')}"
+  "heroku-rb-#{now}"
+end
+
+def random_email_address
+  "heroku-rb@#{now}.com"
+end
+
+def now
+  Time.now.to_f.to_s.gsub('.','')
 end
 
 def with_app(params={}, &block)

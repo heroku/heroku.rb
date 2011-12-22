@@ -1,7 +1,9 @@
 require 'heroku/api/apps'
+require 'heroku/api/collaborators'
 require 'heroku/api/config_vars'
 require 'heroku/mock'
 require 'heroku/stubs/apps'
+require 'heroku/stubs/collaborators'
 require 'heroku/stubs/config_vars'
 require "heroku/version"
 

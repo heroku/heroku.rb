@@ -105,11 +105,26 @@ module Heroku
         app, _ = request_params[:captures][:path]
 
         with_mock_app(mock_data, app) do |app_data|
-          app_data['name'] = request_params[:query]['app[name]']
-          {
-            :body   => Heroku::OkJson.encode('name' => app_data['name']),
-            :status => 200
-          }
+          if request_params[:query].has_key?('app[name]')
+            app_data['name'] = request_params[:query]['app[name]']
+          end
+          if request_params[:query].has_key?('app[transfer_owner]')
+            email = request_params[:query]['app[transfer_owner]']
+            if collaborator = get_mock_collaborator(mock_data, app, email)
+              app_data['owner_email'] = email
+            end
+          end
+          if email && !collaborator
+            {
+              :body   => Heroku::OkJson.encode('error' => 'Only existing collaborators can receive ownership for an app'),
+              :status => 422
+            }
+          else
+            {
+              :body   => Heroku::OkJson.encode('name' => app_data['name']),
+              :status => 200
+            }
+          end
         end
       end
 
