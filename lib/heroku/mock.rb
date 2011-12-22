@@ -3,7 +3,7 @@ require 'heroku/stubs/apps'
 require 'heroku/stubs/collaborators'
 require 'heroku/stubs/config_vars'
 #require 'heroku/stubs/domains'
-#require 'heroku/stubs/keys'
+require 'heroku/stubs/keys'
 #require 'heroku/stubs/logs'
 #require 'heroku/stubs/processes'
 #require 'heroku/stubs/releases'
@@ -20,6 +20,7 @@ module Heroku
         hash[key] = {
           :apps             => [],
           :collaborators    => {},
+          :keys             => [],
           :maintenance_mode => [],
           :config_vars      => {}
         }
@@ -31,6 +32,10 @@ module Heroku
 
       def self.get_mock_collaborator(mock_data, app, email)
         mock_data[:collaborators][app].detect {|collaborator_data| collaborator_data['email'] == email}
+      end
+
+      def self.get_mock_key(mock_data, key)
+        mock_data[:keys].detect {|key_data| %r{ #{Regexp.escape(key)}$}.match(key_data['contents'])}
       end
 
       def self.parse_stub_params(params)

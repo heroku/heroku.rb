@@ -92,8 +92,8 @@ class TestApps < MiniTest::Unit::TestCase
   def test_put_app_with_name
     with_app do |app_data|
       new_name = random_name
-
       response = heroku.put_app(app_data['name'], 'name' => new_name)
+
       assert_equal(200, response.status)
       assert_equal({'name' => new_name}, response.body)
 
