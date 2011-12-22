@@ -8,18 +8,6 @@ require 'heroku/api/config_vars'
 #require 'heroku/api/processes'
 #require 'heroku/api/releases'
 #require 'heroku/api/stacks'
-require 'heroku/mock'
-#require 'heroku/stubs/addons'
-require 'heroku/stubs/apps'
-require 'heroku/stubs/collaborators'
-require 'heroku/stubs/config_vars'
-#require 'heroku/stubs/domains'
-#require 'heroku/stubs/keys'
-#require 'heroku/stubs/logs'
-#require 'heroku/stubs/processes'
-#require 'heroku/stubs/releases'
-#require 'heroku/stubs/stacks'
-require "heroku/version"
 
 module Heroku
   class API < Excon::Connection
