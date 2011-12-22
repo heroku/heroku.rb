@@ -53,7 +53,7 @@ module Heroku
         formatted_body = ''
         body.each do |type, data|
           data.each do |key, value|
-            formatted_body << "#{type}[#{key}]=#{value}&"
+            formatted_body << "#{type}[#{key}]=#{CGI.escape(value)}&"
           end
         end
         formatted_body.chop!
