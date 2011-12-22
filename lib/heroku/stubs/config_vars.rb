@@ -1,14 +1,14 @@
 module Heroku
   class API < Excon::Connection
 
-    # stub DELETE /apps/:name/config_vars/:key
+    # stub DELETE /apps/:app/config_vars/:key
     Excon.stub(:expects => 200, :method => :delete, :path => %r{^/apps/([^/]+)/config_vars/([^/]+)$}) do |params|
       request_params, mock_data = parse_stub_params(params)
-      name, key, _ = request_params[:captures][:path]
-      if app = mock_data[:apps].detect {|app| app['name'] == name}
-        mock_data[:config_vars][name].delete(key)
+      app, key, _ = request_params[:captures][:path]
+      if mock_data[:apps].detect {|app_data| app_data['name'] == app}
+        mock_data[:config_vars][app].delete(key)
         {
-          :body   => Heroku::OkJson.encode(mock_data[:config_vars][name]),
+          :body   => Heroku::OkJson.encode(mock_data[:config_vars][app]),
           :status => 200
         }
       else
@@ -16,13 +16,13 @@ module Heroku
       end
     end
 
-    # stub GET /apps/:name/config_vars
+    # stub GET /apps/:app/config_vars
     Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)/config_vars$}) do |params|
       request_params, mock_data = parse_stub_params(params)
-      name, _ = request_params[:captures][:path]
-      if app = mock_data[:apps].detect {|app| app['name'] == name}
+      app, _ = request_params[:captures][:path]
+      if mock_data[:apps].detect {|app_data| app_data['name'] == app}
         {
-          :body   => Heroku::OkJson.encode(mock_data[:config_vars][name]),
+          :body   => Heroku::OkJson.encode(mock_data[:config_vars][app]),
           :status => 200
         }
       else
@@ -30,14 +30,14 @@ module Heroku
       end
     end
 
-    # stub PUT /apps/:name/config_vars
+    # stub PUT /apps/:app/config_vars
     Excon.stub(:expects => 200, :method => :put, :path => %r{^/apps/([^/]+)/config_vars$}) do |params|
       request_params, mock_data = parse_stub_params(params)
-      name, _ = request_params[:captures][:path]
-      if app = mock_data[:apps].detect {|app| app['name'] == name}
-        mock_data[:config_vars][name].merge!(request_params[:body])
+      app, _ = request_params[:captures][:path]
+      if mock_data[:apps].detect {|app_data| app_data['name'] == app}
+        mock_data[:config_vars][app].merge!(request_params[:body])
         {
-          :body   => Heroku::OkJson.encode(mock_data[:config_vars][name]),
+          :body   => Heroku::OkJson.encode(mock_data[:config_vars][app]),
           :status => 200
         }
       else
