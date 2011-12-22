@@ -7,8 +7,9 @@ module Heroku
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do
+          uuid = [SecureRandom.hex(4), SecureRandom.hex(2), SecureRandom.hex(2), SecureRandom.hex(2), SecureRandom.hex(6)].join('-')
           {
-            :body   => "https://logplex.heroku.com/sessions/#{SecureRandom.uuid}?srv=#{Time.now.to_i}",
+            :body   => "https://logplex.heroku.com/sessions/#{uuid}?srv=#{Time.now.to_i}",
             :status => 200
           }
         end
