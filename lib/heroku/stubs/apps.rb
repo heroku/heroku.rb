@@ -6,7 +6,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :delete, :path => %r{^/apps/([^/]+)$} ) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
-        if app_data = mock_data[:apps].detect {|app_data| app_data['name'] == app}
+        with_mock_app(mock_data, app) do |app_data|
           mock_data[:apps].delete(app_data)
           mock_data[:collaborators].delete(app)
           mock_data[:config_vars].delete(app)
@@ -14,8 +14,6 @@ module Heroku
             :body   => Heroku::OkJson.encode({}),
             :status => 200
           }
-        else
-          APP_NOT_FOUND
         end
       end
 
@@ -32,13 +30,11 @@ module Heroku
       Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)$} ) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
-        if app_data = mock_data[:apps].detect {|app_data| app_data['name'] == app}
+        with_mock_app(mock_data, app) do |app_data|
           {
             :body   => Heroku::OkJson.encode(app_data),
             :status => 200
           }
-        else
-          APP_NOT_FOUND
         end
       end
 
@@ -47,7 +43,7 @@ module Heroku
         request_params, mock_data = parse_stub_params(params)
         app = request_params[:body].has_key?('app[name]') && request_params[:body]['app[name]'] || "generated-name-#{rand(999)}"
 
-        if mock_data[:apps].detect {|app_data| app_data['name'] == app}
+        if get_mock_app(mock_data, app)
           {
             :body => Heroku::OkJson.encode('error' => 'Name is already taken'),
             :status => 422
@@ -89,9 +85,7 @@ module Heroku
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path].first
 
-        app_data = mock_data[:apps].detect {|app_data| app_data['name'] == app}
-
-        if app_data.nil?
+        with_mock_app(mock_data, app) do
           case request_params[:body]['maintenance_mode']
           when '0'
             mock_data[:body][:maintenance_mode] -= [app]
@@ -102,8 +96,6 @@ module Heroku
           {
             :status => 200
           }
-        else
-          APP_NOT_FOUND
         end
       end
 
@@ -112,14 +104,12 @@ module Heroku
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
 
-        if app_data = mock_data[:apps].detect {|app_data| app_data['name'] == app}
+        with_mock_app(mock_data, app) do |app_data|
           app_data['name'] = request_params[:body]['app[name]']
           {
             :body   => Heroku::OkJson.encode('name' => request_params[:body]['app[name]']),
             :status => 200
           }
-        else
-          APP_NOT_FOUND
         end
       end
 

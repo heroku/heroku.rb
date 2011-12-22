@@ -13,6 +13,10 @@ module Heroku
         }
       end
 
+      def self.get_mock_app(mock_data, app)
+        mock_data[:apps].detect {|app_data| app_data['name'] == app}
+      end
+
       def self.parse_stub_params(params)
         api_key = Base64.decode64(params[:headers]['Authorization']).split(':').last
 
@@ -32,6 +36,14 @@ module Heroku
         end
 
         [parsed, @mock_data[api_key]]
+      end
+
+      def self.with_mock_app(mock_data, app, &block)
+        if app_data = get_mock_app(mock_data, app)
+          yield(app_data)
+        else
+          APP_NOT_FOUND
+        end
       end
 
     end
