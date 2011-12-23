@@ -69,7 +69,7 @@ module Heroku
 
           }
 
-          mock_data[addons][app] = [
+          mock_data[:addons][app] = [
             {
               'beta'        => false,
               'configured'  => true,
