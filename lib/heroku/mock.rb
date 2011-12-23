@@ -7,7 +7,7 @@ require 'heroku/stubs/keys'
 require 'heroku/stubs/logs'
 #require 'heroku/stubs/processes'
 #require 'heroku/stubs/releases'
-#require 'heroku/stubs/stacks'
+require 'heroku/stubs/stacks'
 
 module Heroku
   class API < Excon::Connection
