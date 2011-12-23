@@ -7,6 +7,7 @@ module Heroku
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do |app_data|
+          mock_data[:addons].delete(app)
           mock_data[:apps].delete(app_data)
           mock_data[:collaborators].delete(app)
           mock_data[:config_vars].delete(app)
@@ -68,6 +69,24 @@ module Heroku
 
           }
 
+          mock_data[addons][app] = [
+            {
+              'beta'        => false,
+              'configured'  => true,
+              'description' => 'Basic Logging',
+              'name'        => 'logging:basic',
+              'state'       => 'public',
+              'url'         => 'http://devcenter.heroku.com/articles/logging'
+            },
+            {
+              'beta'        => false,
+              'configured'  => true,
+              'description' => 'Shared Database 5MB',
+              'name'        => 'shared-database:5mb',
+              'state'       => 'public',
+              'url'         => nil
+            },
+          ]
           mock_data[:apps] << app_data
           mock_data[:collaborators][app] = [{
             'access' => 'edit',

@@ -18,6 +18,7 @@ module Heroku
 
       @mock_data = Hash.new do |hash, key|
         hash[key] = {
+          :addons           => {},
           :apps             => [],
           :collaborators    => {},
           :domains          => {},
