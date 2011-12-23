@@ -1,12 +1,12 @@
-#require 'heroku/api/addons'
+require 'heroku/api/addons'
 require 'heroku/api/apps'
 require 'heroku/api/collaborators'
 require 'heroku/api/config_vars'
-#require 'heroku/api/domains'
+require 'heroku/api/domains'
 require 'heroku/api/keys'
 require 'heroku/api/logs'
-#require 'heroku/api/processes'
-#require 'heroku/api/releases'
+require 'heroku/api/processes'
+require 'heroku/api/releases'
 require 'heroku/api/stacks'
 
 module Heroku
