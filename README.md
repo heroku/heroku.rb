@@ -5,7 +5,7 @@ The Heroku Ruby Client is used to interact with the Heroku API from Ruby.
 
 For more about the Heroku API see <http://api-docs.heroku.com>.
 
-<img src="https://secure.travis-ci.org/heroku/heroku.png" />
+<a href="https://secure.travis-ci.org/heroku/heroku.rb"><img src="https://secure.travis-ci.org/heroku/heroku.rb.png" /></a>
 
 Usage
 -----
