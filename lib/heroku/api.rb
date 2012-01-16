@@ -13,7 +13,7 @@ module Heroku
   class API < Excon::Connection
 
     def initialize(options={})
-      @api_key = options.delete(:heroku_api_key) || ENV['HEROKU_API_KEY']
+      @api_key = options.delete(:api_key) || ENV['HEROKU_API_KEY']
       user_pass = ":#{@api_key}"
       options = {
         :headers  => {},
