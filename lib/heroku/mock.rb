@@ -1,4 +1,4 @@
-#require 'heroku/stubs/addons'
+require 'heroku/stubs/addons'
 require 'heroku/stubs/apps'
 require 'heroku/stubs/collaborators'
 require 'heroku/stubs/config_vars'
@@ -28,8 +28,30 @@ module Heroku
         }
       end
 
+      def self.get_mock_addon(mock_data, addon)
+        @addons ||= begin
+          data = File.read("#{File.dirname(__FILE__)}/stubs/cache/get_addons.json")
+          Heroku::OkJson.decode(data)
+        end
+        @addons.detect {|addon_data| addon_data['name'] == addon}
+      end
+
+      def self.get_mock_addon_price(mock_data, addon)
+        addon_data = get_mock_addon(mock_data, addon)
+        price_cents = addon_data['price_cents'] || 0
+        price = format("$%d/mo", price_cents / 100)
+        if price == '$0/mo'
+          price = 'free'
+        end
+        price
+      end
+
       def self.get_mock_app(mock_data, app)
         mock_data[:apps].detect {|app_data| app_data['name'] == app}
+      end
+
+      def self.get_mock_app_addon(mock_data, app, addon)
+        mock_data[:addons][app].detect {|addon_data| addon_data['name'] == addon}
       end
 
       def self.get_mock_collaborator(mock_data, app, email)
