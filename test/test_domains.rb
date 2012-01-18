@@ -10,6 +10,7 @@ class TestDomains < MiniTest::Unit::TestCase
 
   def test_delete_domain
     with_app do |app_data|
+      heroku.post_addon(app_data['name'], 'custom_domains:basic')
       heroku.post_domain(app_data['name'], 'example.com')
       response = heroku.delete_domain(app_data['name'], 'example.com')
 
@@ -35,12 +36,21 @@ class TestDomains < MiniTest::Unit::TestCase
 
   def test_post_domain
     with_app do |app_data|
+      heroku.post_addon(app_data['name'], 'custom_domains:basic')
       response = heroku.post_domain(app_data['name'], 'example.com')
 
       assert_equal(200, response.status)
       assert_equal({'domain' => 'example.com'}, response.body)
 
       heroku.delete_domain(app_data['name'], 'example.com')
+    end
+  end
+
+  def test_post_domain_addon_not_installed
+    with_app do |app_data|
+      assert_raises(Excon::Errors::UnprocessableEntity) do
+        heroku.post_domain(app_data['name'], 'example.com')
+      end
     end
   end
 

@@ -54,12 +54,12 @@ module Heroku
         mock_data[:addons][app].detect {|addon_data| addon_data['name'] == addon}
       end
 
-      def self.get_mock_collaborator(mock_data, app, email)
-        mock_data[:collaborators][app].detect {|collaborator_data| collaborator_data['email'] == email}
+      def self.get_mock_app_domain(mock_data, app, domain)
+        mock_data[:domains][app].detect {|domain_data| domain_data['domain'] == domain}
       end
 
-      def self.get_mock_domain(mock_data, app, domain)
-        mock_data[:domains][app].detect {|domain_data| domain_data['domain'] == domain}
+      def self.get_mock_collaborator(mock_data, app, email)
+        mock_data[:collaborators][app].detect {|collaborator_data| collaborator_data['email'] == email}
       end
 
       def self.get_mock_key(mock_data, key)

@@ -8,7 +8,7 @@ module Heroku
         app, domain, _ = request_params[:captures][:path]
         domain = CGI.unescape(domain)
         with_mock_app(mock_data, app) do |app_data|
-          if domain = get_mock_domain(mock_data, app, domain)
+          if domain = get_mock_app_domain(mock_data, app, domain)
             mock_data[:domains][app].delete(domain)
             {
               :body   => {},
@@ -42,21 +42,28 @@ module Heroku
         app, _ = request_params[:captures][:path]
         domain = request_params[:query]['domain_name[domain]']
         with_mock_app(mock_data, app) do |app_data|
-          unless get_mock_domain(mock_data, app, domain)
-            mock_data[:domains][app] << {
-              'app_id'      => app_data['id'],
-              'base_domain' => domain.split('.')[-2..-1].join('.'),
-              'created_at'  => timestamp,
-              'domain'      => domain,
-              'default'     => nil,
-              'id'          => rand(999999),
-              'updated_at'  => timestamp
+          if get_mock_app_addon(mock_data, app, 'custom_domains:basic') || get_mock_app_addon(mock_data, app, 'custom_domains:wildcard')
+            unless get_mock_app_domain(mock_data, app, domain)
+              mock_data[:domains][app] << {
+                'app_id'      => app_data['id'],
+                'base_domain' => domain.split('.')[-2..-1].join('.'),
+                'created_at'  => timestamp,
+                'domain'      => domain,
+                'default'     => nil,
+                'id'          => rand(999999),
+                'updated_at'  => timestamp
+              }
+            end
+            {
+              :body   => Heroku::OkJson.encode('domain' => domain),
+              :status => 200
+            }
+          else
+            {
+              :body   => Heroku::OkJson.encode([["base","Please install the Custom Domains addon before adding domains to your app"]]),
+              :status => 422
             }
           end
-          {
-            :body   => Heroku::OkJson.encode('domain' => domain),
-            :status => 200
-          }
         end
       end
 
