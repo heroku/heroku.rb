@@ -37,12 +37,11 @@ module Heroku
 
       # stub POST /apps/:app/domains
       Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/domains$} ) do |params|
-        # TODO: should fail without basic:domains addon
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
         domain = request_params[:query]['domain_name[domain]']
         with_mock_app(mock_data, app) do |app_data|
-          if get_mock_app_addon(mock_data, app, 'custom_domains:basic') || get_mock_app_addon(mock_data, app, 'custom_domains:wildcard')
+          if ['custom_domains:basic', 'custom_domains:wildcard'].any? {|addon| get_mock_app_addon(mock_data, app, addon)}
             unless get_mock_app_domain(mock_data, app, domain)
               mock_data[:domains][app] << {
                 'app_id'      => app_data['id'],

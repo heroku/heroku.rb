@@ -11,7 +11,7 @@ module Heroku
     end
 
     # GET /apps/:app/releases/:release
-    def get_releases(app, release)
+    def get_release(app, release)
       request(
         :expects  => 200,
         :method   => :get,
@@ -20,7 +20,7 @@ module Heroku
     end
 
     # POST /apps/:app/releases/:release
-    def post_releases(app, release)
+    def post_release(app, release)
       request(
         :expects  => 200,
         :method   => :post,

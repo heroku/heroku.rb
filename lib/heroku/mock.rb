@@ -6,7 +6,7 @@ require 'heroku/stubs/domains'
 require 'heroku/stubs/keys'
 require 'heroku/stubs/logs'
 #require 'heroku/stubs/processes'
-#require 'heroku/stubs/releases'
+require 'heroku/stubs/releases'
 require 'heroku/stubs/stacks'
 
 module Heroku
