@@ -1,3 +1,5 @@
+require "#{File.dirname(__FILE__)}/../heroku-api"
+
 require 'heroku/api/addons'
 require 'heroku/api/apps'
 require 'heroku/api/collaborators'
