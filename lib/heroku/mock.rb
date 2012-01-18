@@ -33,12 +33,23 @@ module Heroku
         addon_data = get_mock_addon(mock_data, addon)
         mock_data[:addons][app] << addon_data.reject {|key, value| !['beta', 'configured', 'description', 'name', 'state', 'url'].include?(key)}
         version = mock_data[:releases][app].map {|release| release['name'][1..-1].to_i}.max || 0
+        env = if get_mock_app(mock_data, app)['stack'] == 'cedar'
+          {
+            'BUNDLE_WITHOUT'      => 'development:test',
+            'DATABASE_URL'        => 'postgres://username:password@ec2-123-123-123-123.compute-1.amazonaws.com/username',
+            'LANG'                => 'en_US.UTF-8',
+            'RACK_ENV'            => 'production',
+            'SHARED_DATABASE_URL' => 'postgres://username:password@ec2-123-123-123-123.compute-1.amazonaws.com/username'
+          }
+        else
+          {}
+        end
         mock_data[:releases][app] << {
           'addons'      => mock_data[:addons][app].map {|addon| addon['name']},
           'commit'      => nil,
           'created_at'  => timestamp,
           'descr'       => "Add-on add #{addon_data['name']}",
-          'env'         => {},
+          'env'         => env,
           'name'        => "v#{version + 1}",
           'pstable'     => { 'web' => '' },
           'user'        => 'email@example.com'
@@ -99,12 +110,23 @@ module Heroku
         addon_data = mock_data[:addons][app].detect {|addon_data| addon_data['name'] == addon}
         mock_data[:addons][app].delete(addon_data)
         version = mock_data[:releases][app].map {|release| release['name'][1..-1].to_i}.max || 0
+        env = if get_mock_app(mock_data, app)['stack'] == 'cedar'
+          {
+            'BUNDLE_WITHOUT'      => 'development:test',
+            'DATABASE_URL'        => 'postgres://username:password@ec2-123-123-123-123.compute-1.amazonaws.com/username',
+            'LANG'                => 'en_US.UTF-8',
+            'RACK_ENV'            => 'production',
+            'SHARED_DATABASE_URL' => 'postgres://username:password@ec2-123-123-123-123.compute-1.amazonaws.com/username'
+          }
+        else
+          {}
+        end
         mock_data[:releases][app] << {
           'addons'      => mock_data[:addons][app].map {|addon| addon['name']},
           'commit'      => nil,
           'created_at'  => timestamp,
           'descr'       => "Add-on remove #{addon_data['name']}",
-          'env'         => {},
+          'env'         => env,
           'name'        => "v#{version + 1}",
           'pstable'     => { 'web' => '' },
           'user'        => 'email@example.com'

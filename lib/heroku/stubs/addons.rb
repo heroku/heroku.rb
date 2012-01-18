@@ -53,7 +53,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do
           {
-            :body   => Heroku::OkJson.encode(mock_data[:addons][app]),
+            :body   => Heroku::OkJson.encode(mock_data[:addons][app].map {|addon| addon['configured'] = true; addon}),
             :status => 200
           }
         end

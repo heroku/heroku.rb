@@ -52,14 +52,15 @@ module Heroku
             :status => 422
           }
         else
+          stack = request_params[:query].has_key?('app[stack]') && request_params[:query]['app[stack]'] || 'bamboo-mri-1.9.2'
           app_data = {
             'created_at'          => timestamp,
             'create_status'       => 'complete',
             'id'                  => rand(99999),
             'name'                => app,
             'owner_email'         => 'email@example.com',
-            'stack'               => request_params[:query].has_key?('app[stack]') && request_params[:query]['app[stack]'] || 'bamboo-mri-1.9.2',
             'slug_size'           => nil,
+            'stack'               => request_params[:query].has_key?('app[stack]') && request_params[:query]['app[stack]'] || 'bamboo-mri-1.9.2',
             'requested_stack'     => nil,
             'git_url'             => "git@heroku.com:#{app}.git",
             'repo_migrate_status' => 'complete',
@@ -67,27 +68,9 @@ module Heroku
             'dynos'               => 0,
             'web_url'             => "http://#{app}.herokuapp.com/",
             'workers'             => 0
-
           }
 
-          mock_data[:addons][app] = [
-            {
-              'beta'        => false,
-              'configured'  => true,
-              'description' => 'Basic Logging',
-              'name'        => 'logging:basic',
-              'state'       => 'public',
-              'url'         => 'http://devcenter.heroku.com/articles/logging'
-            },
-            {
-              'beta'        => false,
-              'configured'  => true,
-              'description' => 'Shared Database 5MB',
-              'name'        => 'shared-database:5mb',
-              'state'       => 'public',
-              'url'         => nil
-            },
-          ]
+          mock_data[:addons][app] = []
           mock_data[:apps] << app_data
           mock_data[:collaborators][app] = [{
             'access' => 'edit',
@@ -96,6 +79,14 @@ module Heroku
           mock_data[:config_vars][app] = {}
           mock_data[:domains][app] = []
           mock_data[:releases][app] = []
+
+          if stack == 'cedar'
+            add_mock_app_addon(mock_data, app, 'releases:basic')
+          else
+            add_mock_app_addon(mock_data, app, 'shared-database:5mb')
+          end
+          add_mock_app_addon(mock_data, app, 'logging:basic')
+
           {
             :body   => Heroku::OkJson.encode(app_data),
             :status => 202

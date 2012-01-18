@@ -53,18 +53,18 @@ class TestAddons < MiniTest::Unit::TestCase
       assert_equal([{
         'beta'        => false,
         'configured'  => true,
-        'description' => 'Basic Logging',
-        'name'        => 'logging:basic',
-        'state'       => 'public',
-        'url'         => 'http://devcenter.heroku.com/articles/logging'
-      },
-      {
-        'beta'        => false,
-        'configured'  => true,
         'description' => 'Shared Database 5MB',
         'name'        => 'shared-database:5mb',
         'state'       => 'public',
         'url'         => nil
+      },
+      {
+        'beta'        => false,
+        'configured'  => true,
+        'description' => 'Logging Basic',
+        'name'        => 'logging:basic',
+        'state'       => 'public',
+        'url'         => 'https://addons.heroku.com/addons/logging:basic'
       }], response.body)
     end
   end
