@@ -21,10 +21,27 @@ module Heroku
           :addons           => {},
           :apps             => [],
           :collaborators    => {},
+          :config_vars      => {},
           :domains          => {},
           :keys             => [],
           :maintenance_mode => [],
-          :config_vars      => {}
+          :releases         => {}
+        }
+      end
+
+      def self.add_mock_app_addon(mock_data, app, addon)
+        addon_data = get_mock_addon(mock_data, addon)
+        mock_data[:addons][app] << addon_data.reject {|key, value| !['beta', 'configured', 'description', 'name', 'state', 'url'].include?(key)}
+        version = mock_data[:releases][app].map {|release| release['name'][1..-1].to_i}.max || 0
+        mock_data[:releases][app] << {
+          'addons'      => mock_data[:addons][app].map {|addon| addon['name']},
+          'commit'      => nil,
+          'created_at'  => timestamp,
+          'descr'       => "Add-on add #{addon_data['name']}",
+          'env'         => {},
+          'name'        => "v#{version + 1}",
+          'pstable'     => { 'web' => '' },
+          'user'        => 'email@example.com'
         }
       end
 
@@ -76,6 +93,22 @@ module Heroku
         end
 
         [parsed, @mock_data[api_key]]
+      end
+
+      def self.remove_mock_app_addon(mock_data, app, addon)
+        addon_data = mock_data[:addons][app].detect {|addon_data| addon_data['name'] == addon}
+        mock_data[:addons][app].delete(addon_data)
+        version = mock_data[:releases][app].map {|release| release['name'][1..-1].to_i}.max || 0
+        mock_data[:releases][app] << {
+          'addons'      => mock_data[:addons][app].map {|addon| addon['name']},
+          'commit'      => nil,
+          'created_at'  => timestamp,
+          'descr'       => "Add-on remove #{addon_data['name']}",
+          'env'         => {},
+          'name'        => "v#{version + 1}",
+          'pstable'     => { 'web' => '' },
+          'user'        => 'email@example.com'
+        }
       end
 
       def self.with_mock_app(mock_data, app, &block)

@@ -12,6 +12,7 @@ module Heroku
             # addon exists
             if app_addon_data = get_mock_app_addon(mock_data, app, addon)
               # addon is currently installed
+              remove_mock_app_addon(mock_data, app, addon)
               {
                 :body   => Heroku::OkJson.encode({
                   :message  => nil,
@@ -69,7 +70,7 @@ module Heroku
               # addon of same type does not exist
               unless app_addon_data = get_mock_app_addon(mock_data, app, addon)
                 # addon is not currently installed
-                mock_data[:addons][app] << addon_data.reject {|key, value| !['beta', 'configured', 'description', 'name', 'state', 'url'].include?(key)}
+                add_mock_app_addon(mock_data, app, addon)
                 {
                   :body   => Heroku::OkJson.encode({
                     :message  => nil,
@@ -114,7 +115,7 @@ module Heroku
               unless app_addon_data = get_mock_app_addon(mock_data, app, addon)
                 # addon is not currently installed
                 mock_data[:addons][app].delete(app_addon_data)
-                mock_data[:addons][app] << addon_data.reject {|key, value| !['beta', 'configured', 'description', 'name', 'state', 'url'].include?(key)}
+                add_mock_app_addon(mock_data, app, addon)
                 {
                   :body   => Heroku::OkJson.encode({
                     :message  => nil,

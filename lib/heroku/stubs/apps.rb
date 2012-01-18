@@ -12,6 +12,7 @@ module Heroku
           mock_data[:collaborators].delete(app)
           mock_data[:config_vars].delete(app)
           mock_data[:domains].delete(app)
+          mock_data[:releases].delete(app)
           {
             :body   => Heroku::OkJson.encode({}),
             :status => 200
@@ -94,6 +95,7 @@ module Heroku
           }]
           mock_data[:config_vars][app] = {}
           mock_data[:domains][app] = []
+          mock_data[:releases][app] = []
           {
             :body   => Heroku::OkJson.encode(app_data),
             :status => 202
