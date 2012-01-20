@@ -3,6 +3,7 @@ require "#{File.dirname(__FILE__)}/../lib/heroku/api"
 require 'rubygems'
 gem 'minitest' # ensure we are using the gem version
 require 'minitest/autorun'
+require 'time'
 
 def heroku
   Heroku.new(:api_key => 'API_KEY', :mock => true)

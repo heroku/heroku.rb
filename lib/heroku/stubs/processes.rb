@@ -1,0 +1,104 @@
+module Heroku
+  class API < Excon::Connection
+    module Mock
+
+    # stub GET /apps/:app/ps
+    Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)/ps}) do |params|
+      request_params, mock_data = parse_stub_params(params)
+      app, _ = request_params[:captures][:path]
+      with_mock_app(mock_data, app) do |app_data|
+        {
+          :body   => Heroku::OkJson.encode(get_mock_processes(mock_data, app)),
+          :status => 200
+        }
+      end
+    end
+
+    # stub POST /apps/:app/ps
+    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps}) do |params|
+      request_params, mock_data = parse_stub_params(params)
+      app, _ = request_params[:captures][:path]
+      with_mock_app(mock_data, app) do |app_data|
+        attached = request_params[:query].has_key?('attach') && request_params[:query]['attach'] == 'true'
+        command  = request_params[:query].has_key?('command') && request_params[:query]['command']
+        rendezvous_url = if attached
+          "s1.runtime.heroku.com:5000/#{SecureRandom.hex(32)}"
+        end
+        data = {
+          'action'          => 'complete',
+          'app_name'        => app,
+          'attached'        => attached,
+          'command'         => command,
+          'elapsed'         => 0,
+          'pretty_state'    => 'created for 0s',
+          'process'         => 'run.1',
+          'rendezvous_url'  => rendezvous_url,
+          'slug'            => 'NONE',
+          'state'           => 'created',
+          'transitioned_at' => timestamp,
+          'type'            => 'Ps',
+          'upid'            => rand(99999999).to_s
+        }
+        mock_data[:ps][app] << data
+        {
+          :body   => Heroku::OkJson.encode(data),
+          :status => 200,
+        }
+      end
+    end
+
+    # stub POST /apps/:app/ps/restart
+#    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps/restart}) do |params|
+#      request_params, mock_data = parse_stub_params(params)
+#      app, _ = request_params[:captures][:path]
+#      with_mock_app(mock_data, app) do |app_data|
+#      end
+#    end
+
+    # stub POST /apps/:app/ps/scale
+#    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps/scale}) do |params|
+#      request_params, mock_data = parse_stub_params(params)
+#      app, _ = request_params[:captures][:path]
+#      with_mock_app(mock_data, app) do |app_data|
+#      end
+#    end
+
+    # stub POST /apps/:app/ps/stop
+#    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps/stop}) do |params|
+#      request_params, mock_data = parse_stub_params(params)
+#      app, _ = request_params[:captures][:path]
+#      with_mock_app(mock_data, app) do |app_data|
+#      end
+#    end
+
+    # stub PUT /apps/:app/dynos
+    Excon.stub(:expects => 200, :method => :put, :path => %r{^/apps/([^/]+)/dynos}) do |params|
+      request_params, mock_data = parse_stub_params(params)
+      app, _ = request_params[:captures][:path]
+      with_mock_app(mock_data, app) do |app_data|
+        dynos = request_params[:query].has_key?('dynos') && request_params[:query]['dynos'].to_i
+        app_data['dynos'] = dynos
+        {
+          :body   => Heroku::OkJson.encode({'name' => app, 'dynos' => dynos}),
+          :status => 200
+        }
+      end
+    end
+
+    # stub PUT /apps/:app/workers
+    Excon.stub(:expects => 200, :method => :put, :path => %r{^/apps/([^/]+)/workers}) do |params|
+      request_params, mock_data = parse_stub_params(params)
+      app, _ = request_params[:captures][:path]
+      with_mock_app(mock_data, app) do |app_data|
+        workers = request_params[:query].has_key?('workers') && request_params[:query]['workers'].to_i
+        app_data['workers'] = workers
+        {
+          :body   => Heroku::OkJson.encode({'name' => app, 'workers' => workers}),
+          :status => 200
+        }
+      end
+    end
+
+    end
+  end
+end

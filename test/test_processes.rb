@@ -1,0 +1,123 @@
+require "#{File.dirname(__FILE__)}/test_helper"
+
+class TestProcesses < MiniTest::Unit::TestCase
+
+  def test_get_ps
+    with_app do |app_data|
+      response = heroku.get_ps(app_data['name'])
+      ps = response.body.first
+
+      assert_equal(200, response.status)
+      assert_equal('up', ps['action'])
+      assert_equal(app_data['name'], ps['app_name'])
+      assert_equal(false, ps['attached'])
+      assert_equal('thin -p $PORT -e $RACK_ENV -R $HEROKU_RACK start', ps['command'])
+      # elapsed
+      # pretty_state
+      assert_equal('web.1', ps['process'])
+      assert_equal(nil, ps['rendevous_url'])
+      assert_equal('NONE', ps['slug'])
+      assert_equal('created', ps['state'])
+      # transitioned_at
+      assert_equal('Dyno', ps['type'])
+      # upid
+    end
+  end
+
+  def test_get_ps_app_not_found
+    assert_raises(Excon::Errors::NotFound) do
+      heroku.get_ps(random_name)
+    end
+  end
+
+  def test_post_ps
+    with_app do |app_data|
+      command = 'pwd'
+      response = heroku.post_ps(app_data['name'], command)
+      ps = response.body
+
+      assert_equal(200, response.status)
+      assert_equal('complete', ps['action'])
+      assert_equal(app_data['name'], ps['app_name'])
+      refute(ps['attached'])
+      assert_equal(command, ps['command'])
+      # elapsed
+      # pretty_state
+      assert_equal('run.1', ps['process'])
+      assert_nil(ps['rendevous_url'])
+      assert_equal('NONE', ps['slug'])
+      assert_equal('created', ps['state'])
+      # transitioned_at
+      assert_equal('Ps', ps['type'])
+      # upid
+    end
+  end
+
+  def test_post_ps_with_attach
+    with_app do |app_data|
+      command = 'pwd'
+      response = heroku.post_ps(app_data['name'], command, true)
+      ps = response.body
+
+      assert_equal(200, response.status)
+      assert_equal('complete', ps['action'])
+      assert_equal(app_data['name'], ps['app_name'])
+      assert(ps['attached'])
+      assert_equal(command, ps['command'])
+      # elapsed
+      # pretty_state
+      assert_equal('run.1', ps['process'])
+      refute_nil(ps['rendezvous_url'])
+      assert_equal('NONE', ps['slug'])
+      assert_equal('created', ps['state'])
+      # transitioned_at
+      assert_equal('Ps', ps['type'])
+      # upid
+    end
+  end
+
+  def test_post_ps_app_not_found
+    assert_raises(Excon::Errors::NotFound) do
+      heroku.post_ps(random_name, 'pwd')
+    end
+  end
+
+  def test_put_dynos
+    with_app do |app_data|
+      dynos = 1
+      response = heroku.put_dynos(app_data['name'], dynos)
+
+      assert_equal(200, response.status)
+      assert_equal({
+        'name' => app_data['name'],
+        'dynos' => dynos
+      }, response.body)
+    end
+  end
+
+  def test_put_dynos_app_not_found
+    assert_raises(Excon::Errors::NotFound) do
+      heroku.put_dynos(random_name, 1)
+    end
+  end
+
+  def test_put_workers
+    with_app do |app_data|
+      workers = 1
+      response = heroku.put_workers(app_data['name'], workers)
+
+      assert_equal(200, response.status)
+      assert_equal({
+        'name' => app_data['name'],
+        'workers' => workers
+      }, response.body)
+    end
+  end
+
+  def test_put_workers_app_not_found
+    assert_raises(Excon::Errors::NotFound) do
+      heroku.put_workers(random_name, 1)
+    end
+  end
+
+end

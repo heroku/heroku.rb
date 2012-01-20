@@ -5,7 +5,7 @@ require 'heroku/stubs/config_vars'
 require 'heroku/stubs/domains'
 require 'heroku/stubs/keys'
 require 'heroku/stubs/logs'
-#require 'heroku/stubs/processes'
+require 'heroku/stubs/processes'
 require 'heroku/stubs/releases'
 require 'heroku/stubs/stacks'
 
@@ -25,6 +25,7 @@ module Heroku
           :domains          => {},
           :keys             => [],
           :maintenance_mode => [],
+          :ps               => {},
           :releases         => {}
         }
       end
@@ -92,6 +93,33 @@ module Heroku
 
       def self.get_mock_key(mock_data, key)
         mock_data[:keys].detect {|key_data| %r{ #{Regexp.escape(key)}$}.match(key_data['contents'])}
+      end
+
+      def self.get_mock_processes(mock_data, app)
+        mock_data[:ps][app].map do |ps|
+
+          # swap day/month positions for Time.parse
+          time_parts = ps['transitioned_at'].split(' ')
+          date_parts = time_parts.first.split('/')
+          date_parts[1], date_parts[2] = date_parts[2], date_parts[1]
+          time_parts[0] = date_parts.join('/')
+          munged_time = time_parts.join(' ')
+          elapsed = Time.now.to_i - Time.parse(munged_time).to_i
+          ps['elapsed'] = elapsed
+
+          # pretty state is 'state for time'
+          pretty_state = ps['pretty_state'].split(' ')
+          if (hours = elapsed / 60 / 60) > 0
+            pretty_state[2] = "#{elapsed}h"
+          elsif (minutes = elapsed / 60) > 0
+            pretty_state[2] = "#{elapsed}m"
+          else
+            pretty_state[2] = "#{elapsed}s"
+          end
+          ps['pretty_state'] = pretty_state.join(' ')
+
+          ps
+        end
       end
 
       def self.parse_stub_params(params)

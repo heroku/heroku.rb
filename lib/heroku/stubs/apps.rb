@@ -12,6 +12,7 @@ module Heroku
           mock_data[:collaborators].delete(app)
           mock_data[:config_vars].delete(app)
           mock_data[:domains].delete(app)
+          mock_data[:ps].delete(app)
           mock_data[:releases].delete(app)
           {
             :body   => Heroku::OkJson.encode({}),
@@ -78,12 +79,30 @@ module Heroku
           }]
           mock_data[:config_vars][app] = {}
           mock_data[:domains][app] = []
+          mock_data[:ps][app] = [{
+            'action'          => 'up',
+            'app_name'        => app,
+            'attached'        => false,
+            'command'         => nil, # set by stack below
+            'elapsed'         => 0,
+            'pretty_state'    => 'created for 0s',
+            'process'         => 'web.1',
+            'rendezvous_url'  => nil,
+            'slug'            => 'NONE',
+            'state'           => 'created',
+            'transitioned_at' => app_data['created_at'],
+            'type'            => nil, # set by stack below
+            'upid'            => rand(99999999).to_s
+          }]
           mock_data[:releases][app] = []
 
           if stack == 'cedar'
             add_mock_app_addon(mock_data, app, 'releases:basic')
+            mock_data[:ps][app].first['type'] = 'Ps'
           else
             add_mock_app_addon(mock_data, app, 'shared-database:5mb')
+            mock_data[:ps][app].first['command']  = 'thin -p $PORT -e $RACK_ENV -R $HEROKU_RACK start'
+            mock_data[:ps][app].first['type']     = 'Dyno'
           end
           add_mock_app_addon(mock_data, app, 'logging:basic')
 

@@ -12,14 +12,15 @@ module Heroku
 
     # POST /apps/:app/ps
     def post_ps(app, command, attach=false)
+      query = { 'command' => command }
+      if attach
+        query['attach'] = 'true'
+      end
       request(
         :expects  => 200,
         :method   => :post,
         :path     => "/apps/#{app}/ps",
-        :query    => {
-          'attach'  => attach,
-          'command' => command
-        }
+        :query    => query
       )
     end
 
@@ -60,7 +61,7 @@ module Heroku
     def put_dynos(app, dynos)
       request(
         :expects  => 200,
-        :method   => :post,
+        :method   => :put,
         :path     => "/apps/#{app}/dynos",
         :query    => {'dynos' => dynos}
       )
@@ -70,7 +71,7 @@ module Heroku
     def put_workers(app, workers)
       request(
         :expects  => 200,
-        :method   => :post,
+        :method   => :put,
         :path     => "/apps/#{app}/workers",
         :query    => {'workers' => workers}
       )
