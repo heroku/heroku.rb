@@ -101,8 +101,8 @@ module Heroku
             elsif qty < current_qty
               (current_qty - qty).times do
                 max_web_id = mock_data[:ps][app].map {|process| process['process'].split('web.').last.to_i}.max
-                process = mock_data[:ps].detect {|process| process['process'] == "web.#{max_web_id}"}
-                mock_data[:ps].delete(process)
+                process = mock_data[:ps][app].detect {|process| process['process'] == "web.#{max_web_id}"}
+                mock_data[:ps][app].delete(process)
               end
             end
             {
