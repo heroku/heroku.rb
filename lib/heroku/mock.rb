@@ -107,16 +107,14 @@ module Heroku
           elapsed = Time.now.to_i - Time.parse(munged_time).to_i
           ps['elapsed'] = elapsed
 
-          # pretty state is 'state for time'
-          pretty_state = ps['pretty_state'].split(' ')
-          if (hours = elapsed / 60 / 60) > 0
-            pretty_state[2] = "#{elapsed}h"
-          elsif (minutes = elapsed / 60) > 0
-            pretty_state[2] = "#{elapsed}m"
+          pretty_elapsed = if elapsed < 60
+            "#{elapsed}s"
+          elsif elapsed < (60 * 60)
+            "#{elapsed / 60}m"
           else
-            pretty_state[2] = "#{elapsed}s"
+            "#{elapsed / 60 / 60}h"
           end
-          ps['pretty_state'] = pretty_state.join(' ')
+          ps['pretty_state'] = "#{ps['state']} for #{pretty_elapsed}"
 
           ps
         end

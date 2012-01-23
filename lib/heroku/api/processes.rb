@@ -41,14 +41,14 @@ module Heroku
         :method   => :post,
         :path     => "/apps/#{app}/ps/scale",
         :query    => {
-          :type => type,
-          :qty  => quantity
+          'type'  => type,
+          'qty'   => quantity
         }
       )
     end
 
     # POST /apps/:app/ps/stop
-    def post_ps_stop(app, options={})
+    def post_ps_stop(app, options)
       request(
         :expects  => 200,
         :method   => :post,

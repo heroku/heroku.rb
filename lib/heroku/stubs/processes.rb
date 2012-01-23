@@ -15,7 +15,7 @@ module Heroku
     end
 
     # stub POST /apps/:app/ps
-    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps}) do |params|
+    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps\/?$}) do |params|
       request_params, mock_data = parse_stub_params(params)
       app, _ = request_params[:captures][:path]
       with_mock_app(mock_data, app) do |app_data|
@@ -24,14 +24,15 @@ module Heroku
         rendezvous_url = if attached
           "s1.runtime.heroku.com:5000/#{SecureRandom.hex(32)}"
         end
+        max_run_id = mock_data[:ps][app].map { |process| process['process'].split('run.').last.to_i}.max
         data = {
           'action'          => 'complete',
           'app_name'        => app,
           'attached'        => attached,
           'command'         => command,
           'elapsed'         => 0,
-          'pretty_state'    => 'created for 0s',
-          'process'         => 'run.1',
+          'pretty_state'    => 'completed for 0s',
+          'process'         => "run.#{max_run_id + 1}",
           'rendezvous_url'  => rendezvous_url,
           'slug'            => 'NONE',
           'state'           => 'created',
@@ -48,28 +49,100 @@ module Heroku
     end
 
     # stub POST /apps/:app/ps/restart
-#    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps/restart}) do |params|
-#      request_params, mock_data = parse_stub_params(params)
-#      app, _ = request_params[:captures][:path]
-#      with_mock_app(mock_data, app) do |app_data|
-#      end
-#    end
+    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps/restart}) do |params|
+      request_params, mock_data = parse_stub_params(params)
+      app, _ = request_params[:captures][:path]
+      with_mock_app(mock_data, app) do |app_data|
+        ps = request_params[:query].has_key?('ps') && request_params[:query]['ps']
+        type  = request_params[:query].has_key?('type') && request_params[:query]['type']
+        if !ps && !type
+          mock_data[:ps][app].select {|process| process['state'] != 'complete'}.each do |process|
+            process['transitioned_at'] = timestamp
+          end
+        elsif ps
+          mock_data[:ps][app].select {|process| process['process'] == 'ps' && process['state'] != 'complete'}.each do |process|
+            process['transitioned_at'] = timestamp
+          end
+        elsif type
+          mock_data[:ps][app].select {|process| process['process'] =~ %r{^#{type}\.\d+} && process['state'] != 'complete'}.each do |process|
+            process['transitioned_at'] = timestamp
+          end
+        end
+        {
+          :body   => 'ok',
+          :status => 200
+        }
+      end
+    end
 
     # stub POST /apps/:app/ps/scale
-#    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps/scale}) do |params|
-#      request_params, mock_data = parse_stub_params(params)
-#      app, _ = request_params[:captures][:path]
-#      with_mock_app(mock_data, app) do |app_data|
-#      end
-#    end
+    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps/scale}) do |params|
+      request_params, mock_data = parse_stub_params(params)
+      app, _ = request_params[:captures][:path]
+      with_mock_app(mock_data, app) do |app_data|
+        request_params[:query]
+        type = request_params[:query].has_key?('type') && request_params[:query]['type']
+        qty = request_params[:query].has_key?('qty') && request_params[:query]['qty']
+        if app_data['stack'] == 'cedar'
+          if type == 'web'
+            current_qty = mock_data[:ps][app].count {|process| process['process'] =~ %r{^web\.\d+}}
+
+            if qty >= current_qty
+              (qty - current_qty).times do
+                max_web_id = mock_data[:ps][app].map {|process| process['process'].split('web.').last.to_i}.max
+                data = mock_data[:ps][app].first.dup # copy of web.1
+                data.merge({
+                  'process'         => "web.#{max_web_id + 1}",
+                  'transitioned_at' => timestamp,
+                  'upid'            => rand(99999999).to_s
+                })
+                mock_data[:ps][app] << data
+              end
+            elsif qty < current_qty
+              (current_qty - qty).times do
+                max_web_id = mock_data[:ps][app].map {|process| process['process'].split('web.').last.to_i}.max
+                mock_data[:ps].delete_if {|process| process['process'] == "web.#{max_web_id}"}
+              end
+            end
+            {
+              :body   => qty.to_s,
+              :status => 200
+            }
+          else
+            {
+              :body   => Heroku::OkJson.encode('error' => "No such type as #{type}") ,
+              :status => 422
+            }
+          end
+        else
+          {
+            :body   => Heroku::OkJson.encode('error' => "That feature is not available on this app's stack"),
+            :status => 422
+          }
+        end
+      end
+    end
 
     # stub POST /apps/:app/ps/stop
-#    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps/stop}) do |params|
-#      request_params, mock_data = parse_stub_params(params)
-#      app, _ = request_params[:captures][:path]
-#      with_mock_app(mock_data, app) do |app_data|
-#      end
-#    end
+    Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/ps/stop}) do |params|
+      request_params, mock_data = parse_stub_params(params)
+      app, _ = request_params[:captures][:path]
+      with_mock_app(mock_data, app) do |app_data|
+        ps = request_params[:query].has_key?('ps') && request_params[:query]['ps']
+        type  = request_params[:query].has_key?('type') && request_params[:query]['type']
+        if !ps && !type
+          {
+            :body   => Heroku::OkJson.encode({'error' => 'Missing process argument'}),
+            :status => 422
+          }
+        else
+          {
+            :body   => 'ok',
+            :status => 200
+          }
+        end
+      end
+    end
 
     # stub PUT /apps/:app/dynos
     Excon.stub(:expects => 200, :method => :put, :path => %r{^/apps/([^/]+)/dynos}) do |params|
@@ -77,11 +150,18 @@ module Heroku
       app, _ = request_params[:captures][:path]
       with_mock_app(mock_data, app) do |app_data|
         dynos = request_params[:query].has_key?('dynos') && request_params[:query]['dynos'].to_i
-        app_data['dynos'] = dynos
-        {
-          :body   => Heroku::OkJson.encode({'name' => app, 'dynos' => dynos}),
-          :status => 200
-        }
+        unless app_data['stack'] == 'cedar'
+          app_data['dynos'] = dynos
+          {
+            :body   => Heroku::OkJson.encode({'name' => app, 'dynos' => dynos}),
+            :status => 200
+          }
+        else
+          {
+            :body   => Heroku::OkJson.encode({'error' => "For Cedar apps, use `heroku scale web=#{dynos}`"}),
+            :status => 422
+          }
+        end
       end
     end
 
@@ -91,11 +171,18 @@ module Heroku
       app, _ = request_params[:captures][:path]
       with_mock_app(mock_data, app) do |app_data|
         workers = request_params[:query].has_key?('workers') && request_params[:query]['workers'].to_i
-        app_data['workers'] = workers
-        {
-          :body   => Heroku::OkJson.encode({'name' => app, 'workers' => workers}),
-          :status => 200
-        }
+        unless app_data['stack'] == 'cedar'
+          app_data['workers'] = workers
+          {
+            :body   => Heroku::OkJson.encode({'name' => app, 'workers' => workers}),
+            :status => 200
+          }
+        else
+          {
+            :body   => Heroku::OkJson.encode({'error' => "For Cedar apps, use `heroku scale worker=#{workers}`"}),
+            :status => 422
+          }
+        end
       end
     end
 

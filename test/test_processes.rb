@@ -82,6 +82,112 @@ class TestProcesses < MiniTest::Unit::TestCase
     end
   end
 
+  def test_post_ps_restart
+    with_app do |app_data|
+      response = heroku.post_ps_restart(app_data['name'])
+
+      assert_equal(200, response.status)
+      assert_equal('ok', response.body)
+    end
+  end
+
+  def test_post_ps_restart_with_ps
+    with_app do |app_data|
+      response = heroku.post_ps_restart(app_data['name'], 'ps' => 'web.1')
+
+      assert_equal(200, response.status)
+      assert_equal('ok', response.body)
+    end
+  end
+
+  def test_post_ps_restart_with_type
+    with_app do |app_data|
+      response = heroku.post_ps_restart(app_data['name'], 'type' => 'web')
+
+      assert_equal(200, response.status)
+      assert_equal('ok', response.body)
+    end
+  end
+
+  def test_post_ps_restart_app_not_found
+    assert_raises(Excon::Errors::NotFound) do
+      heroku.post_ps_restart(random_name)
+    end
+  end
+
+  def test_post_ps_scale_app_not_found
+    assert_raises(Excon::Errors::NotFound) do
+      heroku.post_ps_scale(random_name, 'web', 2)
+    end
+  end
+
+  def test_post_ps_scale_down
+    with_app('stack' => 'cedar') do |app_data|
+      heroku.post_ps_scale(app_data['name'], 'web', 2)
+      response = heroku.post_ps_scale(app_data['name'], 'web', 1)
+
+      assert_equal(200, response.status)
+      assert_equal(1, response.body)
+    end
+  end
+
+  def test_post_ps_scale_type_not_found
+    assert_raises(Excon::Errors::UnprocessableEntity) do
+      with_app('stack' => 'cedar') do |app_data|
+        heroku.post_ps_scale(app_data['name'], 'run', 2)
+      end
+    end
+  end
+
+  def test_post_ps_scale_up
+    with_app('stack' => 'cedar') do |app_data|
+      response = heroku.post_ps_scale(app_data['name'], 'web', 2)
+
+      assert_equal(200, response.status)
+      assert_equal(2, response.body)
+    end
+  end
+
+  def test_post_ps_scale_without_cedar
+    assert_raises(Excon::Errors::UnprocessableEntity) do
+      with_app do |app_data|
+        heroku.post_ps_scale(app_data['name'], 'web', 2)
+      end
+    end
+  end
+
+  def test_post_ps_stop
+    assert_raises(Excon::Errors::UnprocessableEntity) do
+      with_app do |app_data|
+        heroku.post_ps_stop(app_data['name'], {})
+      end
+    end
+  end
+
+  def test_post_ps_stop_with_ps
+    with_app do |app_data|
+      response = heroku.post_ps_stop(app_data['name'], 'ps' => 'web.1')
+
+      assert_equal(200, response.status)
+      assert_equal('ok', response.body)
+    end
+  end
+
+  def test_post_ps_stop_with_type
+    with_app do |app_data|
+      response = heroku.post_ps_stop(app_data['name'], 'type' => 'web')
+
+      assert_equal(200, response.status)
+      assert_equal('ok', response.body)
+    end
+  end
+
+  def test_post_ps_stop_app_not_found
+    assert_raises(Excon::Errors::NotFound) do
+      heroku.post_ps_stop(random_name, {})
+    end
+  end
+
   def test_put_dynos
     with_app do |app_data|
       dynos = 1
@@ -101,6 +207,14 @@ class TestProcesses < MiniTest::Unit::TestCase
     end
   end
 
+  def test_put_dynos_with_cedar
+    assert_raises(Excon::Errors::UnprocessableEntity) do
+      with_app('stack' => 'cedar') do |app_data|
+        heroku.put_dynos(app_data['name'], 2)
+      end
+    end
+  end
+
   def test_put_workers
     with_app do |app_data|
       workers = 1
@@ -117,6 +231,14 @@ class TestProcesses < MiniTest::Unit::TestCase
   def test_put_workers_app_not_found
     assert_raises(Excon::Errors::NotFound) do
       heroku.put_workers(random_name, 1)
+    end
+  end
+
+  def test_put_workers_with_cedar
+    assert_raises(Excon::Errors::UnprocessableEntity) do
+      with_app('stack' => 'cedar') do |app_data|
+        heroku.put_workers(app_data['name'], 2)
+      end
     end
   end
 
