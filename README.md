@@ -41,6 +41,11 @@ For practice or testing you can also use a simulated Heroku:
 
 After that commands should still behave the same, but they will only modify some local data instead of updating the state of things on Heroku.
 
+Tests
+-----
+
+To run tests, first set `ENV['HEROKU_API_KEY']` to your api key.  Then use `bundle exec rake` to run mock tests or `MOCK=false bundle exec rake` to run integration tests.
+
 Meta
 ----
 

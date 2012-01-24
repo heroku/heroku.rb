@@ -5,8 +5,11 @@ gem 'minitest' # ensure we are using the gem version
 require 'minitest/autorun'
 require 'time'
 
+MOCK = ENV['MOCK'] != 'false'
+
 def heroku
-  Heroku.new(:api_key => 'API_KEY', :mock => true)
+  # ENV['HEROKU_API_KEY'] used for :api_key
+  Heroku.new(:mock => MOCK)
 end
 
 def random_name
