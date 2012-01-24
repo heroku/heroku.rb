@@ -36,7 +36,7 @@ module Heroku
       end
 
       # stub POST /apps/:app/domains
-      Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/domains$} ) do |params|
+      Excon.stub(:expects => 201, :method => :post, :path => %r{^/apps/([^/]+)/domains$} ) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
         domain = request_params[:query]['domain_name[domain]']
@@ -55,7 +55,7 @@ module Heroku
             end
             {
               :body   => Heroku::OkJson.encode('domain' => domain),
-              :status => 200
+              :status => 201
             }
           else
             {

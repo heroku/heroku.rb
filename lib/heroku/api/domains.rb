@@ -22,7 +22,7 @@ module Heroku
     # POST /apps/:app/domains
     def post_domain(app, domain)
       request(
-        :expects  => 200,
+        :expects  => 201,
         :method   => :post,
         :path     => "/apps/#{app}/domains",
         :query    => {'domain_name[domain]' => domain}
