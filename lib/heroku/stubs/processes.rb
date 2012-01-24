@@ -27,7 +27,6 @@ module Heroku
         max_run_id = mock_data[:ps][app].map { |process| process['process'].split('run.').last.to_i}.max
         data = {
           'action'          => 'complete',
-          'app_name'        => app,
           'attached'        => attached,
           'command'         => command,
           'elapsed'         => 0,

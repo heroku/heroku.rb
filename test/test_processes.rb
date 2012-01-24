@@ -38,7 +38,6 @@ class TestProcesses < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal('complete', ps['action'])
-      assert_equal(app_data['name'], ps['app_name'])
       refute(ps['attached'])
       assert_equal(command, ps['command'])
       # elapsed
@@ -46,7 +45,8 @@ class TestProcesses < MiniTest::Unit::TestCase
       assert_equal('run.1', ps['process'])
       assert_nil(ps['rendevous_url'])
       assert_equal('NONE', ps['slug'])
-      assert_equal('created', ps['state'])
+      # depending on timing it will be one of these two states
+      assert_includes(['created', 'starting'], ps['state'])
       # transitioned_at
       assert_equal('Ps', ps['type'])
       # upid
@@ -61,7 +61,6 @@ class TestProcesses < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal('complete', ps['action'])
-      assert_equal(app_data['name'], ps['app_name'])
       assert(ps['attached'])
       assert_equal(command, ps['command'])
       # elapsed
@@ -69,7 +68,8 @@ class TestProcesses < MiniTest::Unit::TestCase
       assert_equal('run.1', ps['process'])
       refute_nil(ps['rendezvous_url'])
       assert_equal('NONE', ps['slug'])
-      assert_equal('created', ps['state'])
+      # depending on timing it will be one of these two states
+      assert_includes(['created', 'starting'], ps['state'])
       # transitioned_at
       assert_equal('Ps', ps['type'])
       # upid
