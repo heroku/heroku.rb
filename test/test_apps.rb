@@ -20,14 +20,8 @@ class TestApps < MiniTest::Unit::TestCase
     with_app do |app_data|
       response = heroku.get_apps
       assert_equal(200, response.status)
-      assert_equal(app_data['name'], response.body.first['name'])
+      assert(response.body.detect {|app| app['name'] == app_data['name']})
     end
-  end
-
-  def test_get_apps_empty
-    response = heroku.get_apps
-    assert_equal(200, response.status)
-    assert_equal([], response.body)
   end
 
   def test_get_app
