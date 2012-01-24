@@ -4,6 +4,7 @@ class TestLogs < MiniTest::Unit::TestCase
 
   def test_get_logs
     with_app do |app_data|
+      heroku.post_addons(post_addon(app_data['name'], 'logging:basic')
       response = heroku.get_logs(app_data['name'], 'logplex' => true)
 
       assert_equal(200, response.status)
