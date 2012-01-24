@@ -11,10 +11,10 @@ module Heroku
 
     def put_stack(app, stack)
       request(
+        :body     => stack,
         :expects  => 200,
         :method   => :put,
-        :path     => "/apps/#{app}/stack",
-        :query    => {'body' => stack}
+        :path     => "/apps/#{app}/stack"
       )
     end
 

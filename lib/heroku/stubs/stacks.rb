@@ -47,7 +47,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :put, :path => %r{^/apps/([^/]+)/stack}) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
-        stack = request_params[:query]['body']
+        stack = request_params[:body]
         with_mock_app(mock_data, app) do |app_data|
           if app_data['stack'] != 'cedar' && stack != 'cedar'
             if STACKS.map {|stack_data| stack_data['name']}.include?(stack)

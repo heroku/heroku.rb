@@ -98,6 +98,7 @@ module Heroku
 
           if stack == 'cedar'
             add_mock_app_addon(mock_data, app, 'releases:basic')
+            add_mock_app_addon(mock_data, app, 'logging:basic')
             mock_data[:ps][app].first['type'] = 'Ps'
           else
             add_mock_app_addon(mock_data, app, 'shared-database:5mb')
@@ -109,7 +110,6 @@ module Heroku
             mock_data[:ps][app].first['command']  = 'thin -p $PORT -e $RACK_ENV -R $HEROKU_RACK start'
             mock_data[:ps][app].first['type']     = 'Dyno'
           end
-          add_mock_app_addon(mock_data, app, 'logging:basic')
 
           {
             :body   => Heroku::OkJson.encode(app_data),
