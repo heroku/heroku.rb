@@ -39,7 +39,7 @@ module Heroku
         with_mock_app(mock_data, app) do
           mock_data[:collaborators][app] |= [{'access' => 'edit', 'email' => email}]
           {
-            :body   => "An invitation has been sent to #{email} for them to join Heroku and become a collaborator on #{app}.",
+            :body   => "#{email} added as a collaborator on #{app}.",
             :status => 200
           }
           # Existing user response
