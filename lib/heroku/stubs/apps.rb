@@ -101,6 +101,11 @@ module Heroku
             mock_data[:ps][app].first['type'] = 'Ps'
           else
             add_mock_app_addon(mock_data, app, 'shared-database:5mb')
+            mock_data[:config_vars][app] = {
+              'BUNDLE_WITHOUT' => 'development:test',
+              'LANG' => 'en_US.UTF-8',
+              'RACK_ENV' => 'production'
+            }
             mock_data[:ps][app].first['command']  = 'thin -p $PORT -e $RACK_ENV -R $HEROKU_RACK start'
             mock_data[:ps][app].first['type']     = 'Dyno'
           end

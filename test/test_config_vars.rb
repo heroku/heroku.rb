@@ -3,7 +3,7 @@ require "#{File.dirname(__FILE__)}/test_helper"
 class TestConfigVars < MiniTest::Unit::TestCase
 
   def test_delete_app_config_var
-    with_app do |app_data|
+    with_app('stack' => 'cedar') do |app_data|
       heroku.put_config_vars(app_data['name'], {'KEY' => 'value'})
 
       response = heroku.delete_config_var(app_data['name'], 'KEY')
@@ -20,7 +20,7 @@ class TestConfigVars < MiniTest::Unit::TestCase
   end
 
   def test_get_app_config_vars
-    with_app do |app_data|
+    with_app('stack' => 'cedar') do |app_data|
       response = heroku.get_config_vars(app_data['name'])
 
       assert_equal(200, response.status)
@@ -35,7 +35,7 @@ class TestConfigVars < MiniTest::Unit::TestCase
   end
 
   def test_put_app_config_vars
-    with_app do |app_data|
+    with_app('stack' => 'cedar') do |app_data|
       response = heroku.put_config_vars(app_data['name'], {'KEY' => 'value'})
 
       assert_equal(200, response.status)

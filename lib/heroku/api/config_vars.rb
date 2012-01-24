@@ -22,10 +22,10 @@ module Heroku
     # PUT /apps/:app/config_vars
     def put_config_vars(app, vars)
       request(
+        :body     => Heroku::OkJson.encode(vars),
         :expects  => 200,
         :method   => :put,
-        :path     => "/apps/#{app}/config_vars",
-        :query    => {'body' => Heroku::OkJson.encode(vars)}
+        :path     => "/apps/#{app}/config_vars"
       )
     end
 

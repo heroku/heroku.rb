@@ -32,7 +32,7 @@ module Heroku
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do
-          new_config_vars = request_params[:query].has_key?('body') && Heroku::OkJson.decode(request_params[:query]['body'])
+          new_config_vars = request_params[:body]
           mock_data[:config_vars][app].merge!(new_config_vars)
           {
             :body   => Heroku::OkJson.encode(mock_data[:config_vars][app]),
