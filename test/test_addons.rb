@@ -13,7 +13,7 @@ class TestAddons < MiniTest::Unit::TestCase
   def test_delete_addon_addon_not_installed
     with_app do |app_data|
       assert_raises(Excon::Errors::UnprocessableEntity) do
-        heroku.delete_addon(app_data['name'], 'logging:basic')
+        heroku.delete_addon(app_data['name'], 'custom_domains:basic')
       end
     end
   end
@@ -26,8 +26,8 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_delete_addon
     with_app do |app_data|
-      heroku.post_addon(app_data['name'], 'logging:basic')
-      response = heroku.delete_addon(app_data['name'], 'logging:basic')
+      heroku.post_addon(app_data['name'], 'custom_domains:basic')
+      response = heroku.delete_addon(app_data['name'], 'custom_domains:basic')
 
       assert_equal(200, response.status)
       assert_equal({
@@ -55,6 +55,14 @@ class TestAddons < MiniTest::Unit::TestCase
       assert_equal([{
         'beta'        => false,
         'configured'  => true,
+        'description' => 'Basic Logging',
+        'name'        => 'logging:basic',
+        'url'         => 'https://addons.heroku.com/addons/logging:basic',
+        'state'       => 'public'
+      },
+      {
+        'beta'        => false,
+        'configured'  => true,
         'description' => 'Shared Database 5MB',
         'name'        => 'shared-database:5mb',
         'state'       => 'public',
@@ -71,7 +79,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_post_addon
     with_app do |app_data|
-      response = heroku.post_addon(app_data['name'], 'logging:basic')
+      response = heroku.post_addon(app_data['name'], 'custom_domains:basic')
 
       assert_equal(200, response.status)
       assert_equal({
@@ -116,7 +124,6 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_put_addon
     with_app do |app_data|
-      heroku.post_addon(app_data['name'], 'logging:basic')
       response = heroku.put_addon(app_data['name'], 'logging:expanded')
 
       assert_equal(200, response.status)
@@ -148,7 +155,7 @@ class TestAddons < MiniTest::Unit::TestCase
   def test_put_addon_addon_type_not_installed
     with_app do |app_data|
       assert_raises(Excon::Errors::UnprocessableEntity) do
-        heroku.put_addon(app_data['name'], 'logging:expanded')
+        heroku.put_addon(app_data['name'], 'releases:basic')
       end
     end
   end

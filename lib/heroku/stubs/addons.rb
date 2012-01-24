@@ -134,7 +134,7 @@ module Heroku
             else
               # addon of same type not installed
               {
-                :body   => Heroku::OkJson.encode({'error' => "Can't upgrade, no #{addon.split('_').join(' ')} add-on has been added.\nTo add, use addons:add instead.\n"}),
+                :body   => Heroku::OkJson.encode({'error' => "Can't upgrade, no #{addon.split(':').join(' ')} add-on has been added.\nTo add, use addons:add instead.\n"}),
                 :status => 422
               }
             end
