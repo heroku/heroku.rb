@@ -138,7 +138,7 @@ module Heroku
       end
 
       # stub PUT /apps/:app
-      Excon.stub(:expects => 200, :method => :put, :path => %r{^/apps/([^/]+)$} ) do |params|
+      Excon.stub(:expects => 200, :method => :put, :path => %r{^/apps/([^/]+)$}) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
 
@@ -163,6 +163,19 @@ module Heroku
               :status => 200
             }
           end
+        end
+      end
+
+      # stub PUT /apps/:app/status
+      Excon.stub(:method => :put, :path => %r{^/apps/([^/]+)/status}) do |params|
+        request_params, mock_data = parse_stub_params(params)
+        app, _ = request_params[:captures][:path]
+
+        with_mock_app(mock_data, app) do |app_data|
+          {
+            :body   => Heroku::OkJson.encode({}),
+            :status => 201
+          }
         end
       end
 

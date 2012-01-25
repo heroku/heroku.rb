@@ -24,6 +24,10 @@ def with_app(params={}, &block)
   begin
     data = heroku.post_app(params).body
     @name = data['name']
+    ready = false
+    until ready
+      ready = heroku.request(:method => :put, :path => "/apps/#{@name}/status").status == 201
+    end
     yield(data)
   ensure
     heroku.delete_app(@name) rescue nil
