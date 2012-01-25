@@ -34,7 +34,7 @@ module Heroku
         :body     => key,
         :expects  => 200,
         :method   => :post,
-        :path     => "/user/keys",
+        :path     => "/user/keys"
       )
     end
 
