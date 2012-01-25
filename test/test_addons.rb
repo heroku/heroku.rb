@@ -55,7 +55,7 @@ class TestAddons < MiniTest::Unit::TestCase
       assert_equal([{
         'beta'        => false,
         'configured'  => true,
-        'description' => 'Basic Logging',
+        'description' => 'Logging Basic',
         'name'        => 'logging:basic',
         'url'         => 'https://addons.heroku.com/addons/logging:basic',
         'state'       => 'public'
