@@ -7,6 +7,7 @@ require 'excon'
 require 'securerandom'
 
 require "heroku/api"
+require "heroku/errors"
 require "heroku/mock"
 require "heroku/version"
 

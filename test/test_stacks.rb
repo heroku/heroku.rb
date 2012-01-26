@@ -11,7 +11,7 @@ class TestStacks < MiniTest::Unit::TestCase
   end
 
   def test_get_stack_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.get_stack(random_name)
     end
   end
@@ -25,14 +25,14 @@ class TestStacks < MiniTest::Unit::TestCase
   end
 
   def test_put_stack_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.put_stack(random_name, 'bamboo-ree-1.8.7')
     end
   end
 
   def test_put_stack_stack_not_found
     with_app do |app_data|
-      assert_raises(Excon::Errors::NotFound) do
+      assert_raises(Heroku::Errors::NotFound) do
         heroku.put_stack(app_data['name'], random_name)
       end
     end
@@ -40,7 +40,7 @@ class TestStacks < MiniTest::Unit::TestCase
 
   def test_put_stack_cedar
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.put_stack(app_data['name'], 'cedar')
       end
     end

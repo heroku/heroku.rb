@@ -13,14 +13,14 @@ class TestReleases < MiniTest::Unit::TestCase
   end
 
   def test_get_releases_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.get_releases(random_name)
     end
   end
 
   def test_get_releases_addon_not_installed
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.get_releases(app_data['name'])
       end
     end
@@ -38,21 +38,21 @@ class TestReleases < MiniTest::Unit::TestCase
   end
 
   def test_get_release_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.get_release(random_name, 'v2')
     end
   end
 
   def test_get_release_addon_not_installed
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.get_release(app_data['name'], 'v2')
       end
     end
   end
 
   def test_get_release_release_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.get_release(random_name, 'v0')
     end
   end
@@ -69,21 +69,21 @@ class TestReleases < MiniTest::Unit::TestCase
   end
 
   def test_post_release_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.post_release(random_name, 'v3')
     end
   end
 
   def test_post_release_addon_not_installed
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.post_release(app_data['name'], 'v3')
       end
     end
   end
 
   def test_post_release_release_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.post_release(random_name, 'v0')
     end
   end

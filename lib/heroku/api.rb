@@ -34,7 +34,18 @@ module Heroku
     end
 
     def request(params, &block)
-      response = super
+      begin
+        response = super
+      rescue Excon::Errors::NotFound => error
+        reerror = Heroku::Errors::NotFound.new(error.message)
+        reerror.set_backtrace(error.backtrace)
+        raise reerror
+      rescue Excon::Errors::Error => error
+        reerror = Heroku::Errors::Error.new(error.message)
+        reerror.set_backtrace(error.backtrace)
+        raise reerror
+      end
+
       reset
       if response.body && !response.body.empty?
         begin

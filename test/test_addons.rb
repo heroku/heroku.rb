@@ -4,7 +4,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_delete_addon_addon_not_found
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.delete_addon(app_data['name'], random_name)
       end
     end
@@ -12,14 +12,14 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_delete_addon_addon_not_installed
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.delete_addon(app_data['name'], 'custom_domains:basic')
       end
     end
   end
 
   def test_delete_addon_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.delete_addon(random_name, 'logging:basic')
     end
   end
@@ -72,7 +72,7 @@ class TestAddons < MiniTest::Unit::TestCase
   end
 
   def test_get_addons_with_app_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.get_addons(random_name)
     end
   end
@@ -92,7 +92,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_post_addon_addon_already_installed
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.post_addon(app_data['name'], 'logging:basic')
         heroku.post_addon(app_data['name'], 'logging:basic')
       end
@@ -101,7 +101,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_post_addon_addon_type_already_installed
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.post_addon(app_data['name'], 'logging:basic')
         heroku.post_addon(app_data['name'], 'logging:expanded')
       end
@@ -110,14 +110,14 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_post_addon_addon_not_found
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.post_addon(app_data['name'], random_name)
       end
     end
   end
 
   def test_post_addon_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.post_addon(random_name, 'shared-database:5mb')
     end
   end
@@ -137,7 +137,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_put_addon_addon_already_installed
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.post_addon(app_data['name'], 'logging:basic')
         heroku.put_addon(app_data['name'], 'logging:basic')
       end
@@ -146,7 +146,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_put_addon_addon_not_found
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.put_addon(app_data['name'], random_name)
       end
     end
@@ -154,14 +154,14 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_put_addon_addon_type_not_installed
     with_app do |app_data|
-      assert_raises(Excon::Errors::UnprocessableEntity) do
+      assert_raises(Heroku::Errors::Error) do
         heroku.put_addon(app_data['name'], 'releases:basic')
       end
     end
   end
 
   def test_put_addon_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.put_addon(random_name, 'logging:basic')
     end
   end

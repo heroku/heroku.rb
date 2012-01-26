@@ -14,7 +14,7 @@ class TestConfigVars < MiniTest::Unit::TestCase
   end
 
   def test_delete_app_config_var_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.delete_config_var(random_name, 'key')
     end
   end
@@ -29,7 +29,7 @@ class TestConfigVars < MiniTest::Unit::TestCase
   end
 
   def test_get_app_config_vars_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.get_config_vars(random_name)
     end
   end
@@ -46,7 +46,7 @@ class TestConfigVars < MiniTest::Unit::TestCase
   end
 
   def test_put_app_config_vars_app_not_found
-    assert_raises(Excon::Errors::NotFound) do
+    assert_raises(Heroku::Errors::NotFound) do
       heroku.put_config_vars(random_name, {'KEY' => 'value'})
     end
   end
