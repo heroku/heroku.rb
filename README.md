@@ -12,7 +12,7 @@ Usage
 
 Start by creating a connection to Heroku with your credentials:
 
-    heroku = Heroku::Connection.new(:api_key => API_KEY)
+    heroku = Heroku::API.new(:api_key => API_KEY)
 
 NOTE: You can leave out the `:api_key` if `ENV['HEROKU_API_KEY']` is set instead.
 
