@@ -56,7 +56,7 @@ class TestProcesses < MiniTest::Unit::TestCase
   def test_post_ps_with_attach
     with_app do |app_data|
       command = 'pwd'
-      response = heroku.post_ps(app_data['name'], command, true)
+      response = heroku.post_ps(app_data['name'], command, 'attach' => true)
       ps = response.body
 
       assert_equal(200, response.status)

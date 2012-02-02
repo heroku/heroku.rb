@@ -11,7 +11,7 @@ module Heroku
     end
 
     # POST /apps/:app/ps
-    def post_ps(app, command, options)
+    def post_ps(app, command, options={})
       query = { 'command' => command }.merge(options)
       request(
         :expects  => 200,
