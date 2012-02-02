@@ -1,15 +1,25 @@
-require "#{File.dirname(__FILE__)}/../heroku-api"
+require "base64"
+require "cgi"
+require "excon"
+require "securerandom"
 
-require 'heroku/api/addons'
-require 'heroku/api/apps'
-require 'heroku/api/collaborators'
-require 'heroku/api/config_vars'
-require 'heroku/api/domains'
-require 'heroku/api/keys'
-require 'heroku/api/logs'
-require 'heroku/api/processes'
-require 'heroku/api/releases'
-require 'heroku/api/stacks'
+require "heroku/errors"
+require "heroku/mock"
+require "heroku/vendor/heroku/okjson"
+
+require "heroku/api/addons"
+require "heroku/api/apps"
+require "heroku/api/collaborators"
+require "heroku/api/config_vars"
+require "heroku/api/domains"
+require "heroku/api/keys"
+require "heroku/api/logs"
+require "heroku/api/processes"
+require "heroku/api/releases"
+require "heroku/api/stacks"
+require "heroku/api/version"
+
+srand
 
 module Heroku
   class API < Excon::Connection
@@ -25,7 +35,7 @@ module Heroku
       options[:headers] = {
         'Accept'                => 'application/json',
         'Authorization'         => "Basic #{Base64.encode64(user_pass).gsub("\n", '')}",
-        'User-Agent'            => "heroku-rb/#{Heroku::VERSION}",
+        'User-Agent'            => "heroku-rb/#{Heroku::API::VERSION}",
         'X-Heroku-API-Version'  => '3',
         'X-Ruby-Version'        => RUBY_VERSION,
         'X-Ruby-Platform'       => RUBY_PLATFORM

@@ -9,7 +9,7 @@ MOCK = ENV['MOCK'] != 'false'
 
 def heroku
   # ENV['HEROKU_API_KEY'] used for :api_key
-  Heroku.new(:mock => MOCK)
+  Heroku::API.new(:mock => MOCK)
 end
 
 def random_name
