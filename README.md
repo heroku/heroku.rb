@@ -40,9 +40,9 @@ For additional details about any of the commands, see the [API docs](http://api-
     heroku.delete_app('app')  # delete an app named 'app'
     heroku.get_app('app')     # get info about an app named 'app'
     heroku.get_apps           # get a list of your apps
-    heroku.post_apps          # create an app with a generated name and the default stack
+    heroku.post_app           # create an app with a generated name and the default stack
 
-    heroku.post_apps('name' => 'app') # create an app with a specified name
+    heroku.post_app('name' => 'app') # create an app with a specified name
 
 ### Collaborators
 
