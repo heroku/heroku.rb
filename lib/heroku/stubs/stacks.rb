@@ -37,7 +37,7 @@ module Heroku
           stack_data = STACKS.dup
           stack_data.detect {|stack| stack['name'] == app_data['stack']}['current'] = true
           {
-            :body   => Heroku::OkJson.encode(stack_data),
+            :body   => HerokuAPI::OkJson.encode(stack_data),
             :status => 200
           }
         end
@@ -66,13 +66,13 @@ BODY
               }
             else
               {
-                :body   => Heroku::OkJson.encode('error' => 'Stack not found'),
+                :body   => HerokuAPI::OkJson.encode('error' => 'Stack not found'),
                 :status => 404
               }
             end
           else
             {
-              :body   => Heroku::OkJson.encode('error' => 'Stack migration to/from Cedar is not available. Create a new app with --stack cedar instead.'),
+              :body   => HerokuAPI::OkJson.encode('error' => 'Stack migration to/from Cedar is not available. Create a new app with --stack cedar instead.'),
               :status => 422
             }
           end

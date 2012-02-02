@@ -60,7 +60,7 @@ module Heroku
       def self.get_mock_addon(mock_data, addon)
         @addons ||= begin
           data = File.read("#{File.dirname(__FILE__)}/stubs/cache/get_addons.json")
-          Heroku::OkJson.decode(data)
+          HerokuAPI::OkJson.decode(data)
         end
         @addons.detect {|addon_data| addon_data['name'] == addon}
       end
@@ -125,7 +125,7 @@ module Heroku
 
         parsed = params.dup
         begin # try to JSON decode
-          parsed[:body] &&= Heroku::OkJson.decode(parsed[:body])
+          parsed[:body] &&= HerokuAPI::OkJson.decode(parsed[:body])
         rescue # else leave as is
         end
 

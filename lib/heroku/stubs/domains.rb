@@ -29,7 +29,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do |app_data|
           {
-            :body   => Heroku::OkJson.encode(mock_data[:domains][app]),
+            :body   => HerokuAPI::OkJson.encode(mock_data[:domains][app]),
             :status => 200
           }
         end
@@ -54,12 +54,12 @@ module Heroku
               }
             end
             {
-              :body   => Heroku::OkJson.encode('domain' => domain),
+              :body   => HerokuAPI::OkJson.encode('domain' => domain),
               :status => 201
             }
           else
             {
-              :body   => Heroku::OkJson.encode([["base","Please install the Custom Domains addon before adding domains to your app"]]),
+              :body   => HerokuAPI::OkJson.encode([["base","Please install the Custom Domains addon before adding domains to your app"]]),
               :status => 422
             }
           end

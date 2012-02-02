@@ -26,7 +26,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :get, :path => %r{^/user/keys}) do |params|
         request_params, mock_data = parse_stub_params(params)
         {
-          :body   => Heroku::OkJson.encode(mock_data[:keys]),
+          :body   => HerokuAPI::OkJson.encode(mock_data[:keys]),
           :status => 200
         }
       end

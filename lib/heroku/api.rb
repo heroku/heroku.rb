@@ -6,7 +6,7 @@ require "securerandom"
 require "heroku-api/version"
 require "heroku/errors"
 require "heroku/mock"
-require "heroku/vendor/heroku/okjson"
+require "heroku/vendor/heroku-api/okjson"
 
 require "heroku/api/addons"
 require "heroku/api/apps"
@@ -61,7 +61,7 @@ module Heroku
       reset
       if response.body && !response.body.empty?
         begin
-          response.body = Heroku::OkJson.decode(response.body)
+          response.body = HerokuAPI::OkJson.decode(response.body)
         rescue
           # leave non-JSON body as is
         end

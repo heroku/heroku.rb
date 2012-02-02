@@ -44,7 +44,7 @@ class TestAddons < MiniTest::Unit::TestCase
     data = File.read("#{File.dirname(__FILE__)}/../lib/heroku/stubs/cache/get_addons.json")
 
     assert_equal(200, response.status)
-    assert_equal(Heroku::OkJson.decode(data), response.body)
+    assert_equal(HerokuAPI::OkJson.decode(data), response.body)
   end
 
   def test_get_addons_with_app

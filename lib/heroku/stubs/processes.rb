@@ -8,7 +8,7 @@ module Heroku
       app, _ = request_params[:captures][:path]
       with_mock_app(mock_data, app) do |app_data|
         {
-          :body   => Heroku::OkJson.encode(get_mock_processes(mock_data, app)),
+          :body   => HerokuAPI::OkJson.encode(get_mock_processes(mock_data, app)),
           :status => 200
         }
       end
@@ -41,7 +41,7 @@ module Heroku
         }
         mock_data[:ps][app] << data
         {
-          :body   => Heroku::OkJson.encode(data),
+          :body   => HerokuAPI::OkJson.encode(data),
           :status => 200,
         }
       end
@@ -110,13 +110,13 @@ module Heroku
             }
           else
             {
-              :body   => Heroku::OkJson.encode('error' => "No such type as #{type}") ,
+              :body   => HerokuAPI::OkJson.encode('error' => "No such type as #{type}") ,
               :status => 422
             }
           end
         else
           {
-            :body   => Heroku::OkJson.encode('error' => "That feature is not available on this app's stack"),
+            :body   => HerokuAPI::OkJson.encode('error' => "That feature is not available on this app's stack"),
             :status => 422
           }
         end
@@ -132,7 +132,7 @@ module Heroku
         type  = request_params[:query].has_key?('type') && request_params[:query]['type']
         if !ps && !type
           {
-            :body   => Heroku::OkJson.encode({'error' => 'Missing process argument'}),
+            :body   => HerokuAPI::OkJson.encode({'error' => 'Missing process argument'}),
             :status => 422
           }
         else
@@ -153,12 +153,12 @@ module Heroku
         unless app_data['stack'] == 'cedar'
           app_data['dynos'] = dynos
           {
-            :body   => Heroku::OkJson.encode({'name' => app, 'dynos' => dynos}),
+            :body   => HerokuAPI::OkJson.encode({'name' => app, 'dynos' => dynos}),
             :status => 200
           }
         else
           {
-            :body   => Heroku::OkJson.encode({'error' => "For Cedar apps, use `heroku scale web=#{dynos}`"}),
+            :body   => HerokuAPI::OkJson.encode({'error' => "For Cedar apps, use `heroku scale web=#{dynos}`"}),
             :status => 422
           }
         end
@@ -174,12 +174,12 @@ module Heroku
         unless app_data['stack'] == 'cedar'
           app_data['workers'] = workers
           {
-            :body   => Heroku::OkJson.encode({'name' => app, 'workers' => workers}),
+            :body   => HerokuAPI::OkJson.encode({'name' => app, 'workers' => workers}),
             :status => 200
           }
         else
           {
-            :body   => Heroku::OkJson.encode({'error' => "For Cedar apps, use `heroku scale worker=#{workers}`"}),
+            :body   => HerokuAPI::OkJson.encode({'error' => "For Cedar apps, use `heroku scale worker=#{workers}`"}),
             :status => 422
           }
         end

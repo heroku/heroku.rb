@@ -15,7 +15,7 @@ module Heroku
           mock_data[:ps].delete(app)
           mock_data[:releases].delete(app)
           {
-            :body   => Heroku::OkJson.encode({}),
+            :body   => HerokuAPI::OkJson.encode({}),
             :status => 200
           }
         end
@@ -25,7 +25,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :get, :path => '/apps') do |params|
         request_params, mock_data = parse_stub_params(params)
         {
-          :body   => Heroku::OkJson.encode(mock_data[:apps]),
+          :body   => HerokuAPI::OkJson.encode(mock_data[:apps]),
           :status => 200
         }
       end
@@ -36,7 +36,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do |app_data|
           {
-            :body   => Heroku::OkJson.encode(app_data),
+            :body   => HerokuAPI::OkJson.encode(app_data),
             :status => 200
           }
         end
@@ -49,7 +49,7 @@ module Heroku
 
         if get_mock_app(mock_data, app)
           {
-            :body => Heroku::OkJson.encode('error' => 'Name is already taken'),
+            :body => HerokuAPI::OkJson.encode('error' => 'Name is already taken'),
             :status => 422
           }
         else
@@ -112,7 +112,7 @@ module Heroku
           end
 
           {
-            :body   => Heroku::OkJson.encode(app_data),
+            :body   => HerokuAPI::OkJson.encode(app_data),
             :status => 202
           }
         end
@@ -154,12 +154,12 @@ module Heroku
           end
           if email && !collaborator
             {
-              :body   => Heroku::OkJson.encode('error' => 'Only existing collaborators can receive ownership for an app'),
+              :body   => HerokuAPI::OkJson.encode('error' => 'Only existing collaborators can receive ownership for an app'),
               :status => 422
             }
           else
             {
-              :body   => Heroku::OkJson.encode('name' => app_data['name']),
+              :body   => HerokuAPI::OkJson.encode('name' => app_data['name']),
               :status => 200
             }
           end
@@ -173,7 +173,7 @@ module Heroku
 
         with_mock_app(mock_data, app) do |app_data|
           {
-            :body   => Heroku::OkJson.encode({}),
+            :body   => HerokuAPI::OkJson.encode({}),
             :status => 201
           }
         end
