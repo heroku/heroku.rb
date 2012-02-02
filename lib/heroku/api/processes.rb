@@ -11,11 +11,8 @@ module Heroku
     end
 
     # POST /apps/:app/ps
-    def post_ps(app, command, attach=false)
-      query = { 'command' => command }
-      if attach
-        query['attach'] = 'true'
-      end
+    def post_ps(app, command, options)
+      query = { 'command' => command }.merge(options)
       request(
         :expects  => 200,
         :method   => :post,
