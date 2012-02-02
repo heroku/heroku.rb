@@ -18,14 +18,14 @@ class TestCollaborators < MiniTest::Unit::TestCase
   end
 
   def test_delete_collaborator_app_not_found
-    assert_raises(Heroku::Errors::NotFound) do
+    assert_raises(Heroku::API::Errors::NotFound) do
       heroku.delete_collaborator(random_name, random_email_address)
     end
   end
 
   def test_delete_collaborator_user_not_found
     with_app do |app_data|
-      assert_raises(Heroku::Errors::NotFound) do
+      assert_raises(Heroku::API::Errors::NotFound) do
         heroku.delete_collaborator(app_data['name'], random_email_address)
       end
     end
@@ -44,7 +44,7 @@ class TestCollaborators < MiniTest::Unit::TestCase
   end
 
   def test_get_collaborators_app_not_found
-    assert_raises(Heroku::Errors::NotFound) do
+    assert_raises(Heroku::API::Errors::NotFound) do
       heroku.get_collaborators(random_name)
     end
   end
@@ -65,7 +65,7 @@ class TestCollaborators < MiniTest::Unit::TestCase
   end
 
   def test_post_collaborator_app_not_found
-    assert_raises(Heroku::Errors::NotFound) do
+    assert_raises(Heroku::API::Errors::NotFound) do
       heroku.post_collaborator(random_name, random_email_address)
     end
   end

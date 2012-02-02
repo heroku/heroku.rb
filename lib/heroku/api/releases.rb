@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
 
     # GET /apps/:app/releases
     def get_releases(app)

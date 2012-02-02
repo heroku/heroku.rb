@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
     module Mock
 
       # stub GET /apps/:app/logs

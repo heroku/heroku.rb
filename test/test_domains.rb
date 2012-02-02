@@ -3,7 +3,7 @@ require "#{File.dirname(__FILE__)}/test_helper"
 class TestDomains < MiniTest::Unit::TestCase
 
   def test_delete_domain_app_not_found
-    assert_raises(Heroku::Errors::NotFound) do
+    assert_raises(Heroku::API::Errors::NotFound) do
       heroku.delete_domain(random_name, 'example.com')
     end
   end
@@ -29,7 +29,7 @@ class TestDomains < MiniTest::Unit::TestCase
   end
 
   def test_get_domains_app_not_found
-    assert_raises(Heroku::Errors::NotFound) do
+    assert_raises(Heroku::API::Errors::NotFound) do
       heroku.get_domains(random_name)
     end
   end
@@ -48,14 +48,14 @@ class TestDomains < MiniTest::Unit::TestCase
 
   def test_post_domain_addon_not_installed
     with_app do |app_data|
-      assert_raises(Heroku::Errors::Error) do
+      assert_raises(Heroku::API::Errors::Error) do
         heroku.post_domain(app_data['name'], 'example.com')
       end
     end
   end
 
   def test_post_domain_app_not_found
-    assert_raises(Heroku::Errors::NotFound) do
+    assert_raises(Heroku::API::Errors::NotFound) do
       heroku.post_domain(random_name, 'example.com')
     end
   end

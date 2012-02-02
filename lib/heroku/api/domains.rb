@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
 
     # DELETE /apps/:app/domains/:domain
     def delete_domain(app, domain)

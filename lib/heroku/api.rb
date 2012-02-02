@@ -3,10 +3,11 @@ require "cgi"
 require "excon"
 require "securerandom"
 
-require "heroku-api/version"
-require "heroku/errors"
-require "heroku/mock"
-require "heroku/vendor/heroku-api/okjson"
+require "heroku/api/vendor/okjson"
+
+require "heroku/api/errors"
+require "heroku/api/mock"
+require "heroku/api/version"
 
 require "heroku/api/addons"
 require "heroku/api/apps"
@@ -22,9 +23,7 @@ require "heroku/api/stacks"
 srand
 
 module Heroku
-  class API < Excon::Connection
-
-    VERSION = HerokuAPI::VERSION
+  class API
 
     def initialize(options={})
       @api_key = options.delete(:api_key) || ENV['HEROKU_API_KEY']
@@ -42,30 +41,33 @@ module Heroku
         'X-Ruby-Version'        => RUBY_VERSION,
         'X-Ruby-Platform'       => RUBY_PLATFORM
       }.merge(options[:headers])
-      super("#{options[:scheme]}://#{options[:host]}", options)
+      @connection = Excon.new("#{options[:scheme]}://#{options[:host]}", options)
     end
 
     def request(params, &block)
       begin
-        response = super
+        response = @connection.request(params, &block)
       rescue Excon::Errors::NotFound => error
-        reerror = Heroku::Errors::NotFound.new(error.message)
+        reerror = Heroku::API::Errors::NotFound.new(error.message)
         reerror.set_backtrace(error.backtrace)
         raise reerror
       rescue Excon::Errors::Error => error
-        reerror = Heroku::Errors::Error.new(error.message)
+        reerror = Heroku::API::Errors::Error.new(error.message)
         reerror.set_backtrace(error.backtrace)
         raise reerror
       end
 
-      reset
       if response.body && !response.body.empty?
         begin
-          response.body = HerokuAPI::OkJson.decode(response.body)
+          response.body = Heroku::API::OkJson.decode(response.body)
         rescue
           # leave non-JSON body as is
         end
       end
+
+      # reset (non-persistent) connection
+      @connection.reset
+
       response
     end
 

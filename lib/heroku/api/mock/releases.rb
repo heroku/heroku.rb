@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
     module Mock
 
       # stub GET /apps/:app/releases
@@ -19,7 +19,7 @@ module Heroku
             }
           else
             {
-              :body   => HerokuAPI::OkJson.encode({'error' => 'Please install the Release Management add-on to access release history'}),
+              :body   => Heroku::API::OkJson.encode({'error' => 'Please install the Release Management add-on to access release history'}),
               :status => 422
             }
           end
@@ -39,7 +39,7 @@ module Heroku
             end
             if release_data = releases.detect {|release| release['name'] == release_name}
               {
-                :body   => HerokuAPI::OkJson.encode(release_data),
+                :body   => Heroku::API::OkJson.encode(release_data),
                 :status => 200
               }
             else
@@ -50,7 +50,7 @@ module Heroku
             end
           else
             {
-              :body   => HerokuAPI::OkJson.encode({'error' => 'Please install the Release Management add-on to access release history'}),
+              :body   => Heroku::API::OkJson.encode({'error' => 'Please install the Release Management add-on to access release history'}),
               :status => 422
             }
           end
@@ -100,7 +100,7 @@ module Heroku
                 }
               else
                 {
-                  :body   => HerokuAPI::OkJson.encode({'error' => 'Cannot rollback to a release that had a different set of addons installed'}),
+                  :body   => Heroku::API::OkJson.encode({'error' => 'Cannot rollback to a release that had a different set of addons installed'}),
                   :status => 422
                 }
               end
@@ -112,7 +112,7 @@ module Heroku
             end
           else
             {
-              :body   => HerokuAPI::OkJson.encode({'error' => 'Please install the Release Management add-on to access release history'}),
+              :body   => Heroku::API::OkJson.encode({'error' => 'Please install the Release Management add-on to access release history'}),
               :status => 422
             }
           end

@@ -1,16 +1,16 @@
-require 'heroku/stubs/addons'
-require 'heroku/stubs/apps'
-require 'heroku/stubs/collaborators'
-require 'heroku/stubs/config_vars'
-require 'heroku/stubs/domains'
-require 'heroku/stubs/keys'
-require 'heroku/stubs/logs'
-require 'heroku/stubs/processes'
-require 'heroku/stubs/releases'
-require 'heroku/stubs/stacks'
+require 'heroku/api/mock/addons'
+require 'heroku/api/mock/apps'
+require 'heroku/api/mock/collaborators'
+require 'heroku/api/mock/config_vars'
+require 'heroku/api/mock/domains'
+require 'heroku/api/mock/keys'
+require 'heroku/api/mock/logs'
+require 'heroku/api/mock/processes'
+require 'heroku/api/mock/releases'
+require 'heroku/api/mock/stacks'
 
 module Heroku
-  class API < Excon::Connection
+  class API
     module Mock
 
       APP_NOT_FOUND  = { :body => 'App not found.',   :status => 404 }
@@ -59,8 +59,8 @@ module Heroku
 
       def self.get_mock_addon(mock_data, addon)
         @addons ||= begin
-          data = File.read("#{File.dirname(__FILE__)}/stubs/cache/get_addons.json")
-          HerokuAPI::OkJson.decode(data)
+          data = File.read("#{File.dirname(__FILE__)}/mock/cache/get_addons.json")
+          Heroku::API::OkJson.decode(data)
         end
         @addons.detect {|addon_data| addon_data['name'] == addon}
       end
@@ -125,7 +125,7 @@ module Heroku
 
         parsed = params.dup
         begin # try to JSON decode
-          parsed[:body] &&= HerokuAPI::OkJson.decode(parsed[:body])
+          parsed[:body] &&= Heroku::API::OkJson.decode(parsed[:body])
         rescue # else leave as is
         end
 

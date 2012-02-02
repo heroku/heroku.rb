@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
 
     # DELETE /apps/:app/collaborators/:email
     def delete_collaborator(app, email)

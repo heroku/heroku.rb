@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
 
     # DELETE /user/keys/:key
     def delete_key(key)

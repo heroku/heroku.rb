@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
     module Mock
 
       # stub DELETE /apps/:app/addons/:addon
@@ -14,7 +14,7 @@ module Heroku
               # addon is currently installed
               remove_mock_app_addon(mock_data, app, addon)
               {
-                :body   => HerokuAPI::OkJson.encode({
+                :body   => Heroku::API::OkJson.encode({
                   :message  => nil,
                   :price    => get_mock_addon_price(mock_data, addon),
                   :status   => 'Uninstalled'
@@ -24,14 +24,14 @@ module Heroku
             else
               # addon is not currently installed
               {
-                :body   => HerokuAPI::OkJson.encode({'error' => "The add-on #{addon} is not installed for this app. Did you mean:\n\t#{addon_names.join("\n\t")}"}),
+                :body   => Heroku::API::OkJson.encode({'error' => "The add-on #{addon} is not installed for this app. Did you mean:\n\t#{addon_names.join("\n\t")}"}),
                 :status => 422
               }
             end
           else
             # addon does not exist
             {
-              :body   => HerokuAPI::OkJson.encode({'error' => "Could not find add-on #{addon}. Did you mean:\n\t#{addon_names.join("\n\t")}"}),
+              :body   => Heroku::API::OkJson.encode({'error' => "Could not find add-on #{addon}. Did you mean:\n\t#{addon_names.join("\n\t")}"}),
               :status => 422
             }
           end
@@ -53,7 +53,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do
           {
-            :body   => HerokuAPI::OkJson.encode(mock_data[:addons][app].map {|addon| addon['configured'] = true; addon}),
+            :body   => Heroku::API::OkJson.encode(mock_data[:addons][app].map {|addon| addon['configured'] = true; addon}),
             :status => 200
           }
         end
@@ -72,7 +72,7 @@ module Heroku
                 # addon is not currently installed
                 add_mock_app_addon(mock_data, app, addon)
                 {
-                  :body   => HerokuAPI::OkJson.encode({
+                  :body   => Heroku::API::OkJson.encode({
                     :message  => nil,
                     :price    => get_mock_addon_price(mock_data, addon),
                     :status   => 'Installed'
@@ -82,21 +82,21 @@ module Heroku
               else
                 # addon is currently installed
                 {
-                  :body   => HerokuAPI::OkJson.encode({'error' => "Add-on already installed."}),
+                  :body   => Heroku::API::OkJson.encode({'error' => "Add-on already installed."}),
                   :status => 422
                 }
               end
             else
               # addon of same type exists
               {
-                :body   => HerokuAPI::OkJson.encode({'error' => "#{app_addon_type_data['name']} add-on already added.\nTo upgrade, use addons:upgrade instead.\n"}),
+                :body   => Heroku::API::OkJson.encode({'error' => "#{app_addon_type_data['name']} add-on already added.\nTo upgrade, use addons:upgrade instead.\n"}),
                 :status => 422
               }
             end
           else
             # addon does not exist
             {
-              :body   => HerokuAPI::OkJson.encode({'error' => "Add-on not found."}),
+              :body   => Heroku::API::OkJson.encode({'error' => "Add-on not found."}),
               :status => 422
             }
           end
@@ -117,7 +117,7 @@ module Heroku
                 mock_data[:addons][app].delete(app_addon_data)
                 add_mock_app_addon(mock_data, app, addon)
                 {
-                  :body   => HerokuAPI::OkJson.encode({
+                  :body   => Heroku::API::OkJson.encode({
                     :message  => nil,
                     :price    => get_mock_addon_price(mock_data, addon),
                     :status   => 'Updated'
@@ -127,21 +127,21 @@ module Heroku
               else
                 # addon is currently installed
                 {
-                  :body   => HerokuAPI::OkJson.encode({'error' => "Add-on already installed."}),
+                  :body   => Heroku::API::OkJson.encode({'error' => "Add-on already installed."}),
                   :status => 422
                 }
               end
             else
               # addon of same type not installed
               {
-                :body   => HerokuAPI::OkJson.encode({'error' => "Can't upgrade, no #{addon.split(':').join(' ')} add-on has been added.\nTo add, use addons:add instead.\n"}),
+                :body   => Heroku::API::OkJson.encode({'error' => "Can't upgrade, no #{addon.split(':').join(' ')} add-on has been added.\nTo add, use addons:add instead.\n"}),
                 :status => 422
               }
             end
           else
             # addon does not exist
             {
-              :body   => HerokuAPI::OkJson.encode({'error' => "Add-on not found."}),
+              :body   => Heroku::API::OkJson.encode({'error' => "Add-on not found."}),
               :status => 422
             }
           end

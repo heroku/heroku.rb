@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
 
     # GET /apps/:app/logs
     def get_logs(app, options)

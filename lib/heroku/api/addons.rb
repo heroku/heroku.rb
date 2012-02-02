@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
 
     # DELETE /apps/:app/addons/:addon
     def delete_addon(app, addon)

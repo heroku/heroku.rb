@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
     module Mock
 
       # stub DELETE /apps/:app/collaborators/:email
@@ -25,7 +25,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do
           {
-            :body   => HerokuAPI::OkJson.encode(mock_data[:collaborators][app]),
+            :body   => Heroku::API::OkJson.encode(mock_data[:collaborators][app]),
             :status => 200
           }
         end

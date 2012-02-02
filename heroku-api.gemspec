@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "heroku-api/version"
+require "heroku/api/version"
 
 Gem::Specification.new do |s|
   s.name        = "heroku-api"
-  s.version     = HerokuAPI::VERSION
+  s.version     = Heroku::API::VERSION
   s.authors     = ["geemus (Wesley Beary)"]
   s.email       = ["wesley@heroku.com"]
   s.homepage    = "http://github.com/heroku/heroku.rb"

@@ -11,7 +11,7 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_delete_app_not_found
-    assert_raises(Heroku::Errors::NotFound) do
+    assert_raises(Heroku::API::Errors::NotFound) do
       heroku.delete_app(random_name)
     end
   end
@@ -33,7 +33,7 @@ class TestApps < MiniTest::Unit::TestCase
   end
 
   def test_get_app_not_found
-    assert_raises(Heroku::Errors::NotFound) do
+    assert_raises(Heroku::API::Errors::NotFound) do
       heroku.get_app(random_name)
     end
   end
@@ -60,7 +60,7 @@ class TestApps < MiniTest::Unit::TestCase
     name = random_name
     response = heroku.post_app('name' => name)
 
-    assert_raises(Heroku::Errors::Error) do
+    assert_raises(Heroku::API::Errors::Error) do
       heroku.post_app('name' => name)
     end
 
@@ -78,7 +78,7 @@ class TestApps < MiniTest::Unit::TestCase
 
   def test_put_app_not_found
     name = random_name
-    assert_raises(Heroku::Errors::NotFound) do
+    assert_raises(Heroku::API::Errors::NotFound) do
       heroku.put_app(name, 'name' => random_name)
     end
   end
@@ -97,7 +97,7 @@ class TestApps < MiniTest::Unit::TestCase
 
   def test_put_app_with_transfer_owner_non_collaborator
     with_app do |app_data|
-      assert_raises(Heroku::Errors::Error) do
+      assert_raises(Heroku::API::Errors::Error) do
         heroku.put_app(app_data['name'], 'transfer_owner' => random_email_address)
       end
     end

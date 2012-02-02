@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
 
     # GET /apps/:app/ps
     def get_ps(app)

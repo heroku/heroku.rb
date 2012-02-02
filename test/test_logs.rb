@@ -12,7 +12,7 @@ class TestLogs < MiniTest::Unit::TestCase
   end
 
   def test_get_logs_app_not_found
-    assert_raises(Heroku::Errors::NotFound) do
+    assert_raises(Heroku::API::Errors::NotFound) do
       heroku.get_logs(random_name, 'logplex' => true)
     end
   end

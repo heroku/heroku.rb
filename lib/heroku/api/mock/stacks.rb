@@ -1,5 +1,5 @@
 module Heroku
-  class API < Excon::Connection
+  class API
     module Mock
 
       STACKS = [
@@ -37,7 +37,7 @@ module Heroku
           stack_data = STACKS.dup
           stack_data.detect {|stack| stack['name'] == app_data['stack']}['current'] = true
           {
-            :body   => HerokuAPI::OkJson.encode(stack_data),
+            :body   => Heroku::API::OkJson.encode(stack_data),
             :status => 200
           }
         end
@@ -66,13 +66,13 @@ BODY
               }
             else
               {
-                :body   => HerokuAPI::OkJson.encode('error' => 'Stack not found'),
+                :body   => Heroku::API::OkJson.encode('error' => 'Stack not found'),
                 :status => 404
               }
             end
           else
             {
-              :body   => HerokuAPI::OkJson.encode('error' => 'Stack migration to/from Cedar is not available. Create a new app with --stack cedar instead.'),
+              :body   => Heroku::API::OkJson.encode('error' => 'Stack migration to/from Cedar is not available. Create a new app with --stack cedar instead.'),
               :status => 422
             }
           end
