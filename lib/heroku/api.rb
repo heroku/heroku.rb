@@ -3,6 +3,7 @@ require "cgi"
 require "excon"
 require "securerandom"
 
+require "heroku-api/version"
 require "heroku/errors"
 require "heroku/mock"
 require "heroku/vendor/heroku/okjson"
@@ -17,12 +18,13 @@ require "heroku/api/logs"
 require "heroku/api/processes"
 require "heroku/api/releases"
 require "heroku/api/stacks"
-require "heroku/api/version"
 
 srand
 
 module Heroku
   class API < Excon::Connection
+
+    VERSION = HerokuAPI::VERSION
 
     def initialize(options={})
       @api_key = options.delete(:api_key) || ENV['HEROKU_API_KEY']
