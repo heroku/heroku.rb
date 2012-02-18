@@ -116,4 +116,17 @@ class TestApps < MiniTest::Unit::TestCase
     end
   end
 
+  def test_post_app_maintenance
+    with_app do |app_data|
+      response = heroku.post_app_maintenance(app_data['name'], '1')
+
+      assert_equal(200, response.status)
+      assert_equal("", response.body)
+
+      response = heroku.post_app_maintenance(app_data['name'], '0')
+
+      assert_equal(200, response.status)
+      assert_equal("", response.body)
+    end
+  end
 end

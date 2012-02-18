@@ -39,7 +39,7 @@ module Heroku
     end
 
     # POST /apps/:app/server/maintenance
-    def post_app_server_maintenance(app, new_server_maintenance)
+    def post_app_maintenance(app, maintenance_mode)
       request(
         :expects  => 200,
         :method   => :post,
