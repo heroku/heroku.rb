@@ -37,17 +37,17 @@ For additional details about any of the commands, see the [API docs](http://api-
 
 ### Apps
 
-    heroku.delete_app('app')  # delete an app named 'app'
-    heroku.get_app('app')     # get info about an app named 'app'
-    heroku.get_apps           # get a list of your apps
-    heroku.post_app           # create an app with a generated name and the default stack
-
-    heroku.post_app('name' => 'app') # create an app with a specified name
+    heroku.delete_app('app')                # delete an app named 'app'
+    heroku.get_apps                         # get a list of your apps
+    heroku.get_app('app')                   # get info about an app named 'app'
+    heroku.post_app                         # create an app with a generated name and the default stack
+    heroku.post_app('name' => 'app')        # create an app with a specified name
+    heroku.post_app_maintenance('app', '1') # toggle maintenance mode
 
 ### Collaborators
 
     delete_collaborator('app', 'email@example.com') # remove 'email@example.com' collaborator from 'app' app
-    delete_collaborator('app')                      # list collaborators for 'app' app
+    get_collaborators('app')                        # list collaborators for 'app' app
     post_collaborator('app', 'email@example.com')   # add 'email@example.com' collaborator to 'app' app
 
 ### Config Variables
