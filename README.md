@@ -12,9 +12,9 @@ Usage
 
 Start by creating a connection to Heroku with your credentials:
 
-    require 'heroku-rb'
+    require 'heroku-api'
 
-    heroku = Heroku.new(:api_key => API_KEY)
+    heroku = Heroku::API.new(:api_key => API_KEY)
 
 NOTE: You can leave out the `:api_key` if `ENV['HEROKU_API_KEY']` is set instead.
 
@@ -103,9 +103,9 @@ Mock
 
 For practice or testing you can also use a simulated Heroku:
 
-    require 'heroku-rb'
+    require 'heroku-api'
 
-    heroku = Heroku.new(:api_key => API_KEY, :mock => true)
+    heroku = Heroku::API.new(:api_key => API_KEY, :mock => true)
 
 After that commands should still behave the same, but they will only modify some local data instead of updating the state of things on Heroku.
 
