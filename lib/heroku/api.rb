@@ -19,6 +19,7 @@ require "heroku/api/logs"
 require "heroku/api/processes"
 require "heroku/api/releases"
 require "heroku/api/stacks"
+require "heroku/api/user"
 
 srand
 
