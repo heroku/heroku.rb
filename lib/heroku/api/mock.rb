@@ -8,6 +8,7 @@ require 'heroku/api/mock/logs'
 require 'heroku/api/mock/processes'
 require 'heroku/api/mock/releases'
 require 'heroku/api/mock/stacks'
+require 'heroku/api/mock/user'
 
 module Heroku
   class API
@@ -26,7 +27,8 @@ module Heroku
           :keys             => [],
           :maintenance_mode => [],
           :ps               => {},
-          :releases         => {}
+          :releases         => {},
+          :user             => {}
         }
       end
 
