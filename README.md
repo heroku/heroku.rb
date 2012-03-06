@@ -97,6 +97,9 @@ For additional details about any of the commands, see the [API docs](http://api-
     get_stack('app')          # list available stacks
     put_stack('app', 'stack') # migrate 'app' app to 'stack' stack
 
+### User
+
+    get_user                  # list info about current user
 
 Mock
 ----
