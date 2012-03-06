@@ -99,7 +99,7 @@ For additional details about any of the commands, see the [API docs](http://api-
 
 ### User
 
-    get_user                  # list info about current user
+    get_user                  # list user info
 
 Mock
 ----
