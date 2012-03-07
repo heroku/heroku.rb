@@ -127,7 +127,7 @@ class TestProcesses < MiniTest::Unit::TestCase
       response = heroku.post_ps_scale(app_data['name'], 'web', 1)
 
       assert_equal(200, response.status)
-      assert_equal(1, response.body)
+      assert_equal("1", response.body)
     end
   end
 
@@ -144,7 +144,7 @@ class TestProcesses < MiniTest::Unit::TestCase
       response = heroku.post_ps_scale(app_data['name'], 'web', 2)
 
       assert_equal(200, response.status)
-      assert_equal(2, response.body)
+      assert_equal("2", response.body)
     end
   end
 

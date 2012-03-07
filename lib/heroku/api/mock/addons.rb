@@ -15,9 +15,9 @@ module Heroku
               remove_mock_app_addon(mock_data, app, addon)
               {
                 :body   => Heroku::API::Mock::json_gzip({
-                  :message  => nil,
-                  :price    => get_mock_addon_price(mock_data, addon),
-                  :status   => 'Uninstalled'
+                  "message" => nil,
+                  "price"   => get_mock_addon_price(mock_data, addon),
+                  "status"  => 'Uninstalled'
                 }),
                 :status => 200
               }
@@ -73,9 +73,9 @@ module Heroku
                 add_mock_app_addon(mock_data, app, addon)
                 {
                   :body   => Heroku::API::Mock.json_gzip({
-                    :message  => nil,
-                    :price    => get_mock_addon_price(mock_data, addon),
-                    :status   => 'Installed'
+                    "message" => nil,
+                    "price"   => get_mock_addon_price(mock_data, addon),
+                    "status"  => 'Installed'
                   }),
                   :status => 200
                 }
@@ -118,9 +118,9 @@ module Heroku
                 add_mock_app_addon(mock_data, app, addon)
                 {
                   :body   => Heroku::API::Mock.json_gzip({
-                    :message  => nil,
-                    :price    => get_mock_addon_price(mock_data, addon),
-                    :status   => 'Updated'
+                    "message" => nil,
+                    "price"   => get_mock_addon_price(mock_data, addon),
+                    "status"  => 'Updated'
                   }),
                   :status => 200
                 }
