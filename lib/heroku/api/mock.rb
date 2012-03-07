@@ -122,6 +122,18 @@ module Heroku
         end
       end
 
+      def self.gzip(string)
+        io = StringIO.new
+        gzip = Zlib::GzipWriter.new(io)
+        gzip.write(string)
+        gzip.close
+        io.string
+      end
+
+      def self.json_gzip(string)
+        gzip(Heroku::API::OkJson.encode(string))
+      end
+
       def self.parse_stub_params(params)
         api_key = Base64.decode64(params[:headers]['Authorization']).split(':').last
 

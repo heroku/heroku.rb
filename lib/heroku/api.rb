@@ -2,6 +2,8 @@ require "base64"
 require "cgi"
 require "excon"
 require "securerandom"
+require "stringio"
+require "zlib"
 
 __LIB_DIR__ = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 unless $LOAD_PATH.include?(__LIB_DIR__)
@@ -41,6 +43,8 @@ module Heroku
       }.merge(options)
       options[:headers] = {
         'Accept'                => 'application/json',
+        'Accept-Encoding'       => 'gzip',
+        #'Accept-Language'       => 'en-US, en;q=0.8',
         'Authorization'         => "Basic #{Base64.encode64(user_pass).gsub("\n", '')}",
         'User-Agent'            => "heroku-rb/#{Heroku::API::VERSION}",
         'X-Heroku-API-Version'  => '3',
@@ -64,6 +68,7 @@ module Heroku
       end
 
       if response.body && !response.body.empty?
+        response.body = Zlib::GzipReader.new(StringIO.new(response.body)).read
         begin
           response.body = Heroku::API::OkJson.decode(response.body)
         rescue

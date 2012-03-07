@@ -9,7 +9,7 @@ module Heroku
         with_mock_app(mock_data, app) do
           mock_data[:config_vars][app].delete(key)
           {
-            :body   => Heroku::API::OkJson.encode(mock_data[:config_vars][app]),
+            :body   => Heroku::API::Mock.json_gzip(mock_data[:config_vars][app]),
             :status => 200
           }
         end
@@ -21,7 +21,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do
           {
-            :body   => Heroku::API::OkJson.encode(mock_data[:config_vars][app]),
+            :body   => Heroku::API::Mock.json_gzip(mock_data[:config_vars][app]),
             :status => 200
           }
         end
@@ -35,7 +35,7 @@ module Heroku
           new_config_vars = request_params[:body]
           mock_data[:config_vars][app].merge!(new_config_vars)
           {
-            :body   => Heroku::API::OkJson.encode(mock_data[:config_vars][app]),
+            :body   => Heroku::API::Mock.json_gzip(mock_data[:config_vars][app]),
             :status => 200
           }
         end

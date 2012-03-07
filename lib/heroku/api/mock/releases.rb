@@ -9,17 +9,17 @@ module Heroku
         with_mock_app(mock_data, app) do |app_data|
           if get_mock_app_addon(mock_data, app, 'releases:basic')
             {
-              :body   => mock_data[:releases][app][-2..-1],
+              :body   => Heroku::API::Mock.json_gzip(mock_data[:releases][app][-2..-1]),
               :status => 200
             }
           elsif get_mock_app_addon(mock_data, app, 'releases:advanced')
             {
-              :body   => mock_data[:releases][app],
+              :body   => Heroku::API::Mock.json_gzip(mock_data[:releases][app]),
               :status => 200
             }
           else
             {
-              :body   => Heroku::API::OkJson.encode({'error' => 'Please install the Release Management add-on to access release history'}),
+              :body   => Heroku::API::Mock.json_gzip({'error' => 'Please install the Release Management add-on to access release history'}),
               :status => 422
             }
           end
@@ -39,7 +39,7 @@ module Heroku
             end
             if release_data = releases.detect {|release| release['name'] == release_name}
               {
-                :body   => Heroku::API::OkJson.encode(release_data),
+                :body   => Heroku::API::Mock.json_gzip(release_data),
                 :status => 200
               }
             else
@@ -50,7 +50,7 @@ module Heroku
             end
           else
             {
-              :body   => Heroku::API::OkJson.encode({'error' => 'Please install the Release Management add-on to access release history'}),
+              :body   => Heroku::API::Mock.json_gzip({'error' => 'Please install the Release Management add-on to access release history'}),
               :status => 422
             }
           end
@@ -95,24 +95,24 @@ module Heroku
                 }
 
                 {
-                  :body   => release_data['name'],
+                  :body   => Heroku::API::Mock.gzip(release_data['name']),
                   :status => 200
                 }
               else
                 {
-                  :body   => Heroku::API::OkJson.encode({'error' => 'Cannot rollback to a release that had a different set of addons installed'}),
+                  :body   => Heroku::API::Mock.json_gzip({'error' => 'Cannot rollback to a release that had a different set of addons installed'}),
                   :status => 422
                 }
               end
             else
               {
-                :body   => 'Record not found.',
+                :body   => Heroku::API::Mock.gzip('Record not found.'),
                 :status => 404
               }
             end
           else
             {
-              :body   => Heroku::API::OkJson.encode({'error' => 'Please install the Release Management add-on to access release history'}),
+              :body   => Heroku::API::Mock.json_gzip({'error' => 'Please install the Release Management add-on to access release history'}),
               :status => 422
             }
           end

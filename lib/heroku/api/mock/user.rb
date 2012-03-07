@@ -6,7 +6,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :get, :path => %r{^/user}) do |params|
         request_params, mock_data = parse_stub_params(params)
         {
-          :body   => File.read("#{File.dirname(__FILE__)}/cache/get_user.json"),
+          :body   => Heroku::API::Mock.gzip(File.read("#{File.dirname(__FILE__)}/cache/get_user.json")),
           :status => 200
         }
       end

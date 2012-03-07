@@ -10,11 +10,11 @@ module Heroku
           if collaborator_data = get_mock_collaborator(mock_data, app, email)
             mock_data[:collaborators][app].delete(collaborator_data)
             {
-              :body => "#{email} has been removed as collaborator on #{app}",
+              :body => Heroku::API::Mock.gzip("#{email} has been removed as collaborator on #{app}"),
               :status => 200
             }
           else
-            { :body => 'User not found.', :status => 404 }
+            { :body => Heroku::API::Mock.gzip('User not found.'), :status => 404 }
           end
         end
       end
@@ -25,7 +25,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do
           {
-            :body   => Heroku::API::OkJson.encode(mock_data[:collaborators][app]),
+            :body   => Heroku::API::Mock.json_gzip(mock_data[:collaborators][app]),
             :status => 200
           }
         end
@@ -39,7 +39,7 @@ module Heroku
         with_mock_app(mock_data, app) do
           mock_data[:collaborators][app] |= [{'access' => 'edit', 'email' => email}]
           {
-            :body   => "#{email} added as a collaborator on #{app}.",
+            :body   => Heroku::API::Mock.gzip("#{email} added as a collaborator on #{app}."),
             :status => 200
           }
           # Existing user response
