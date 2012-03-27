@@ -92,5 +92,8 @@ module Heroku
       app_params
     end
 
+    def addon_params(params)
+      {:config => params}
+    end
   end
 end

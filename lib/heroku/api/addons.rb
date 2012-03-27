@@ -26,22 +26,23 @@ module Heroku
     end
 
     # POST /apps/:app/addons/:addon
-    def post_addon(app, addon)
+    def post_addon(app, addon, config = {})
       request(
         :expects  => 200,
         :method   => :post,
-        :path     => "/apps/#{app}/addons/#{addon}"
+        :path     => "/apps/#{app}/addons/#{addon}",
+        :query    => addon_params(config)
       )
     end
 
     # PUT /apps/:app/addons/:addon
-    def put_addon(app, addon)
+    def put_addon(app, addon, config = {})
       request(
         :expects  => 200,
         :method   => :put,
-        :path     => "/apps/#{app}/addons/#{addon}"
+        :path     => "/apps/#{app}/addons/#{addon}",
+        :query    => addon_params(config)
       )
     end
-
   end
 end
