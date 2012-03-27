@@ -90,6 +90,19 @@ class TestAddons < MiniTest::Unit::TestCase
     end
   end
 
+  def test_post_addon_with_config
+    with_app do |app_data|
+      response = heroku.post_addon(app_data['name'], 'heroku-postgresql:ronin', {"superuser"=>"SUPERSECRET"})
+
+      assert_equal(200, response.status)
+      assert_equal({
+        'message' => nil,
+        'price'   => '$200/mo',
+        'status'  => 'Installed'
+      }, response.body)
+    end
+  end
+
   def test_post_addon_addon_already_installed
     with_app do |app_data|
       assert_raises(Heroku::API::Errors::Error) do
