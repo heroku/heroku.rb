@@ -61,7 +61,7 @@ module Heroku
             'name'                => app,
             'owner_email'         => 'email@example.com',
             'slug_size'           => nil,
-            'stack'               => request_params[:query].has_key?('app[stack]') && request_params[:query]['app[stack]'] || 'bamboo-mri-1.9.2',
+            'stack'               => stack,
             'requested_stack'     => nil,
             'git_url'             => "git@heroku.com:#{app}.git",
             'repo_migrate_status' => 'complete',
