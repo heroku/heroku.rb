@@ -1,3 +1,14 @@
+0.1.1 04/06/2012
+================
+
+readme/docs updates and fixes
+add get_user method
+request/use gzip responses
+update vendored okjson
+allow passing config data to addon install
+fix STACK usage in mocks
+bump excon dep
+
 0.1.0 02/02/2012
 ================
 
