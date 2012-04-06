@@ -34,7 +34,7 @@ module Heroku
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do |app_data|
-          stack_data = STACKS.dup
+          stack_data = Marshal::load(Marshal.dump(STACKS))
           stack_data.detect {|stack| stack['name'] == app_data['stack']}['current'] = true
           {
             :body   => Heroku::API::Mock.json_gzip(stack_data),
