@@ -37,7 +37,7 @@ module Heroku
           stack_data = Marshal::load(Marshal.dump(STACKS))
           stack_data.detect {|stack| stack['name'] == app_data['stack']}['current'] = true
           {
-            :body   => Heroku::API::Mock.json_gzip(stack_data),
+            :body   => Heroku::API::OkJson.encode(stack_data),
             :status => 200
           }
         end
@@ -52,7 +52,7 @@ module Heroku
           if app_data['stack'] != 'cedar' && stack != 'cedar'
             if STACKS.map {|stack_data| stack_data['name']}.include?(stack)
               {
-                :body   => Heroku::API::Mock.gzip(<<-BODY),
+                :body   => <<-BODY,
 HTTP/1.1 200 OK
 -----> Preparing to migrate #{app}
        #{app_data['stack']} -> #{stack}
@@ -66,13 +66,13 @@ BODY
               }
             else
               {
-                :body   => Heroku::API::Mock.json_gzip('error' => 'Stack not found'),
+                :body   => Heroku::API::OkJson.encode('error' => 'Stack not found'),
                 :status => 404
               }
             end
           else
             {
-              :body   => Heroku::API::Mock.json_gzip('error' => 'Stack migration to/from Cedar is not available. Create a new app with --stack cedar instead.'),
+              :body   => Heroku::API::OkJson.encode('error' => 'Stack migration to/from Cedar is not available. Create a new app with --stack cedar instead.'),
               :status => 422
             }
           end

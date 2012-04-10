@@ -58,7 +58,7 @@ class TestAddons < MiniTest::Unit::TestCase
         'description' => 'Logging Basic',
         'name'        => 'logging:basic',
         'url'         => 'https://addons.heroku.com/addons/logging:basic',
-        'state'       => 'public'
+        'state'       => 'disabled'
       },
       {
         'beta'        => false,
