@@ -16,7 +16,7 @@ task :cache, [:api_key] do |task, args|
     require "#{File.dirname(__FILE__)}/lib/heroku/api"
     heroku = Heroku::API.new(:api_key => args.api_key)
     data = Heroku::API::OkJson.encode(heroku.get_addons.body)
-    File.open("#{File.dirname(__FILE__)}/lib/heroku/stubs/cache/get_addons.json", 'w') do |file|
+    File.open("#{File.dirname(__FILE__)}/lib/heroku/api/mock/cache/get_addons.json", 'w') do |file|
       file.write(data)
     end
   end
