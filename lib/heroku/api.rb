@@ -68,7 +68,11 @@ module Heroku
       end
 
       if response.body && !response.body.empty?
-        response.body = Zlib::GzipReader.new(StringIO.new(response.body)).read
+        begin
+          response.body = Zlib::GzipReader.new(StringIO.new(response.body)).read
+        rescue Zlib::GzipFile::Error
+          # response body was not zipped
+        end
         begin
           response.body = Heroku::API::OkJson.decode(response.body)
         rescue
