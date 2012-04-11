@@ -1,3 +1,9 @@
+0.1.2 04/10/2012
+================
+
+less aggressive gzip usage (checks content-encoding)
+update cache
+
 0.1.1 04/06/2012
 ================
 
