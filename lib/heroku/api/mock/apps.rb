@@ -147,7 +147,7 @@ module Heroku
             name = request_params[:query]['app[name]']
             app_data['git_url'] = "git@heroku.com:#{name}.git"
             app_data['name'] = name
-            app_data['web_url'] = "http://#{app}.herokuapp.com/"
+            app_data['web_url'] = "http://#{name}.herokuapp.com/"
           end
           if request_params[:query].has_key?('app[transfer_owner]')
             email = request_params[:query]['app[transfer_owner]']
