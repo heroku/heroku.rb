@@ -43,6 +43,7 @@ For additional details about any of the commands, see the [API docs](http://api-
     heroku.post_app                         # create an app with a generated name and the default stack
     heroku.post_app('name' => 'app')        # create an app with a specified name
     heroku.post_app_maintenance('app', '1') # toggle maintenance mode
+    heroku.put_app('name' => 'myapp')       # update an app to have a different name
 
 ### Collaborators
 
