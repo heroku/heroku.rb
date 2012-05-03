@@ -58,11 +58,21 @@ module Heroku
       begin
         response = @connection.request(params, &block)
       rescue Excon::Errors::NotFound => error
-        reerror = Heroku::API::Errors::NotFound.new(error.message)
+        reerror = Heroku::API::Errors::NotFound.new(error.message, error.response)
         reerror.set_backtrace(error.backtrace)
         raise reerror
       rescue Excon::Errors::Error => error
-        reerror = Heroku::API::Errors::Error.new(error.message)
+        klass = case error.response.status
+          when 401 then Heroku::API::Errors::Unauthorized
+          when 402 then Heroku::API::Errors::VerificationRequired
+          when 403 then Heroku::API::Errors::Forbidden
+          when 408 then Heroku::API::Errors::Timeout
+          when 423 then Heroku::API::Errors::Locked
+          when /50./ then Heroku::API::Errors::RequestFailed
+          else Heroku::API::Errors::ErrorWithResponse
+        end
+
+        reerror = klass.new(error.message, error.response)
         reerror.set_backtrace(error.backtrace)
         raise reerror
       end
