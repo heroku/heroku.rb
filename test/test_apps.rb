@@ -60,7 +60,7 @@ class TestApps < MiniTest::Unit::TestCase
     name = random_name
     response = heroku.post_app('name' => name)
 
-    assert_raises(Heroku::API::Errors::Error) do
+    assert_raises(Heroku::API::Errors::RequestFailed) do
       heroku.post_app('name' => name)
     end
 
@@ -97,7 +97,7 @@ class TestApps < MiniTest::Unit::TestCase
 
   def test_put_app_with_transfer_owner_non_collaborator
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.put_app(app_data['name'], 'transfer_owner' => random_email_address)
       end
     end

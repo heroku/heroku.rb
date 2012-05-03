@@ -4,7 +4,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_delete_addon_addon_not_found
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.delete_addon(app_data['name'], random_name)
       end
     end
@@ -12,7 +12,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_delete_addon_addon_not_installed
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.delete_addon(app_data['name'], 'custom_domains:basic')
       end
     end
@@ -105,7 +105,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_post_addon_addon_already_installed
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.post_addon(app_data['name'], 'logging:basic')
         heroku.post_addon(app_data['name'], 'logging:basic')
       end
@@ -114,7 +114,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_post_addon_addon_type_already_installed
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.post_addon(app_data['name'], 'logging:basic')
         heroku.post_addon(app_data['name'], 'logging:expanded')
       end
@@ -123,7 +123,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_post_addon_addon_not_found
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.post_addon(app_data['name'], random_name)
       end
     end
@@ -150,7 +150,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_put_addon_addon_already_installed
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.post_addon(app_data['name'], 'logging:basic')
         heroku.put_addon(app_data['name'], 'logging:basic')
       end
@@ -159,7 +159,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_put_addon_addon_not_found
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.put_addon(app_data['name'], random_name)
       end
     end
@@ -167,7 +167,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_put_addon_addon_type_not_installed
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.put_addon(app_data['name'], 'releases:basic')
       end
     end

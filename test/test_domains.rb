@@ -48,7 +48,7 @@ class TestDomains < MiniTest::Unit::TestCase
 
   def test_post_domain_addon_not_installed
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.post_domain(app_data['name'], 'example.com')
       end
     end
