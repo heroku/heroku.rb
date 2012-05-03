@@ -67,6 +67,7 @@ module Heroku
           when 402 then Heroku::API::Errors::VerificationRequired
           when 403 then Heroku::API::Errors::Forbidden
           when 408 then Heroku::API::Errors::Timeout
+          when 422 then Heroku::API::Errors::RequestFailed
           when 423 then Heroku::API::Errors::Locked
           when /50./ then Heroku::API::Errors::RequestFailed
           else Heroku::API::Errors::ErrorWithResponse
