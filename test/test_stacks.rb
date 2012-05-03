@@ -40,7 +40,7 @@ class TestStacks < MiniTest::Unit::TestCase
 
   def test_put_stack_cedar
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.put_stack(app_data['name'], 'cedar')
       end
     end

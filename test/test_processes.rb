@@ -132,7 +132,7 @@ class TestProcesses < MiniTest::Unit::TestCase
   end
 
   def test_post_ps_scale_type_not_found
-    assert_raises(Heroku::API::Errors::Error) do
+    assert_raises(Heroku::API::Errors::RequestFailed) do
       with_app('stack' => 'cedar') do |app_data|
         heroku.post_ps_scale(app_data['name'], 'run', 2)
       end
@@ -149,7 +149,7 @@ class TestProcesses < MiniTest::Unit::TestCase
   end
 
   def test_post_ps_scale_without_cedar
-    assert_raises(Heroku::API::Errors::Error) do
+    assert_raises(Heroku::API::Errors::RequestFailed) do
       with_app do |app_data|
         heroku.post_ps_scale(app_data['name'], 'web', 2)
       end
@@ -157,7 +157,7 @@ class TestProcesses < MiniTest::Unit::TestCase
   end
 
   def test_post_ps_stop
-    assert_raises(Heroku::API::Errors::Error) do
+    assert_raises(Heroku::API::Errors::RequestFailed) do
       with_app do |app_data|
         heroku.post_ps_stop(app_data['name'], {})
       end
@@ -208,7 +208,7 @@ class TestProcesses < MiniTest::Unit::TestCase
   end
 
   def test_put_dynos_with_cedar
-    assert_raises(Heroku::API::Errors::Error) do
+    assert_raises(Heroku::API::Errors::RequestFailed) do
       with_app('stack' => 'cedar') do |app_data|
         heroku.put_dynos(app_data['name'], 2)
       end
@@ -235,7 +235,7 @@ class TestProcesses < MiniTest::Unit::TestCase
   end
 
   def test_put_workers_with_cedar
-    assert_raises(Heroku::API::Errors::Error) do
+    assert_raises(Heroku::API::Errors::RequestFailed) do
       with_app('stack' => 'cedar') do |app_data|
         heroku.put_workers(app_data['name'], 2)
       end

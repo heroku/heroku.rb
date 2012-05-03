@@ -20,7 +20,7 @@ class TestReleases < MiniTest::Unit::TestCase
 
   def test_get_releases_addon_not_installed
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.get_releases(app_data['name'])
       end
     end
@@ -45,7 +45,7 @@ class TestReleases < MiniTest::Unit::TestCase
 
   def test_get_release_addon_not_installed
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.get_release(app_data['name'], 'v2')
       end
     end
@@ -76,7 +76,7 @@ class TestReleases < MiniTest::Unit::TestCase
 
   def test_post_release_addon_not_installed
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::Error) do
+      assert_raises(Heroku::API::Errors::RequestFailed) do
         heroku.post_release(app_data['name'], 'v3')
       end
     end
