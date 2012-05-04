@@ -23,6 +23,19 @@ module Heroku
         end
       end
 
+      # stub DELETE /apps/:app/domains/:domain
+      Excon.stub(:expects => 200, :method => :delete, :path => %r{^/apps/([^/]+)/domains$} ) do |params|
+        request_params, mock_data = parse_stub_params(params)
+        app, _ = request_params[:captures][:path]
+        with_mock_app(mock_data, app) do |app_data|
+          mock_data[:domains][app] = []
+          {
+            :body   => "",
+            :status => 200
+          }
+        end
+      end
+
       # stub GET /apps/:app/domains
       Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)/domains$} ) do |params|
         request_params, mock_data = parse_stub_params(params)

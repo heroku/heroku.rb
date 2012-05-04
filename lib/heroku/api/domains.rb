@@ -10,6 +10,15 @@ module Heroku
       )
     end
 
+    # DELETE /apps/:app/domains
+    def delete_domains(app)
+      request(
+        :expects  => 200,
+        :method   => :delete,
+        :path     => "/apps/#{app}/domains"
+      )
+    end
+
     # GET /apps/:app/domains
     def get_domains(app)
       request(

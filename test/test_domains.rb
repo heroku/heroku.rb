@@ -19,6 +19,17 @@ class TestDomains < MiniTest::Unit::TestCase
     end
   end
 
+  def test_delete_domains
+    with_app do |app_data|
+      heroku.post_addon(app_data['name'], 'custom_domains:basic')
+      heroku.post_domain(app_data['name'], 'example.com')
+      response = heroku.delete_domains(app_data['name'])
+
+      assert_equal(200, response.status)
+      assert_equal("", response.body)
+    end
+  end
+
   def test_get_domains
     with_app do |app_data|
       response = heroku.get_domains(app_data['name'])
