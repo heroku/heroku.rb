@@ -37,7 +37,7 @@ module Heroku
             elsif get_mock_app_addon(mock_data, app, 'releases:advanced')
               mock_data[:releases][app]
             end
-            if release_data = releases.detect {|release| release['name'] == release_name}
+            if (release_name == 'current' && release_data = releases.last) || releases.detect {|release| release['name'] == release_name}
               {
                 :body   => Heroku::API::OkJson.encode(release_data),
                 :status => 200

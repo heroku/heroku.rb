@@ -37,6 +37,16 @@ class TestReleases < MiniTest::Unit::TestCase
     end
   end
 
+  def test_get_release_current
+    with_app do |app_data|
+      heroku.post_addon(app_data['name'], 'releases:basic')
+      response = heroku.get_release(app_data['name'], 'current')
+
+      assert_equal(200, response.status)
+      # body assertion?
+    end
+  end
+
   def test_get_release_app_not_found
     assert_raises(Heroku::API::Errors::NotFound) do
       heroku.get_release(random_name, 'v2')
