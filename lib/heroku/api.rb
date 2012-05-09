@@ -62,6 +62,8 @@ module Heroku
         reerror = Heroku::API::Errors::NotFound.new(error.message, error.response)
         reerror.set_backtrace(error.backtrace)
         raise reerror
+      rescue Excon::Errors::SocketError => error
+        raise error
       rescue Excon::Errors::Error => error
         klass = case error.response.status
           when 401 then Heroku::API::Errors::Unauthorized

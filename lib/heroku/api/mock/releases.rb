@@ -3,7 +3,7 @@ module Heroku
     module Mock
 
       # stub GET /apps/:app/releases
-      Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)/releases} ) do |params|
+      Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)/releases$} ) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do |app_data|
@@ -27,7 +27,7 @@ module Heroku
       end
 
       # stub GET /apps/:app/releases/:release
-      Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)/releases/([^/]+)} ) do |params|
+      Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)/releases/([^/]+)$} ) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, release_name, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do |app_data|
@@ -37,7 +37,7 @@ module Heroku
             elsif get_mock_app_addon(mock_data, app, 'releases:advanced')
               mock_data[:releases][app]
             end
-            if (release_name == 'current' && release_data = releases.last) || releases.detect {|release| release['name'] == release_name}
+            if release_data = (release_name == 'current' && releases.last) || releases.detect {|release| release['name'] == release_name}
               {
                 :body   => Heroku::API::OkJson.encode(release_data),
                 :status => 200
