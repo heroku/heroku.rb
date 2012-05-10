@@ -58,10 +58,6 @@ module Heroku
     def request(params, &block)
       begin
         response = @connection.request(params, &block)
-      rescue Excon::Errors::NotFound => error
-        reerror = Heroku::API::Errors::NotFound.new(error.message, error.response)
-        reerror.set_backtrace(error.backtrace)
-        raise reerror
       rescue Excon::Errors::SocketError => error
         raise error
       rescue Excon::Errors::Error => error
@@ -69,6 +65,7 @@ module Heroku
           when 401 then Heroku::API::Errors::Unauthorized
           when 402 then Heroku::API::Errors::VerificationRequired
           when 403 then Heroku::API::Errors::Forbidden
+          when 404 then Heroku::API::Errors::NotFound
           when 408 then Heroku::API::Errors::Timeout
           when 422 then Heroku::API::Errors::RequestFailed
           when 423 then Heroku::API::Errors::Locked
@@ -78,7 +75,7 @@ module Heroku
 
         reerror = klass.new(error.message, error.response)
         reerror.set_backtrace(error.backtrace)
-        raise reerror
+        raise(reerror)
       end
 
       if response.body && !response.body.empty?
