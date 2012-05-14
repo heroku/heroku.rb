@@ -99,6 +99,7 @@ module Heroku
           add_mock_app_addon(mock_data, app, 'logging:basic')
           if stack == 'cedar'
             add_mock_app_addon(mock_data, app, 'releases:basic')
+            mock_data[:ps][app].first['command'] = 'bundle exec thin start -p $PORT'
             mock_data[:ps][app].first['type'] = 'Ps'
           else
             add_mock_app_addon(mock_data, app, 'shared-database:5mb')
