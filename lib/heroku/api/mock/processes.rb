@@ -80,13 +80,20 @@ module Heroku
       app, _ = request_params[:captures][:path]
       with_mock_app(mock_data, app) do |app_data|
         type = request_params[:query].has_key?('type') && request_params[:query]['type']
-        qty = request_params[:query].has_key?('qty') && request_params[:query]['qty'].to_i
+        qty = request_params[:query].has_key?('qty') && request_params[:query]['qty']
         if app_data['stack'] == 'cedar'
           if type == 'web'
             current_qty = mock_data[:ps][app].count {|process| process['process'] =~ %r{^web\.\d+}}
 
-            if qty >= current_qty
-              (qty - current_qty).times do
+            new_qty = case qty
+            when /[+-]\d+/
+              current_qty + qty.to_i
+            else
+              qty.to_i
+            end
+
+            if new_qty >= current_qty
+              (new_qty - current_qty).times do
                 max_web_id = mock_data[:ps][app].map {|process| process['process'].split('web.').last.to_i}.max
                 data = mock_data[:ps][app].first.dup # copy of web.1
                 data.merge({
@@ -96,15 +103,15 @@ module Heroku
                 })
                 mock_data[:ps][app] << data
               end
-            elsif qty < current_qty
-              (current_qty - qty).times do
+            elsif new_qty < current_qty
+              (current_qty - new_qty).times do
                 max_web_id = mock_data[:ps][app].map {|process| process['process'].split('web.').last.to_i}.max
                 process = mock_data[:ps][app].detect {|process| process['process'] == "web.#{max_web_id}"}
                 mock_data[:ps][app].delete(process)
               end
             end
             {
-              :body   => qty.to_s,
+              :body   => new_qty.to_s,
               :status => 200
             }
           else
