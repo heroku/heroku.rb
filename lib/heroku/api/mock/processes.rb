@@ -79,9 +79,8 @@ module Heroku
       request_params, mock_data = parse_stub_params(params)
       app, _ = request_params[:captures][:path]
       with_mock_app(mock_data, app) do |app_data|
-        request_params[:query]
         type = request_params[:query].has_key?('type') && request_params[:query]['type']
-        qty = request_params[:query].has_key?('qty') && request_params[:query]['qty']
+        qty = request_params[:query].has_key?('qty') && request_params[:query]['qty'].to_i
         if app_data['stack'] == 'cedar'
           if type == 'web'
             current_qty = mock_data[:ps][app].count {|process| process['process'] =~ %r{^web\.\d+}}
