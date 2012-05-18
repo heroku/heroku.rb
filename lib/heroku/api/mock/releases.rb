@@ -43,28 +43,7 @@ module Heroku
           releases = mock_data[:releases][app]
           if release_data = releases.detect {|release| release['name'] == release_name}
             if release_data['addons'] == mock_data[:releases][app].last['addons']
-              version = mock_data[:releases][app].map {|release| release['name'][1..-1].to_i}.max || 0
-              env = if get_mock_app(mock_data, app)['stack'] == 'cedar'
-                {
-                  'BUNDLE_WITHOUT'      => 'development:test',
-                  'DATABASE_URL'        => 'postgres://username:password@ec2-123-123-123-123.compute-1.amazonaws.com/username',
-                  'LANG'                => 'en_US.UTF-8',
-                  'RACK_ENV'            => 'production',
-                  'SHARED_DATABASE_URL' => 'postgres://username:password@ec2-123-123-123-123.compute-1.amazonaws.com/username'
-                }
-              else
-                {}
-              end
-              mock_data[:releases][app] << {
-                'addons'      => mock_data[:addons][app].map {|addon| addon['name']},
-                'commit'      => nil,
-                'created_at'  => timestamp,
-                'descr'       => "Rollback to #{release_name}",
-                'env'         => env,
-                'name'        => "v#{version + 1}",
-                'pstable'     => { 'web' => '' },
-                'user'        => 'email@example.com'
-              }
+              add_mock_release(mock_data, app, {'descr' => "Rollback to #{release_name}"})
 
               {
                 :body   => release_data['name'],

@@ -35,8 +35,11 @@ module Heroku
 
       def self.add_mock_app_addon(mock_data, app, addon)
         addon_data = get_mock_addon(mock_data, addon)
-        mock_data[:addons][app] << addon_data.reject {|key, value| !['beta', 'configured', 'description', 'name', 'state', 'url'].include?(key)}
-        version = mock_data[:releases][app].map {|release| release['name'][1..-1].to_i}.max || 0
+        mock_data[:addons][app] << addon_data.reject {|key, value| !['attachable', 'beta', 'configured', 'consumes_dyno_hours', 'description', 'group_description', 'name', 'plan_description', 'price', 'slug', 'state', 'terms_of_service', 'url'].include?(key)}
+        add_mock_release(mock_data, app, {'descr' => "Add-on add #{addon_data['name']}"})
+      end
+
+      def self.add_mock_release(mock_data, app, release_data)
         env = if get_mock_app(mock_data, app)['stack'] == 'cedar'
           {
             'BUNDLE_WITHOUT'      => 'development:test',
@@ -48,16 +51,17 @@ module Heroku
         else
           {}
         end
+        version = mock_data[:releases][app].map {|release| release['name'][1..-1].to_i}.max || 0
         mock_data[:releases][app] << {
           'addons'      => mock_data[:addons][app].map {|addon| addon['name']},
           'commit'      => nil,
           'created_at'  => timestamp,
-          'descr'       => "Add-on add #{addon_data['name']}",
+          'descr'       => "",
           'env'         => env,
           'name'        => "v#{version + 1}",
           'pstable'     => { 'web' => '' },
           'user'        => 'email@example.com'
-        }
+        }.merge(release_data)
       end
 
       def self.get_mock_addon(mock_data, addon)
@@ -132,28 +136,7 @@ module Heroku
       def self.remove_mock_app_addon(mock_data, app, addon)
         addon_data = mock_data[:addons][app].detect {|addon_data| addon_data['name'] == addon}
         mock_data[:addons][app].delete(addon_data)
-        version = mock_data[:releases][app].map {|release| release['name'][1..-1].to_i}.max || 0
-        env = if get_mock_app(mock_data, app)['stack'] == 'cedar'
-          {
-            'BUNDLE_WITHOUT'      => 'development:test',
-            'DATABASE_URL'        => 'postgres://username:password@ec2-123-123-123-123.compute-1.amazonaws.com/username',
-            'LANG'                => 'en_US.UTF-8',
-            'RACK_ENV'            => 'production',
-            'SHARED_DATABASE_URL' => 'postgres://username:password@ec2-123-123-123-123.compute-1.amazonaws.com/username'
-          }
-        else
-          {}
-        end
-        mock_data[:releases][app] << {
-          'addons'      => mock_data[:addons][app].map {|addon| addon['name']},
-          'commit'      => nil,
-          'created_at'  => timestamp,
-          'descr'       => "Add-on remove #{addon_data['name']}",
-          'env'         => env,
-          'name'        => "v#{version + 1}",
-          'pstable'     => { 'web' => '' },
-          'user'        => 'email@example.com'
-        }
+        add_mock_release(mock_data, app, {'descr' => "Add-on remove #{addon_data['name']}"})
       end
 
       def self.with_mock_app(mock_data, app, &block)
