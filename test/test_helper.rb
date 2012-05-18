@@ -1,4 +1,4 @@
-require "#{File.dirname(__FILE__)}/../lib/heroku/api"
+require File.expand_path("#{File.dirname(__FILE__)}/../lib/heroku/api")
 
 require 'rubygems'
 gem 'minitest' # ensure we are using the gem version
