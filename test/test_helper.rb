@@ -12,6 +12,10 @@ def heroku
   Heroku::API.new(:mock => MOCK)
 end
 
+def random_domain
+  "#{random_name}.com"
+end
+
 def random_name
   "heroku-rb-#{SecureRandom.hex(10)}"
 end

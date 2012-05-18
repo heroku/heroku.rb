@@ -10,8 +10,9 @@ class TestDomains < MiniTest::Unit::TestCase
 
   def test_delete_domain
     with_app do |app_data|
-      heroku.post_domain(app_data['name'], 'example.com')
-      response = heroku.delete_domain(app_data['name'], 'example.com')
+      domain = random_domain
+      heroku.post_domain(app_data['name'], domain)
+      response = heroku.delete_domain(app_data['name'], domain)
 
       assert_equal(200, response.status)
       assert_equal({}, response.body)
@@ -20,7 +21,7 @@ class TestDomains < MiniTest::Unit::TestCase
 
   def test_delete_domains
     with_app do |app_data|
-      heroku.post_domain(app_data['name'], 'example.com')
+      heroku.post_domain(app_data['name'], random_domain)
       response = heroku.delete_domains(app_data['name'])
 
       assert_equal(200, response.status)
@@ -45,12 +46,13 @@ class TestDomains < MiniTest::Unit::TestCase
 
   def test_post_domain
     with_app do |app_data|
-      response = heroku.post_domain(app_data['name'], 'example.com')
+      domain = random_domain
+      response = heroku.post_domain(app_data['name'], domain)
 
       assert_equal(201, response.status)
-      assert_equal({'domain' => 'example.com'}, response.body)
+      assert_equal({'domain' => domain}, response.body)
 
-      heroku.delete_domain(app_data['name'], 'example.com')
+      heroku.delete_domain(app_data['name'], domain)
     end
   end
 
