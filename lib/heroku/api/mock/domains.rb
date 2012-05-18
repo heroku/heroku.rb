@@ -54,28 +54,21 @@ module Heroku
         app, _ = request_params[:captures][:path]
         domain = request_params[:query]['domain_name[domain]']
         with_mock_app(mock_data, app) do |app_data|
-          if ['custom_domains:basic', 'custom_domains:wildcard'].any? {|addon| get_mock_app_addon(mock_data, app, addon)}
-            unless get_mock_app_domain(mock_data, app, domain)
-              mock_data[:domains][app] << {
-                'app_id'      => app_data['id'],
-                'base_domain' => domain.split('.')[-2..-1].join('.'),
-                'created_at'  => timestamp,
-                'domain'      => domain,
-                'default'     => nil,
-                'id'          => rand(999999),
-                'updated_at'  => timestamp
-              }
-            end
-            {
-              :body   => Heroku::API::OkJson.encode('domain' => domain),
-              :status => 201
-            }
-          else
-            {
-              :body   => Heroku::API::OkJson.encode([["base","Please install the Custom Domains addon before adding domains to your app"]]),
-              :status => 422
+          unless get_mock_app_domain(mock_data, app, domain)
+            mock_data[:domains][app] << {
+              'app_id'      => app_data['id'],
+              'base_domain' => domain.split('.')[-2..-1].join('.'),
+              'created_at'  => timestamp,
+              'domain'      => domain,
+              'default'     => nil,
+              'id'          => rand(999999),
+              'updated_at'  => timestamp
             }
           end
+          {
+            :body   => Heroku::API::OkJson.encode('domain' => domain),
+            :status => 201
+          }
         end
       end
 
