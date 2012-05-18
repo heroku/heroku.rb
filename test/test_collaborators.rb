@@ -37,7 +37,7 @@ class TestCollaborators < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal(
-        [{'access' => 'edit', 'email' => app_data['owner_email']}],
+        [{'access' => 'edit', 'email' => app_data['owner_email'], 'name' => nil}],
         response.body
       )
     end

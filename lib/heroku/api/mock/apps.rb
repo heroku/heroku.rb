@@ -75,7 +75,8 @@ module Heroku
           mock_data[:apps] << app_data
           mock_data[:collaborators][app] = [{
             'access' => 'edit',
-            'email'  => 'email@example.com'
+            'email'  => 'email@example.com',
+            'name'   => nil
           }]
           mock_data[:config_vars][app] = {}
           mock_data[:domains][app] = []

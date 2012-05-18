@@ -37,7 +37,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         email = request_params[:query]['collaborator[email]']
         with_mock_app(mock_data, app) do
-          mock_data[:collaborators][app] |= [{'access' => 'edit', 'email' => email}]
+          mock_data[:collaborators][app] |= [{'access' => 'edit', 'email' => email, 'name' => nil}]
           {
             :body   => "#{email} added as a collaborator on #{app}.",
             :status => 200
