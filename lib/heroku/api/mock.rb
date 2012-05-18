@@ -101,13 +101,7 @@ module Heroku
       def self.get_mock_processes(mock_data, app)
         mock_data[:ps][app].map do |ps|
 
-          # swap day/month positions for Time.parse
-          time_parts = ps['transitioned_at'].split(' ')
-          date_parts = time_parts.first.split('/')
-          date_parts[1], date_parts[2] = date_parts[2], date_parts[1]
-          time_parts[0] = date_parts.join('/')
-          munged_time = time_parts.join(' ')
-          elapsed = Time.now.to_i - Time.parse(munged_time).to_i
+          elapsed = Time.now.to_i - Time.parse(ps['transitioned_at']).to_i
           ps['elapsed'] = elapsed
 
           pretty_elapsed = if elapsed < 60
@@ -171,7 +165,7 @@ module Heroku
       end
 
       def self.timestamp
-        Time.now.strftime("%G/%d/%m %H:%M:%S %z")
+        Time.now.strftime("%G/%m/%d %H:%M:%S %z")
       end
 
     end
