@@ -8,6 +8,7 @@ module Heroku
         app, key, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do
           mock_data[:config_vars][app].delete(key)
+          add_mock_release(mock_data, app, {'descr' => "Config remove #{key}"})
           {
             :body   => Heroku::API::OkJson.encode(mock_data[:config_vars][app]),
             :status => 200
@@ -34,6 +35,7 @@ module Heroku
         with_mock_app(mock_data, app) do
           new_config_vars = request_params[:body]
           mock_data[:config_vars][app].merge!(new_config_vars)
+          add_mock_release(mock_data, app, {'descr' => "Config add #{new_config_vars.keys.join(', ')}"})
           {
             :body   => Heroku::API::OkJson.encode(mock_data[:config_vars][app]),
             :status => 200
