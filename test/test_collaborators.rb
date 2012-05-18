@@ -4,7 +4,7 @@ class TestCollaborators < MiniTest::Unit::TestCase
 
   def test_delete_collaborator
     with_app do |app_data|
-      email_address = 'wesley+heroku.rb@heroku.com'
+      email_address = 'wesley@heroku.com'
       heroku.post_collaborator(app_data['name'], email_address)
 
       response = heroku.delete_collaborator(app_data['name'], email_address)
@@ -51,7 +51,7 @@ class TestCollaborators < MiniTest::Unit::TestCase
 
   def test_post_collaborator
     with_app do |app_data|
-      email_address = 'wesley+heroku.rb@heroku.com'
+      email_address = 'wesley@heroku.com'
       response = heroku.post_collaborator(app_data['name'], email_address)
 
       assert_equal(200, response.status)
