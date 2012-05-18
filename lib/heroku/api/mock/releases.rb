@@ -38,7 +38,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/releases} ) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
-        release_name = request_params[:query]['rollback']
+        release_name = request_params[:query]['rollback'] || mock_data[:releases][app][-2] && mock_data[:releases][app][-2]['name']
         with_mock_app(mock_data, app) do |app_data|
           releases = mock_data[:releases][app]
           if release_data = releases.detect {|release| release['name'] == release_name}
