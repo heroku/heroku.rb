@@ -98,14 +98,14 @@ class TestApps < MiniTest::Unit::TestCase
   def test_put_app_with_transfer_owner_non_collaborator
     with_app do |app_data|
       assert_raises(Heroku::API::Errors::RequestFailed) do
-        heroku.put_app(app_data['name'], 'transfer_owner' => random_email_address)
+        heroku.put_app(app_data['name'], 'transfer_owner' => 'wesley@heroku.com')
       end
     end
   end
 
   def test_put_app_with_transfer_owner
     with_app do |app_data|
-      email_address = 'wesley+heroku.rb@heroku.com'
+      email_address = 'wesley@heroku.com'
       heroku.post_collaborator(app_data['name'], email_address)
       response = heroku.put_app(app_data['name'], 'transfer_owner' => email_address)
 
