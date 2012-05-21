@@ -26,8 +26,8 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_delete_addon
     with_app do |app_data|
-      heroku.post_addon(app_data['name'], 'custom_domains:basic')
-      response = heroku.delete_addon(app_data['name'], 'custom_domains:basic')
+      heroku.post_addon(app_data['name'], 'deployhooks:http')
+      response = heroku.delete_addon(app_data['name'], 'deployhooks:http')
 
       assert_equal(200, response.status)
       assert_equal({
@@ -53,20 +53,19 @@ class TestAddons < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal([{
-        'beta'        => false,
-        'configured'  => true,
-        'description' => 'Logging Basic',
-        'name'        => 'logging:basic',
-        'url'         => 'https://addons.heroku.com/addons/logging:basic',
-        'state'       => 'disabled'
-      },
-      {
-        'beta'        => false,
-        'configured'  => true,
-        'description' => 'Shared Database 5MB',
-        'name'        => 'shared-database:5mb',
-        'state'       => 'public',
-        'url'         => nil
+        'attachable'          => false,
+        'beta'                => false,
+        'configured'          => true,
+        'consumes_dyno_hours' => false,
+        'description'         => 'Shared Database 5MB',
+        'group_description'   => 'Shared Database',
+        'name'                => 'shared-database:5mb',
+        'plan_description'    => '5mb',
+        'price'               => { 'cents' => 0, 'unit' => 'month' },
+        'slug'                => '5mb',
+        'state'               => 'public',
+        'terms_of_service'    => false,
+        'url'                 => nil
       }], response.body)
     end
   end
@@ -79,7 +78,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_post_addon
     with_app do |app_data|
-      response = heroku.post_addon(app_data['name'], 'custom_domains:basic')
+      response = heroku.post_addon(app_data['name'], 'deployhooks:http')
 
       assert_equal(200, response.status)
       assert_equal({
@@ -92,12 +91,12 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_post_addon_with_config
     with_app do |app_data|
-      response = heroku.post_addon(app_data['name'], 'heroku-postgresql:ronin', {"superuser"=>"SUPERSECRET"})
+      response = heroku.post_addon(app_data['name'], 'deployhooks:http', {"url"=>"http://example.com"})
 
       assert_equal(200, response.status)
       assert_equal({
         'message' => nil,
-        'price'   => '$200/mo',
+        'price'   => 'free',
         'status'  => 'Installed'
       }, response.body)
     end
@@ -123,7 +122,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_post_addon_addon_not_found
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::RequestFailed) do
+      assert_raises(Heroku::API::Errors::NotFound) do
         heroku.post_addon(app_data['name'], random_name)
       end
     end
@@ -137,11 +136,12 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_put_addon
     with_app do |app_data|
-      response = heroku.put_addon(app_data['name'], 'logging:expanded')
+      response = heroku.post_addon(app_data['name'], 'pgbackups:basic')
+      response = heroku.put_addon(app_data['name'], 'pgbackups:plus')
 
       assert_equal(200, response.status)
       assert_equal({
-        'message' => nil,
+        'message' => 'Plan upgraded',
         'price'   => 'free',
         'status'  => 'Updated'
       }, response.body)
@@ -159,7 +159,7 @@ class TestAddons < MiniTest::Unit::TestCase
 
   def test_put_addon_addon_not_found
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::RequestFailed) do
+      assert_raises(Heroku::API::Errors::NotFound) do
         heroku.put_addon(app_data['name'], random_name)
       end
     end

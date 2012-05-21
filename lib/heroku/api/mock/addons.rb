@@ -97,7 +97,7 @@ module Heroku
             # addon does not exist
             {
               :body   => Heroku::API::OkJson.encode({'error' => "Add-on not found."}),
-              :status => 422
+              :status => 404
             }
           end
         end
@@ -118,7 +118,7 @@ module Heroku
                 add_mock_app_addon(mock_data, app, addon)
                 {
                   :body   => Heroku::API::OkJson.encode({
-                    "message" => nil,
+                    "message" => 'Plan upgraded',
                     "price"   => get_mock_addon_price(mock_data, addon),
                     "status"  => 'Updated'
                   }),
@@ -142,7 +142,7 @@ module Heroku
             # addon does not exist
             {
               :body   => Heroku::API::OkJson.encode({'error' => "Add-on not found."}),
-              :status => 422
+              :status => 404
             }
           end
         end
