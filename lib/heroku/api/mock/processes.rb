@@ -19,7 +19,9 @@ module Heroku
       request_params, mock_data = parse_stub_params(params)
       app, _ = request_params[:captures][:path]
       with_mock_app(mock_data, app) do |app_data|
-        attached = request_params[:query].has_key?('attach') && request_params[:query]['attach'].to_s == 'true'
+        unless attached = request_params[:query].has_key?('attach') && request_params[:query]['attach'].to_s == 'true'
+          type = 'Ps'
+        end
         command  = request_params[:query].has_key?('command') && request_params[:query]['command']
         rendezvous_url = if attached
           "s1.runtime.heroku.com:5000/#{SecureRandom.hex(32)}"
@@ -36,7 +38,7 @@ module Heroku
           'slug'            => 'NONE',
           'state'           => 'created',
           'transitioned_at' => timestamp,
-          'type'            => 'Ps',
+          'type'            => type,
           'upid'            => rand(99999999).to_s
         }
         mock_data[:ps][app] << data

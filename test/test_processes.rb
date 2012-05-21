@@ -71,7 +71,7 @@ class TestProcesses < MiniTest::Unit::TestCase
       # depending on timing it will be one of these two states
       assert_includes(['created', 'starting'], ps['state'])
       # transitioned_at
-      assert_equal('Ps', ps['type'])
+      assert_equal(nil, ps['type'])
       # upid
     end
   end
