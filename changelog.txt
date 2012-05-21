@@ -1,25 +1,41 @@
+0.1.8 05/21/2012
+================
+
+fix tests to be individually runnable
+update cache function to get user data
+update domain tests to match new default plugins
+update collaborators mocks to be more accurate
+update domain tests to use random_domain
+use better transfer targets in app tests
+fix timestamp generation in mocks
+fix release creation in mocks
+fix release rollback mocks to rollback to last when no version is given
+more accurate addons mocks
+more accurate process mocks for attached processes
+
+
 0.1.7 05/15/2012
 ================
 
-# consolidate NotFound error handling to work more like other errors
-# fixes for ps:scale mock accuracy
-# fix default command for cedar web process mocks
+consolidate NotFound error handling to work more like other errors
+fixes for ps:scale mock accuracy
+fix default command for cedar web process mocks
 
 0.1.6 05/09/2012
 ================
 
-# fixes for GET /apps/:app/releases/:release mocks
+fixes for GET /apps/:app/releases/:release mocks
 
 0.1.5 05/09/2012
 ================
 
-# add support for GET /apps/:app/releases/current
+add support for GET /apps/:app/releases/current
 
 0.1.4 05/09/2012
 ================
 
-# add DELETE /domains
-# add POST /login
+add DELETE /domains
+add POST /login
 
 0.1.3 05/03/2012
 ================
