@@ -53,7 +53,6 @@ module Heroku
             if STACKS.map {|stack_data| stack_data['name']}.include?(stack)
               {
                 :body   => <<-BODY,
-HTTP/1.1 200 OK
 -----> Preparing to migrate #{app}
        #{app_data['stack']} -> #{stack}
 
