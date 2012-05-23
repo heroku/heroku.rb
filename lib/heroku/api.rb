@@ -1,8 +1,7 @@
 require "base64"
-require "cgi"
 require "excon"
 require "securerandom"
-require "stringio"
+require "uri"
 require "zlib"
 
 __LIB_DIR__ = File.expand_path(File.join(File.dirname(__FILE__), ".."))
@@ -21,6 +20,7 @@ require "heroku/api/apps"
 require "heroku/api/collaborators"
 require "heroku/api/config_vars"
 require "heroku/api/domains"
+require "heroku/api/features"
 require "heroku/api/keys"
 require "heroku/api/login"
 require "heroku/api/logs"

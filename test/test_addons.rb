@@ -39,7 +39,6 @@ class TestAddons < MiniTest::Unit::TestCase
   end
 
   def test_get_addons
-    skip unless MOCK
     response = heroku.get_addons
     data = File.read("#{File.dirname(__FILE__)}/../lib/heroku/api/mock/cache/get_addons.json")
 

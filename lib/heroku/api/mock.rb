@@ -3,6 +3,7 @@ require 'heroku/api/mock/apps'
 require 'heroku/api/mock/collaborators'
 require 'heroku/api/mock/config_vars'
 require 'heroku/api/mock/domains'
+require 'heroku/api/mock/features'
 require 'heroku/api/mock/keys'
 require 'heroku/api/mock/login'
 require 'heroku/api/mock/logs'
@@ -25,6 +26,10 @@ module Heroku
           :collaborators    => {},
           :config_vars      => {},
           :domains          => {},
+          :features         => {
+            :app  => Hash.new {|hash,key| hash[key] = []},
+            :user => []
+          },
           :keys             => [],
           :maintenance_mode => [],
           :ps               => {},
@@ -96,6 +101,14 @@ module Heroku
 
       def self.get_mock_collaborator(mock_data, app, email)
         mock_data[:collaborators][app].detect {|collaborator_data| collaborator_data['email'] == email}
+      end
+
+      def self.get_mock_feature(mock_data, feature)
+        @features ||= begin
+          data = File.read("#{File.dirname(__FILE__)}/mock/cache/get_features.json")
+          Heroku::API::OkJson.decode(data)
+        end
+        @features.detect {|feature_data| feature_data['name'] == feature}
       end
 
       def self.get_mock_key(mock_data, key)
