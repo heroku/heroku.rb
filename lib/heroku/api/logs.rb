@@ -2,7 +2,8 @@ module Heroku
   class API
 
     # GET /apps/:app/logs
-    def get_logs(app, options)
+    def get_logs(app, options = nil)
+      options ||= {}
       options = {
         'logplex' => 'true'
       }.merge(options)
