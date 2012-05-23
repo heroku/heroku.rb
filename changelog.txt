@@ -1,3 +1,9 @@
+0.2.0 05/23/2012
+================
+
+fix mocks for stack requests
+add features (labs) functionality
+
 0.1.8 05/21/2012
 ================
 
