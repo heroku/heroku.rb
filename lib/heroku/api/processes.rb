@@ -12,12 +12,12 @@ module Heroku
 
     # POST /apps/:app/ps
     def post_ps(app, command, options={})
-      query = { 'command' => command }.merge(options)
+      options = { 'command' => command }.merge(options)
       request(
         :expects  => 200,
         :method   => :post,
         :path     => "/apps/#{app}/ps",
-        :query    => query
+        :query    => ps_options(options)
       )
     end
 

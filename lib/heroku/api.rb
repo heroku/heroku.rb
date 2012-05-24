@@ -108,5 +108,15 @@ module Heroku
     def addon_params(params)
       {:config => params}
     end
+
+    def ps_options(params)
+      if ps_env = params.delete(:ps_env) || params.delete('ps_env')
+        ps_env.each do |key, value|
+          params["ps_env[#{key}]"] = value
+        end
+      end
+      params
+    end
+
   end
 end
