@@ -1,3 +1,8 @@
+0.2.1 05/24/2012
+================
+
+update post_ps to properly munge ps_env params
+
 0.2.0 05/23/2012
 ================
 
