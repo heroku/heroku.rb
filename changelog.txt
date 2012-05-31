@@ -1,7 +1,12 @@
+0.2.4 05/31/2012
+================
+
+fix overly lax GET /user stub reveealed by changes in excon 0.14.0
+
 0.2.3 05/31/2012
 ================
 
-fix overly lax stub revealed by changes in excon 0.14.0
+fix overly lax DELETE /user/keys stub revealed by changes in excon 0.14.0
 
 0.2.2 05/31/2012
 ================
