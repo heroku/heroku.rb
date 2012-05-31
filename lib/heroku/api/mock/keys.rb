@@ -19,7 +19,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :delete, :path => %r{^/user/keys$}) do |params|
         request_params, mock_data = parse_stub_params(params)
         mock_data[:keys] = []
-        { :status => 200}
+        { :status => 200 }
       end
 
       # stub GET /user/keys
