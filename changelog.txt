@@ -1,3 +1,8 @@
+0.2.2 05/31/2012
+================
+
+bump excon dep for improved stubs/instrumentation
+
 0.2.1 05/24/2012
 ================
 
