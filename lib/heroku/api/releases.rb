@@ -20,7 +20,7 @@ module Heroku
     end
 
     # POST /apps/:app/releases/:release
-    def post_release(app, release)
+    def post_release(app, release=nil)
       request(
         :expects  => 200,
         :method   => :post,
