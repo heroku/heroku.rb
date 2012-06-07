@@ -106,9 +106,9 @@ module Heroku
     end
 
     def addon_params(params)
-      app_params = {}
+      addon_params = {}
       params.each do |key, value|
-        app_params["config[#{key}]"] = value
+        addon_params["config[#{key}]"] = value
       end
     end
 
