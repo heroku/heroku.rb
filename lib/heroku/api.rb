@@ -106,7 +106,10 @@ module Heroku
     end
 
     def addon_params(params)
-      {:config => params}
+      app_params = {}
+      params.each do |key, value|
+        app_params["config[#{key}]"] = value
+      end
     end
 
     def ps_options(params)
