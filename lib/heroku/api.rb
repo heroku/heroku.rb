@@ -106,7 +106,10 @@ module Heroku
     end
 
     def addon_params(params)
-      {:config => params}
+      params.inject({}) do |accum, (key, value)|
+        accum["config[#{key}]"] = value
+        accum
+      end
     end
 
     def ps_options(params)

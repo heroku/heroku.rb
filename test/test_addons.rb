@@ -101,6 +101,18 @@ class TestAddons < MiniTest::Unit::TestCase
     end
   end
 
+  def test_post_add_on_with_config_parses_config_correctly
+    with_app do |app_data|
+      addon_post_path = "/apps/#{app_data['name']}/addons/deployhooks:http"
+      Excon.stub({:method => :post, :path => addon_post_path}) do |params|
+        {:body => params[:query], :status => 200}
+      end
+      response = heroku.post_addon(app_data['name'], 'deployhooks:http', {"url"=>"http://example.com"})
+      assert_equal({ "config[url]" => "http://example.com"}, response.body)
+    end
+    Excon.stubs.shift
+  end
+
   def test_post_addon_addon_already_installed
     with_app do |app_data|
       assert_raises(Heroku::API::Errors::RequestFailed) do
