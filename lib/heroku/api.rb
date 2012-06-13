@@ -58,9 +58,7 @@ module Heroku
     def request(params, &block)
       begin
         response = @connection.request(params, &block)
-      rescue Excon::Errors::SocketError => error
-        raise error
-      rescue Excon::Errors::Error => error
+      rescue Excon::Errors::HTTPStatusError => error
         klass = case error.response.status
           when 401 then Heroku::API::Errors::Unauthorized
           when 402 then Heroku::API::Errors::VerificationRequired
