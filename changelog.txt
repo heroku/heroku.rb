@@ -1,3 +1,10 @@
+0.2.5 06/13/2012
+================
+
+make post_release release param optional (defaults to latest)
+fix for contructing addon_params
+fail gracefully on non-http-status errors
+
 0.2.4 05/31/2012
 ================
 
