@@ -97,8 +97,7 @@ module Heroku
             if new_qty >= current_qty
               (new_qty - current_qty).times do
                 max_web_id = mock_data[:ps][app].map {|process| process['process'].split('web.').last.to_i}.max
-                data = mock_data[:ps][app].first.dup # copy of web.1
-                data.merge({
+                data = mock_data[:ps][app].first.merge({
                   'process'         => "web.#{max_web_id + 1}",
                   'transitioned_at' => timestamp,
                   'upid'            => rand(99999999).to_s
