@@ -1,3 +1,8 @@
+0.2.6 06/21/2012
+================
+
+processes scale mocks now more accurately update process list
+
 0.2.5 06/13/2012
 ================
 
