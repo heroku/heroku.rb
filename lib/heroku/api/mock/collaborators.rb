@@ -25,7 +25,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do
           {
-            :body   => Heroku::API::OkJson.encode(mock_data[:collaborators][app]),
+            :body   => Heroku::API.json_encode(mock_data[:collaborators][app]),
             :status => 200
           }
         end
