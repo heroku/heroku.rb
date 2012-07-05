@@ -32,7 +32,7 @@ module Heroku
       end
 
       # stub POST /apps/:app/collaborators
-      Excon.stub(:expects => 200, :method => :post, :path => %r{^/apps/([^/]+)/collaborators}) do |params|
+      Excon.stub(:expects => [200, 201], :method => :post, :path => %r{^/apps/([^/]+)/collaborators}) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path]
         email = request_params[:query]['collaborator[email]']
@@ -40,7 +40,7 @@ module Heroku
           mock_data[:collaborators][app] |= [{'access' => 'edit', 'email' => email, 'name' => nil}]
           {
             :body   => "#{email} added as a collaborator on #{app}.",
-            :status => 200
+            :status => 201
           }
           # Existing user response
           #{

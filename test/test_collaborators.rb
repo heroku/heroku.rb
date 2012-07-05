@@ -54,7 +54,7 @@ class TestCollaborators < MiniTest::Unit::TestCase
       email_address = 'wesley@heroku.com'
       response = heroku.post_collaborator(app_data['name'], email_address)
 
-      assert_equal(200, response.status)
+      assert_equal(201, response.status)
       assert_equal(
         "#{email_address} added as a collaborator on #{app_data['name']}.",
         response.body

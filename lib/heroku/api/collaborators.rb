@@ -22,7 +22,7 @@ module Heroku
     # POST /apps/:app/collaborators
     def post_collaborator(app, email)
       request(
-        :expects  => 200,
+        :expects  => [200, 201],
         :method   => :post,
         :path     => "/apps/#{app}/collaborators",
         :query    => {'collaborator[email]' => email}
