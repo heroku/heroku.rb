@@ -1,3 +1,11 @@
+0.2.7 07/05/2012
+================
+
+doc fixes (fixes delete_addon and improves consistency)
+post_collaborator returns 201 when users does not yet exist
+use json (instead of okjson) when available
+update excon dependency
+
 0.2.6 06/21/2012
 ================
 
