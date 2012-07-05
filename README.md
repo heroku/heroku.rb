@@ -29,7 +29,7 @@ For additional details about any of the commands, see the [API docs](http://api-
 
 ### Add-ons
 
-    heroku.delete('app', 'addon')     # remove 'addon' add-on from an 'app' app
+    heroku.delete_addon('app', 'addon')     # remove 'addon' add-on from an 'app' app
     heroku.get_addons                 # see a listing of all available add-ons
     heroku.get_addons('app')          # see listing of installed add-ons for 'app' app
     heroku.post_addon('app', 'addon') # add 'addon' add-on to 'app' app
@@ -47,60 +47,60 @@ For additional details about any of the commands, see the [API docs](http://api-
 
 ### Collaborators
 
-    delete_collaborator('app', 'email@example.com') # remove 'email@example.com' collaborator from 'app' app
-    get_collaborators('app')                        # list collaborators for 'app' app
-    post_collaborator('app', 'email@example.com')   # add 'email@example.com' collaborator to 'app' app
+    heroku.delete_collaborator('app', 'email@example.com') # remove 'email@example.com' collaborator from 'app' app
+    heroku.get_collaborators('app')                        # list collaborators for 'app' app
+    heroku.post_collaborator('app', 'email@example.com')   # add 'email@example.com' collaborator to 'app' app
 
 ### Config Variables
 
-    delete_config_var('app', 'KEY')           # remove 'KEY' key from 'app' app
-    get_config_vars('app')                    # get list of config vars for 'app' app
-    put_config_vars('app', 'KEY' => 'value')  # set 'KEY' key to 'value' for 'app' app
+    heroku.delete_config_var('app', 'KEY')           # remove 'KEY' key from 'app' app
+    heroku.get_config_vars('app')                    # get list of config vars for 'app' app
+    heroku.put_config_vars('app', 'KEY' => 'value')  # set 'KEY' key to 'value' for 'app' app
 
 ### Domains
 
-    delete_domain('app', 'example.com') # remove the 'example.com' domain from the 'app' app
-    get_domains('app')                  # list configured domains for the 'app' app
-    post_domains('app', 'example.com')  # add 'example.com' domain to the 'app' app
+    heroku.delete_domain('app', 'example.com') # remove the 'example.com' domain from the 'app' app
+    heroku.get_domains('app')                  # list configured domains for the 'app' app
+    heroku.post_domains('app', 'example.com')  # add 'example.com' domain to the 'app' app
 
 ### Keys
 
-    delete_key('user@hostname.local') # remove the 'user@hostname.local' key
-    delete_keys                       # remove all keys
-    get_keys                          # list configured keys
-    post_key('key data')              # add key defined by 'key data'
+    heroku.delete_key('user@hostname.local') # remove the 'user@hostname.local' key
+    heroku.delete_keys                       # remove all keys
+    heroku.get_keys                          # list configured keys
+    heroku.post_key('key data')              # add key defined by 'key data'
 
 ### Logs
 
-    get_logs('app') # return logs information for 'app' app
+    heroku.get_logs('app') # return logs information for 'app' app
 
 ### Processes
 
-    get_ps('app')                             # list current processes for 'app' app
-    post_ps('app', 'command')                 # run 'command' command in context of 'app' app
-    post_ps_restart('app')                    # restart all processes for 'app' app
-    post_ps_scale('app', 'type', 'quantity')  # scale 'type' type processes to 'quantity' for 'app' app
-    post_ps_stop('app', 'ps' => 'web.1')      # stop 'web.1' process for 'app' app
-    post_ps_stop('app', 'type' => 'web')      # stop all 'web' processes for 'app' app
-    put_dynos('app', 'dynos')                 # set number of dynos for bamboo app 'app' to 'dynos'
-    put_workers('app', 'workers')             # set number of workers for bamboo app 'app' to 'workers'
+    heroku.get_ps('app')                             # list current processes for 'app' app
+    heroku.post_ps('app', 'command')                 # run 'command' command in context of 'app' app
+    heroku.post_ps_restart('app')                    # restart all processes for 'app' app
+    heroku.post_ps_scale('app', 'type', 'quantity')  # scale 'type' type processes to 'quantity' for 'app' app
+    heroku.post_ps_stop('app', 'ps' => 'web.1')      # stop 'web.1' process for 'app' app
+    heroku.post_ps_stop('app', 'type' => 'web')      # stop all 'web' processes for 'app' app
+    heroku.put_dynos('app', 'dynos')                 # set number of dynos for bamboo app 'app' to 'dynos'
+    heroku.put_workers('app', 'workers')             # set number of workers for bamboo app 'app' to 'workers'
 
-    post_ps_restart('app', 'ps' => 'web.1')   # restart 'web.1' process for 'app' app
+    heroku.post_ps_restart('app', 'ps' => 'web.1')   # restart 'web.1' process for 'app' app
 
 ### Releases
 
-    get_releases('app')       # list of releases for 'app' app
-    get_release('app', 'v#')  # get details of 'v#' release for 'app' app
-    post_release('app', 'v#') # rollback 'app' app to 'v#' release
+    heroku.get_releases('app')       # list of releases for 'app' app
+    heroku.get_release('app', 'v#')  # get details of 'v#' release for 'app' app
+    heroku.post_release('app', 'v#') # rollback 'app' app to 'v#' release
 
 ### Stacks
 
-    get_stack('app')          # list available stacks
-    put_stack('app', 'stack') # migrate 'app' app to 'stack' stack
+    heroku.get_stack('app')          # list available stacks
+    heroku.put_stack('app', 'stack') # migrate 'app' app to 'stack' stack
 
 ### User
 
-    get_user                  # list user info
+    heroku.get_user                  # list user info
 
 Mock
 ----
