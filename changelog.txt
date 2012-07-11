@@ -1,3 +1,8 @@
+0.2.8 07/08/2012
+================
+
+return to OkJson usage, as json breaks with some legacy toolbelt installs
+
 0.2.7 07/05/2012
 ================
 
