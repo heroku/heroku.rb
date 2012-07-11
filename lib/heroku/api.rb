@@ -9,6 +9,8 @@ unless $LOAD_PATH.include?(__LIB_DIR__)
   $LOAD_PATH.unshift(__LIB_DIR__)
 end
 
+require "heroku/api/vendor/okjson"
+
 require "heroku/api/errors"
 require "heroku/api/mock"
 require "heroku/api/version"
@@ -31,36 +33,6 @@ srand
 
 module Heroku
   class API
-
-    begin
-
-      require('json')
-
-      def self.json_decode(json)
-        JSON.parse(json)
-      rescue
-        json
-      end
-
-      def self.json_encode(object)
-        JSON.dump(object)
-      end
-
-    rescue LoadError
-
-      require('heroku/api/vendor/okjson')
-
-      def self.json_decode(json)
-        Heroku::API::OkJson.decode(json)
-      rescue
-        json
-      end
-
-      def self.json_encode(object)
-        Heroku::API::OkJson.encode(object)
-      end
-
-    end
 
     def initialize(options={})
       @api_key = options.delete(:api_key) || ENV['HEROKU_API_KEY']
@@ -109,7 +81,9 @@ module Heroku
           response.body = Zlib::GzipReader.new(StringIO.new(response.body)).read
         end
         begin
-          response.body = Heroku::API.json_decode(response.body)
+          response.body = Heroku::API::OkJson.decode(response.body)
+        rescue
+          # leave non-JSON body as is
         end
       end
 

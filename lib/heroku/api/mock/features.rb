@@ -16,20 +16,20 @@ module Heroku
             when 'app'
               mock_data[:features][:app][app].delete(feature_data)
               {
-                :body   => Heroku::API.json_encode(feature_data.merge('enabled' => false)),
+                :body   => Heroku::API::OkJson.encode(feature_data.merge('enabled' => false)),
                 :status => 200
               }
             when 'user'
               mock_data[:features][:user].delete(feature_data.merge('enabled' => false))
               {
-                :body   => Heroku::API.json_encode(feature_data),
+                :body   => Heroku::API::OkJson.encode(feature_data),
                 :status => 200
               }
             end
           else
             # feature does not exist
             {
-              :body   => Heroku::API.json_encode({'error' => "Feature not found."}),
+              :body   => Heroku::API::OkJson.encode({'error' => "Feature not found."}),
               :status => 404
             }
           end
@@ -56,13 +56,13 @@ module Heroku
         feature, _ = request_params[:captures][:path]
         if feature_data = get_mock_feature(mock_data, feature)
           {
-            :body   => Heroku::API.json_encode(feature_data),
+            :body   => Heroku::API::OkJson.encode(feature_data),
             :status => 200
           }
         else
           # feature does not exist
           {
-            :body   => Heroku::API.json_encode({'error' => "Feature not found."}),
+            :body   => Heroku::API::OkJson.encode({'error' => "Feature not found."}),
             :status => 404
           }
         end
@@ -82,7 +82,7 @@ module Heroku
             when 'app'
               mock_data[:features][:app][app] << feature_data
               {
-                :body   => Heroku::API.json_encode(feature_data),
+                :body   => Heroku::API::OkJson.encode(feature_data),
                 :status => 200
               }
             when 'user'
@@ -95,7 +95,7 @@ module Heroku
           else
             # feature does not exist
             {
-              :body   => Heroku::API.json_encode({'error' => "Feature not found."}),
+              :body   => Heroku::API::OkJson.encode({'error' => "Feature not found."}),
               :status => 404
             }
           end
