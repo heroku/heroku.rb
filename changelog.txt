@@ -1,3 +1,8 @@
+0.2.12 07/17/2012
+=================
+
+more last minute excon fixes (proxies are hard)
+
 0.2.11 07/17/2012
 =================
 
