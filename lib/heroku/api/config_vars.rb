@@ -6,7 +6,7 @@ module Heroku
       request(
         :expects  => 200,
         :method   => :delete,
-        :path     => "/apps/#{app}/config_vars/#{key}"
+        :path     => "/apps/#{app}/config_vars/#{escape(key)}"
       )
     end
 

@@ -6,6 +6,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :delete, :path => %r{^/apps/([^/]+)/config_vars/([^/]+)$}) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, key, _ = request_params[:captures][:path]
+        key = unescape(key)
         with_mock_app(mock_data, app) do
           mock_data[:config_vars][app].delete(key)
           add_mock_release(mock_data, app, {'descr' => "Config remove #{key}"})

@@ -152,6 +152,10 @@ module Heroku
         add_mock_release(mock_data, app, {'descr' => "Add-on remove #{addon_data['name']}"})
       end
 
+      def self.unescape(string)
+        CGI.unescape(string)
+      end
+
       def self.with_mock_app(mock_data, app, &block)
         if app_data = get_mock_app(mock_data, app)
           yield(app_data)

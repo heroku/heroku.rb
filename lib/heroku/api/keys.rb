@@ -6,7 +6,7 @@ module Heroku
       request(
         :expects  => 200,
         :method   => :delete,
-        :path     => "/user/keys/#{CGI.escape(key).gsub('.','%2E')}"
+        :path     => "/user/keys/#{escape(key)}"
       )
     end
 

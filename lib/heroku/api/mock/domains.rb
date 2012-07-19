@@ -6,7 +6,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :delete, :path => %r{^/apps/([^/]+)/domains/([^/]+)$} ) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, domain, _ = request_params[:captures][:path]
-        domain = CGI.unescape(domain)
+        domain = unescape(domain)
         with_mock_app(mock_data, app) do |app_data|
           if domain = get_mock_app_domain(mock_data, app, domain)
             mock_data[:domains][app].delete(domain)

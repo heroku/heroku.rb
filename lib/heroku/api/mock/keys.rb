@@ -6,7 +6,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :delete, :path => %r{^/user/keys/([^/]+)}) do |params|
         request_params, mock_data = parse_stub_params(params)
         key, _ = request_params[:captures][:path]
-        key = CGI.unescape(key).gsub('%2E', '.')
+        key = unescape(key)
         if key_data = get_mock_key(mock_data, key)
           mock_data[:keys].delete(key_data)
           { :status => 200 }
