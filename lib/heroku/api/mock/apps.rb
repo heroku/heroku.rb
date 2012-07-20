@@ -12,6 +12,7 @@ module Heroku
           mock_data[:collaborators].delete(app)
           mock_data[:config_vars].delete(app)
           mock_data[:domains].delete(app)
+          mock_data[:maintenance_mode].delete(app)
           mock_data[:ps].delete(app)
           mock_data[:releases].delete(app)
           {
