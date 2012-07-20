@@ -44,6 +44,12 @@ class TestApps < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal({'maintenance' => false}, response.body)
+
+      heroku.post_app_maintenance(app_data['name'], '1')
+      response = heroku.get_app_maintenance(app_data['name'])
+
+      assert_equal(200, response.status)
+      assert_equal({'maintenance' => true}, response.body)
     end
   end
 
