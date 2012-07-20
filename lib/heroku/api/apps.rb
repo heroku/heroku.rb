@@ -28,6 +28,15 @@ module Heroku
       )
     end
 
+    # GET /apps/:app/server/maintenance
+    def get_app_maintenance(app)
+      request(
+        :expects  => 200,
+        :method   => :get,
+        :path     => "/apps/#{app}/server/maintenance"
+      )
+    end
+
     # POST /apps
     def post_app(params={})
       request(

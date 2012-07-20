@@ -42,6 +42,20 @@ module Heroku
         end
       end
 
+      # stub GET /apps/:app/server/maintenance
+      Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)/server/maintenance$}) do |params|
+        request_params, mock_data = parse_stub_params(params)
+        app, _ = request_params[:captures][:path].first
+
+        with_mock_app(mock_data, app) do
+          maintenance = mock_data[:maintenance_mode].include?(app)
+          {
+            :body   => Heroku::API::OkJson.encode('maintenance' => maintenance),
+            :status => 200
+          }
+        end
+      end
+
       # stub POST /apps
       Excon.stub(:expects => 202, :method => :post, :path => '/apps') do |params|
         request_params, mock_data = parse_stub_params(params)
