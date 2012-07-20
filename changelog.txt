@@ -1,3 +1,8 @@
+0.3.1 07/20/2012
+================
+
+fix bug in maintenance mocks not being reset after app delet
+
 0.3.0 07/20/2012
 ================
 
