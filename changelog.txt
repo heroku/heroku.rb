@@ -1,3 +1,9 @@
+0.3.0 07/20/2012
+================
+
+fixes for url segment escaping of config_vars, domains and keys
+add get_app_maintenance
+
 0.2.13 07/18/2012
 =================
 
