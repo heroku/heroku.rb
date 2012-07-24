@@ -48,7 +48,6 @@ module Heroku
         #'Accept-Language'       => 'en-US, en;q=0.8',
         'Authorization'         => "Basic #{Base64.encode64(user_pass).gsub("\n", '')}",
         'User-Agent'            => "heroku-rb/#{Heroku::API::VERSION}",
-        'X-Heroku-API-Version'  => '3',
         'X-Ruby-Version'        => RUBY_VERSION,
         'X-Ruby-Platform'       => RUBY_PLATFORM
       }.merge(options[:headers])
