@@ -26,6 +26,7 @@ require "heroku/api/login"
 require "heroku/api/logs"
 require "heroku/api/processes"
 require "heroku/api/releases"
+require "heroku/api/ssl_endpoints"
 require "heroku/api/stacks"
 require "heroku/api/user"
 

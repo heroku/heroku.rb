@@ -5,7 +5,16 @@ gem 'minitest' # ensure we are using the gem version
 require 'minitest/autorun'
 require 'time'
 
+DATA_PATH = File.expand_path("#{File.dirname(__FILE__)}/data")
 MOCK = ENV['MOCK'] != 'false'
+
+def data_server_crt
+  @data_server_crt ||= File.read(File.join(DATA_PATH, 'server.crt'))
+end
+
+def data_server_key
+  @data_server_key ||= File.read(File.join(DATA_PATH, 'server.key'))
+end
 
 def heroku
   # ENV['HEROKU_API_KEY'] used for :api_key
