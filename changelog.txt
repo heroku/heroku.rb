@@ -1,3 +1,10 @@
+0.3.2 08/01/2012
+================
+
+don't request v3 apis
+first pass at ssl_endpoints support (no mocks yet)
+bump excon dep
+
 0.3.1 07/20/2012
 ================
 
