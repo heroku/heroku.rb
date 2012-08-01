@@ -8,12 +8,12 @@ require 'time'
 DATA_PATH = File.expand_path("#{File.dirname(__FILE__)}/data")
 MOCK = ENV['MOCK'] != 'false'
 
-def data_server_crt
-  @data_server_crt ||= File.read(File.join(DATA_PATH, 'server.crt'))
+def data_site_crt
+  @data_site_crt ||= File.read(File.join(DATA_PATH, 'site.crt'))
 end
 
-def data_server_key
-  @data_server_key ||= File.read(File.join(DATA_PATH, 'server.key'))
+def data_site_key
+  @data_site_key ||= File.read(File.join(DATA_PATH, 'site.key'))
 end
 
 def heroku
