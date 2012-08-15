@@ -41,6 +41,7 @@ module Heroku
       options = {
         :headers  => {},
         :host     => 'api.heroku.com',
+        :nonblock => false,
         :scheme   => 'https'
       }.merge(options)
       options[:headers] = {
