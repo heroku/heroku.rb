@@ -1,3 +1,12 @@
+0.3.3 09/15/2012
+================
+
+update to more realistic self signed cert in tests
+update body format for delete_ssl_endpoint
+vendor latest okjson
+patch okjson to work around encoding bug
+bump excon and use blocking requests
+
 0.3.2 08/01/2012
 ================
 
