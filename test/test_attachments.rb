@@ -8,7 +8,26 @@ class TestAttachments < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal(
-        [],
+          [{
+            'name' => 'HEROKU_POSTGRESQL_BROWN',
+            'app' => {
+              'name' => app_data['name'],
+              'id' => "app#{app_data['id']}@heroku.com",
+              'owner' => app_data['owner_email']
+            },
+            'config_var' => 'HEROKU_POSTGRESQL_BROWN_URL',
+            'resource' => {
+              'name' => 'advising-nobly-1989',
+              'type' => 'heroku-postgresql:crane',
+              'value' => 'postgres://username:password@host:5432/dbname',
+              'billing_app' => {
+                'name' => app_data['name'],
+                'id' => "app#{app_data['id']}@heroku.com",
+                'owner' => app_data['owner_email']
+              },
+              'sso_url' => nil
+            }
+          }],
         response.body
       )
     end

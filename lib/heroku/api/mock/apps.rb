@@ -9,6 +9,7 @@ module Heroku
         with_mock_app(mock_data, app) do |app_data|
           mock_data[:addons].delete(app)
           mock_data[:apps].delete(app_data)
+          mock_data[:attachments].delete(app)
           mock_data[:collaborators].delete(app)
           mock_data[:config_vars].delete(app)
           mock_data[:domains].delete(app)
@@ -88,6 +89,26 @@ module Heroku
 
           mock_data[:addons][app] = []
           mock_data[:apps] << app_data
+          mock_data[:attachments][app] = [{
+            'name' => 'HEROKU_POSTGRESQL_BROWN',
+            'app' => {
+              'name' => app_data['name'],
+              'id' => "app#{app_data['id']}@heroku.com",
+              'owner' => app_data['owner_email']
+            },
+            'config_var' => 'HEROKU_POSTGRESQL_BROWN_URL',
+            'resource' => {
+              'name' => 'advising-nobly-1989',
+              'type' => 'heroku-postgresql:crane',
+              'value' => 'postgres://username:password@host:5432/dbname',
+              'billing_app' => {
+                'name' => app_data['name'],
+                'id' => "app#{app_data['id']}@heroku.com",
+                'owner' => app_data['owner_email']
+              },
+              'sso_url' => nil
+            }
+          }]
           mock_data[:collaborators][app] = [{
             'access' => 'edit',
             'email'  => 'email@example.com',

@@ -24,7 +24,7 @@ module Heroku
         hash[key] = {
           :addons           => {},
           :apps             => [],
-          :attachments      => [],
+          :attachments      => {},
           :collaborators    => {},
           :config_vars      => {},
           :domains          => {},
