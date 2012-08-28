@@ -17,6 +17,7 @@ require "heroku/api/version"
 
 require "heroku/api/addons"
 require "heroku/api/apps"
+require "heroku/api/attachments"
 require "heroku/api/collaborators"
 require "heroku/api/config_vars"
 require "heroku/api/domains"

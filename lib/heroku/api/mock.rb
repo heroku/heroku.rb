@@ -1,5 +1,6 @@
 require 'heroku/api/mock/addons'
 require 'heroku/api/mock/apps'
+require 'heroku/api/mock/attachments'
 require 'heroku/api/mock/collaborators'
 require 'heroku/api/mock/config_vars'
 require 'heroku/api/mock/domains'
@@ -23,6 +24,7 @@ module Heroku
         hash[key] = {
           :addons           => {},
           :apps             => [],
+          :attachments      => [],
           :collaborators    => {},
           :config_vars      => {},
           :domains          => {},
