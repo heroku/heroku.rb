@@ -65,7 +65,7 @@ class TestFeatures < MiniTest::Unit::TestCase
     with_app do |app_data|
       response = heroku.post_feature('user_env_compile', app_data['name'])
 
-      assert_equal(200, response.status)
+      assert_equal(201, response.status)
       assert_equal(@feature_data.merge('enabled' => true), response.body)
     end
   end
