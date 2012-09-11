@@ -1,9 +1,15 @@
-0.3.4 09/15/2012
+0.3.5 09/11/2012
+================
+
+add get_attachments and mocks
+update enable features usage and mocks to use 200/201 based on update/create
+
+0.3.4 08/15/2012
 ================
 
 update excon to get SSLv3 fix
 
-0.3.3 09/15/2012
+0.3.3 08/15/2012
 ================
 
 update to more realistic self signed cert in tests
