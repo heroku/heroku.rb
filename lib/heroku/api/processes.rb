@@ -17,7 +17,7 @@ module Heroku
         :expects  => 200,
         :method   => :post,
         :path     => "/apps/#{app}/ps",
-        :query    => ps_options(options)
+        :query    => ps_params(options)
       )
     end
 

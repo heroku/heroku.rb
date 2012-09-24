@@ -120,7 +120,7 @@ module Heroku
       CGI.escape(string).gsub('.', '%2E')
     end
 
-    def ps_options(params)
+    def ps_params(params)
       if ps_env = params.delete(:ps_env) || params.delete('ps_env')
         ps_env.each do |key, value|
           params["ps_env[#{key}]"] = value
