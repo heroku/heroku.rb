@@ -46,7 +46,7 @@ module Heroku
         :scheme   => 'https'
       }.merge(options)
       options[:headers] = {
-        'Accept'                => 'application/json',
+        'Accept'                => 'application/vnd.heroku+json; version=3',
         'Accept-Encoding'       => 'gzip',
         #'Accept-Language'       => 'en-US, en;q=0.8',
         'Authorization'         => "Basic #{Base64.encode64(user_pass).gsub("\n", '')}",
