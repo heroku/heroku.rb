@@ -5,8 +5,11 @@ class TestApps < MiniTest::Unit::TestCase
   def test_delete_app
     with_app do |app_data|
       response = heroku.delete_app(app_data['name'])
-      assert_equal({}, response.body)
       assert_equal(200, response.status)
+      assert_equal(
+        app_data.reject {|key, value| key == 'updated_at'},
+        response.body.reject {|key, value| key == 'updated_at'}
+      )
     end
   end
 
@@ -20,7 +23,10 @@ class TestApps < MiniTest::Unit::TestCase
     with_app do |app_data|
       response = heroku.get_apps
       assert_equal(200, response.status)
-      assert(response.body.detect {|app| app['name'] == app_data['name']})
+      assert_equal(
+        app_data.reject {|key,value| key == 'updated_at'},
+        response.body.detect {|app| app['name'] == app_data['name']}.reject {|key,value| key == 'updated_at'}
+      )
     end
   end
 
@@ -28,7 +34,10 @@ class TestApps < MiniTest::Unit::TestCase
     with_app do |app_data|
       response = heroku.get_app(app_data['name'])
       assert_equal(200, response.status)
-      assert_equal(app_data['name'], response.body['name'])
+      assert_equal(
+        app_data.reject {|key,value| key == 'updated_at'},
+        response.body.reject {|key,value| key == 'updated_at'}
+      )
     end
   end
 
@@ -104,7 +113,14 @@ class TestApps < MiniTest::Unit::TestCase
       response = heroku.put_app(app_data['name'], 'name' => new_name)
 
       assert_equal(200, response.status)
-      assert_equal({'name' => new_name}, response.body)
+      assert_equal(
+        app_data.merge(
+          'git_url' => "git@heroku.com:#{new_name}.git",
+          'name'    => new_name,
+          'web_url' => "http://#{new_name}.herokuapp.com/"
+        ).reject {|key,value| key == 'updated_at'},
+        response.body.reject {|key,value| key == 'updated_at'}
+      )
 
       heroku.delete_app(new_name)
     end
@@ -112,7 +128,7 @@ class TestApps < MiniTest::Unit::TestCase
 
   def test_put_app_with_transfer_owner_non_collaborator
     with_app do |app_data|
-      assert_raises(Heroku::API::Errors::RequestFailed) do
+      assert_raises(Heroku::API::Errors::Forbidden) do
         heroku.put_app(app_data['name'], 'transfer_owner' => 'wesley@heroku.com')
       end
     end
@@ -125,9 +141,10 @@ class TestApps < MiniTest::Unit::TestCase
       response = heroku.put_app(app_data['name'], 'transfer_owner' => email_address)
 
       assert_equal(200, response.status)
-      assert_equal({'name' => app_data['name']}, response.body)
-
-      heroku.delete_collaborator(app_data['name'], email_address)
+      assert_equal(
+        app_data.reject {|key,value| ['owner_id', 'updated_at'].include?(key)},
+        response.body.reject {|key, value| ['owner_id', 'updated_at'].include?(key)}
+      )
     end
   end
 
@@ -136,12 +153,12 @@ class TestApps < MiniTest::Unit::TestCase
       response = heroku.post_app_maintenance(app_data['name'], '1')
 
       assert_equal(200, response.status)
-      assert_equal("", response.body)
+      assert_equal(" ", response.body)
 
       response = heroku.post_app_maintenance(app_data['name'], '0')
 
       assert_equal(200, response.status)
-      assert_equal("", response.body)
+      assert_equal(" ", response.body)
     end
   end
 end

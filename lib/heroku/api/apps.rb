@@ -30,6 +30,7 @@ module Heroku
 
     # GET /apps/:app/server/maintenance
     def get_app_maintenance(app)
+      deprecate("get_app_maintenance is deprecated, use get_app(app) and check maintenance attribute of body")
       request(
         :expects  => 200,
         :method   => :get,
@@ -49,6 +50,7 @@ module Heroku
 
     # POST /apps/:app/server/maintenance
     def post_app_maintenance(app, maintenance_mode)
+      deprecate("post_app_maintenance is deprecated, use put_app(app, {'maintenance' => maintenance_mode})")
       request(
         :expects  => 200,
         :method   => :post,

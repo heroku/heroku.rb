@@ -57,6 +57,10 @@ module Heroku
       @connection = Excon.new("#{options[:scheme]}://#{options[:host]}", options)
     end
 
+    def deprecate(message)
+      $stderr.puts("DEPRECATION: #{message}")
+    end
+
     def request(params, &block)
       begin
         response = @connection.request(params, &block)

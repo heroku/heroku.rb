@@ -17,7 +17,7 @@ module Heroku
           mock_data[:ps].delete(app)
           mock_data[:releases].delete(app)
           {
-            :body   => Heroku::API::OkJson.encode({}),
+            :body   => Heroku::API::OkJson.encode(app_data.merge('updated_at' => timestamp)),
             :status => 200
           }
         end
@@ -73,16 +73,17 @@ module Heroku
           app_data = {
             'created_at'          => timestamp,
             'create_status'       => 'complete',
-            'id'                  => rand(99999),
-            'name'                => app,
-            'owner_email'         => 'email@example.com',
-            'slug_size'           => nil,
-            'stack'               => stack,
-            'requested_stack'     => nil,
+            'dynos'               => 0,
             'git_url'             => "git@heroku.com:#{app}.git",
+            'id'                  => "app#{rand(99999)}@heroku.com",
+            'name'                => app,
+            'owner_id'            => '123456@users.heroku.com',
             'repo_migrate_status' => 'complete',
             'repo_size'           => nil,
-            'dynos'               => 0,
+            'requested_stack'     => nil,
+            'slug_size'           => nil,
+            'stack'               => stack,
+            'updated_at'          => timestamp,
             'web_url'             => "http://#{app}.herokuapp.com/",
             'workers'             => 0
           }
@@ -140,7 +141,7 @@ module Heroku
         request_params, mock_data = parse_stub_params(params)
         app, _ = request_params[:captures][:path].first
 
-        with_mock_app(mock_data, app) do
+        with_mock_app(mock_data, app) do |app_data|
           case request_params[:query]['maintenance_mode']
           when '0'
             mock_data[:maintenance_mode] -= [app]
@@ -149,6 +150,7 @@ module Heroku
           end
 
           {
+            :body   => ' ',
             :status => 200
           }
         end
@@ -169,17 +171,18 @@ module Heroku
           if request_params[:query].has_key?('app[transfer_owner]')
             email = request_params[:query]['app[transfer_owner]']
             if collaborator = get_mock_collaborator(mock_data, app, email)
-              app_data['owner_email'] = email
+              app_data['owner_id'] = "#{email.hash.to_s[-6..-1]}@users.heroku.com"
             end
           end
           if email && !collaborator
             {
               :body   => Heroku::API::OkJson.encode('error' => 'Only existing collaborators can receive ownership for an app'),
-              :status => 422
+              :status => 403
             }
           else
+            app_data['updated_at'] = timestamp
             {
-              :body   => Heroku::API::OkJson.encode('name' => app_data['name']),
+              :body   => Heroku::API::OkJson.encode(app_data),
               :status => 200
             }
           end
