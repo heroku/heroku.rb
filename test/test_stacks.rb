@@ -17,7 +17,7 @@ class TestStacks < MiniTest::Unit::TestCase
   end
 
   def test_put_stack
-    with_app do |app_data|
+    with_app(:stack => 'bamboo-mri-1.9.2') do |app_data|
       response = heroku.put_stack(app_data['name'], 'bamboo-ree-1.8.7')
 
       assert_equal(200, response.status)
