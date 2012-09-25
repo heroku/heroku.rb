@@ -34,7 +34,7 @@ module Heroku
     # POST /features/:feature
     def post_feature(feature, app = nil)
       request(
-        :expects  => [200, 201],
+        :expects  => 200,
         :method   => :post,
         :path     => "/features/#{feature}",
         :query    => { 'app' => app }

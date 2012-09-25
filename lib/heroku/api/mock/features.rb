@@ -69,7 +69,7 @@ module Heroku
       end
 
       # stub POST /features/:feature
-      Excon.stub(:expects => [200, 201], :method => :post, :path => %r{^/features/([^/]+)$}) do |params|
+      Excon.stub(:expects => 200, :method => :post, :path => %r{^/features/([^/]+)$}) do |params|
         request_params, mock_data = parse_stub_params(params)
         app = request_params[:query].has_key?('app') && request_params[:query]['app']
         feature, _ = request_params[:captures][:path]
@@ -80,26 +80,14 @@ module Heroku
             # feature exists
             case feature_data['kind']
             when 'app'
-              status = if mock_data[:features][:app][app].include?(feature_data)
-                200
-              else
-                mock_data[:features][:app][app] << feature_data
-                201
-              end
               {
                 :body   => Heroku::API::OkJson.encode(feature_data),
-                :status => status
+                :status => 200
               }
             when 'user'
-              status = if mock_data[:features][:user].include(feature_data)
-                200
-              else
-                mock_data[:features][:user] << feature_data
-                201
-              end
               {
                 :body   => '',
-                :status => status
+                :status => 200
               }
             end
           else
