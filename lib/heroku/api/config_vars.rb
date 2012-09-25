@@ -3,10 +3,21 @@ module Heroku
 
     # DELETE /apps/:app/config_vars/:key
     def delete_config_var(app, key)
+      deprecate("delete_config_var is deprecated, use delete_config_vars(app, key)")
       request(
         :expects  => 200,
         :method   => :delete,
         :path     => "/apps/#{app}/config_vars/#{escape(key)}"
+      )
+    end
+
+    # DELETE /apps/:app/config_vars
+    def delete_config_vars(app, keys)
+      request(
+        :expects  => 200,
+        :method   => :delete,
+        :path     => "/apps/#{app}/config-vars",
+        :query    => [*keys].map {|key| "config_vars[]=#{key}"}.join('&')
       )
     end
 
@@ -22,10 +33,10 @@ module Heroku
     # PUT /apps/:app/config_vars
     def put_config_vars(app, vars)
       request(
-        :body     => Heroku::API::OkJson.encode(vars),
         :expects  => 200,
         :method   => :put,
-        :path     => "/apps/#{app}/config_vars"
+        :path     => "/apps/#{app}/config_vars",
+        :query    => config_vars_params(vars)
       )
     end
 

@@ -116,6 +116,13 @@ module Heroku
       end
     end
 
+    def config_vars_params(params)
+      params.inject({}) do |accum, (key, value)|
+        accum["config_vars[#{key}]"] = value
+        accum
+      end
+    end
+
     def escape(string)
       CGI.escape(string).gsub('.', '%2E')
     end
