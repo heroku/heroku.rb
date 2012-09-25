@@ -6,17 +6,14 @@ module Heroku
       request(
         :expects  => 200,
         :method   => :delete,
-        :path     => "/apps/#{app}/domains/#{escape(domain)}"
+        :path     => "/apps/#{app}/domains",
+        :query    => {'domain' => domain}
       )
     end
 
     # DELETE /apps/:app/domains
     def delete_domains(app)
-      request(
-        :expects  => 200,
-        :method   => :delete,
-        :path     => "/apps/#{app}/domains"
-      )
+      raise Excon::Errors.new('delete_domains is no longer supported, iterate over domains and use delete_domain(app, domain)')
     end
 
     # GET /apps/:app/domains
@@ -34,7 +31,7 @@ module Heroku
         :expects  => 201,
         :method   => :post,
         :path     => "/apps/#{app}/domains",
-        :query    => {'domain_name[domain]' => domain}
+        :query    => {'domain' => domain}
       )
     end
 
