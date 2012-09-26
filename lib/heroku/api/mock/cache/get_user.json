@@ -1,1 +1,1 @@
-{"name":null,"created_at":"2012/01/16 13:27:23 -0800","verified_at":"2012/05/18 13:49:16 -0700","last_login":"2012/05/22 15:05:13 -0700","confirmed":false,"id":"123456@users.heroku.com","verified":true,"confirmed_at":null,"email":"user@example.com"}
+{"name":null,"created_at":"2012-01-16T21:27:23-00:00","verified_at":"2012-09-24T17:10:45-00:00","last_login":"2012-09-24T17:10:28-00:00","confirmed":true,"updated_at":"2012-09-25T21:30:06-00:00","id":"123456@users.heroku.com","verified":true,"confirmed_at":"2012-07-30T22:41:46-00:00","email":"user@example.com"}
