@@ -31,9 +31,20 @@ class TestAddons < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal({
-        'message' => nil,
-        'price'   => 'free',
-        'status'  => 'Uninstalled'
+        "id"                => "deployhooks",
+        "name"              => "Deploy Hooks",
+        "plans"             => [
+          {
+            "id"      => "deployhooks:http",
+            "message" => nil,
+            "name"    => "HTTP Hook",
+            "sso_url" => nil,
+            "state"   => "public",
+            "status"  => "install"
+          }
+        ],
+        "terms_of_service"  => false,
+        "url"               => "http://devcenter.heroku.com/articles/deploy-hooks#http-post-hook"
       }, response.body)
     end
   end
@@ -51,21 +62,7 @@ class TestAddons < MiniTest::Unit::TestCase
       response = heroku.get_addons(app_data['name'])
 
       assert_equal(200, response.status)
-      assert_equal([{
-        'attachable'          => false,
-        'beta'                => false,
-        'configured'          => true,
-        'consumes_dyno_hours' => false,
-        'description'         => 'Shared Database 5MB',
-        'group_description'   => 'Shared Database',
-        'name'                => 'shared-database:5mb',
-        'plan_description'    => '5mb',
-        'price'               => { 'cents' => 0, 'unit' => 'month' },
-        'slug'                => '5mb',
-        'state'               => 'public',
-        'terms_of_service'    => false,
-        'url'                 => nil
-      }], response.body)
+      assert_equal([], response.body)
     end
   end
 
@@ -81,9 +78,20 @@ class TestAddons < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal({
-        'message' => nil,
-        'price'   => 'free',
-        'status'  => 'Installed'
+        "id"                => "deployhooks",
+        "name"              => "Deploy Hooks",
+        "plans"             => [
+          {
+            "id"      => "deployhooks:http",
+            "message" => nil,
+            "name"    => "HTTP Hook",
+            "sso_url" => nil,
+            "state"   => "public",
+            "status"  => "installed"
+          }
+        ],
+        "terms_of_service"  => false,
+        "url"               => "http://devcenter.heroku.com/articles/deploy-hooks#http-post-hook"
       }, response.body)
     end
   end
@@ -94,23 +102,22 @@ class TestAddons < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal({
-        'message' => nil,
-        'price'   => 'free',
-        'status'  => 'Installed'
+        "id"                => "deployhooks",
+        "name"              => "Deploy Hooks",
+        "plans"             => [
+          {
+            "id"      => "deployhooks:http",
+            "message" => nil,
+            "name"    => "HTTP Hook",
+            "sso_url" => nil,
+            "state"   => "public",
+            "status"  => "installed"
+          }
+        ],
+        "terms_of_service"  => false,
+        "url"               => "http://devcenter.heroku.com/articles/deploy-hooks#http-post-hook"
       }, response.body)
     end
-  end
-
-  def test_post_add_on_with_config_parses_config_correctly
-    with_app do |app_data|
-      addon_post_path = "/apps/#{app_data['name']}/addons/deployhooks:http"
-      Excon.stub({:method => :post, :path => addon_post_path}) do |params|
-        {:body => params[:query], :status => 200}
-      end
-      response = heroku.post_addon(app_data['name'], 'deployhooks:http', {"url"=>"http://example.com"})
-      assert_equal({ "config[url]" => "http://example.com"}, response.body)
-    end
-    Excon.stubs.shift
   end
 
   def test_post_addon_addon_already_installed
@@ -152,9 +159,20 @@ class TestAddons < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal({
-        'message' => 'Plan upgraded',
-        'price'   => 'free',
-        'status'  => 'Updated'
+        "id"                => "pgbackups",
+        "name"              => "Pgbackups",
+        "plans"             => [
+          {
+            "id"      => "pgbackups:plus",
+            "message" => "Plan upgraded",
+            "name"    => "PG Backups Plus",
+            "sso_url" => nil,
+            "state"   => "public",
+            "status"  => "installed"
+          }
+        ],
+        "terms_of_service"  => false,
+        "url"               => nil
       }, response.body)
     end
   end
