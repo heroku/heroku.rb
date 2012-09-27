@@ -61,7 +61,7 @@ For additional details about any of the commands, see the [API docs](http://api-
 
     heroku.delete_domain('app', 'example.com') # remove the 'example.com' domain from the 'app' app
     heroku.get_domains('app')                  # list configured domains for the 'app' app
-    heroku.post_domains('app', 'example.com')  # add 'example.com' domain to the 'app' app
+    heroku.post_domain('app', 'example.com')  # add 'example.com' domain to the 'app' app
 
 ### Keys
 
