@@ -21,6 +21,8 @@ require "heroku/api/attachments"
 require "heroku/api/collaborators"
 require "heroku/api/config_vars"
 require "heroku/api/domains"
+require "heroku/api/dyno_types"
+require "heroku/api/dynos"
 require "heroku/api/features"
 require "heroku/api/keys"
 require "heroku/api/login"
@@ -127,7 +129,7 @@ module Heroku
       CGI.escape(string).gsub('.', '%2E')
     end
 
-    def ps_params(params)
+    def dynos_params(params)
       if ps_env = params.delete(:ps_env) || params.delete('ps_env')
         ps_env.each do |key, value|
           params["ps_env[#{key}]"] = value

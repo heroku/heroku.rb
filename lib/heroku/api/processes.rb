@@ -1,67 +1,30 @@
 module Heroku
   class API
 
-    # GET /apps/:app/ps
     def get_ps(app)
-      request(
-        :expects  => 200,
-        :method   => :get,
-        :path     => "/apps/#{app}/ps"
-      )
+      deprecate('get_ps is deprecated, use get_dynos(app).')
+      get_dynos(app)
     end
 
-    # POST /apps/:app/ps
     def post_ps(app, command, options={})
-      options = { 'command' => command }.merge(options)
-      request(
-        :expects  => 200,
-        :method   => :post,
-        :path     => "/apps/#{app}/ps",
-        :query    => ps_params(options)
-      )
+      deprecate('post_ps is deprecated, use post_dynos(app, command, options={}).')
+      post_dynos(app, command, options)
     end
 
-    # POST /apps/:app/ps/restart
     def post_ps_restart(app, options={})
-      request(
-        :expects  => 200,
-        :method   => :post,
-        :path     => "/apps/#{app}/ps/restart",
-        :query    => options
-      )
+      deprecate('post_ps_restart is deprecated, use delete_dynos(app, options={}).')
+      delete_dynos(app, options={})
     end
 
     # POST /apps/:app/ps/scale
     def post_ps_scale(app, type, quantity)
-      request(
-        :expects  => 200,
-        :method   => :post,
-        :path     => "/apps/#{app}/ps/scale",
-        :query    => {
-          'type'  => type,
-          'qty'   => quantity
-        }
-      )
+      deprecate('post_ps_scale is deprecated, use put_dyno_types(app, types).')
+      put_dyno_types(app, [{'name' => type, 'quantity' => quantity}])
     end
 
-    # POST /apps/:app/ps/stop
     def post_ps_stop(app, options)
-      request(
-        :expects  => 200,
-        :method   => :post,
-        :path     => "/apps/#{app}/ps/stop",
-        :query    => options
-      )
-    end
-
-    # PUT /apps/:app/dynos
-    def put_dynos(app, dynos)
-      request(
-        :expects  => 200,
-        :method   => :put,
-        :path     => "/apps/#{app}/dynos",
-        :query    => {'dynos' => dynos}
-      )
+      deprecate('post_ps_restart is deprecated, use delete_dynos(app, options={}).')
+      delete_dynos(app, options={})
     end
 
     # PUT /apps/:app/workers
