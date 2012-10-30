@@ -137,15 +137,20 @@ module Heroku
       end
 
       def self.parse_stub_params(params)
-        api_key = Base64.decode64(params[:headers]['Authorization']).split(':').last
+        mock_data = nil
 
-        parsed = params.dup
-        begin # try to JSON decode
-          parsed[:body] &&= Heroku::API::OkJson.decode(parsed[:body])
-        rescue # else leave as is
+        if params[:headers].has_key?('Authorization')
+          api_key = Base64.decode64(params[:headers]['Authorization']).split(':').last
+
+          parsed = params.dup
+          begin # try to JSON decode
+            parsed[:body] &&= Heroku::API::OkJson.decode(parsed[:body])
+          rescue # else leave as is
+          end
+          mock_data = @mock_data[api_key]
         end
 
-        [parsed, @mock_data[api_key]]
+        [parsed, mock_data]
       end
 
       def self.remove_mock_app_addon(mock_data, app, addon)

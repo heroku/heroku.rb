@@ -36,24 +36,36 @@ srand
 module Heroku
   class API
 
+    HEADERS = {
+      'Accept'                => 'application/json',
+      'Accept-Encoding'       => 'gzip',
+      #'Accept-Language'       => 'en-US, en;q=0.8',
+      'User-Agent'            => "heroku-rb/#{Heroku::API::VERSION}",
+      'X-Ruby-Version'        => RUBY_VERSION,
+      'X-Ruby-Platform'       => RUBY_PLATFORM
+    }
+
+    OPTIONS = {
+      :headers  => {},
+      :host     => 'api.heroku.com',
+      :nonblock => false,
+      :scheme   => 'https'
+    }
+
     def initialize(options={})
+      options = OPTIONS.merge(options)
+
       @api_key = options.delete(:api_key) || ENV['HEROKU_API_KEY']
+      if !@api_key && options.has_key?(:username) && options.has_key?(:password)
+        @connection = Excon.new("#{options[:scheme]}://#{options[:host]}", options.merge(:headers => HEADERS))
+        @api_key = self.post_login(options[:username], options[:password]).body["api_key"]
+      end
+
       user_pass = ":#{@api_key}"
-      options = {
-        :headers  => {},
-        :host     => 'api.heroku.com',
-        :nonblock => false,
-        :scheme   => 'https'
-      }.merge(options)
-      options[:headers] = {
-        'Accept'                => 'application/json',
-        'Accept-Encoding'       => 'gzip',
-        #'Accept-Language'       => 'en-US, en;q=0.8',
-        'Authorization'         => "Basic #{Base64.encode64(user_pass).gsub("\n", '')}",
-        'User-Agent'            => "heroku-rb/#{Heroku::API::VERSION}",
-        'X-Ruby-Version'        => RUBY_VERSION,
-        'X-Ruby-Platform'       => RUBY_PLATFORM
-      }.merge(options[:headers])
+      options[:headers] = HEADERS.merge({
+        'Authorization' => "Basic #{Base64.encode64(user_pass).gsub("\n", '')}",
+      }).merge(options[:headers])
+
       @connection = Excon.new("#{options[:scheme]}://#{options[:host]}", options)
     end
 
