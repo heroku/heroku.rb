@@ -14,7 +14,8 @@ Start by creating a connection to Heroku with your credentials:
 
     require 'heroku-api'
 
-    heroku = Heroku::API.new(:api_key => API_KEY)
+    heroku = Heroku::API.new(:api_key => API_KEY)                           # use API Key
+    heroku = Heroku::API.new(:username => USERNAME, :password => PASSWORD)  # use username and password
 
 NOTE: You can leave out the `:api_key` if `ENV['HEROKU_API_KEY']` is set instead.
 
