@@ -63,6 +63,10 @@ For additional details about any of the commands, see the [API docs](http://api-
     heroku.get_domains('app')                  # list configured domains for the 'app' app
     heroku.post_domains('app', 'example.com')  # add 'example.com' domain to the 'app' app
 
+### Dyno Types
+
+    heroku.put_dyno_types('app', 'web' => 3) # scale the web dyno type to 3 dynos
+
 ### Keys
 
     heroku.delete_key('user@hostname.local') # remove the 'user@hostname.local' key
