@@ -4,11 +4,12 @@ require 'heroku/api/mock/attachments'
 require 'heroku/api/mock/collaborators'
 require 'heroku/api/mock/config_vars'
 require 'heroku/api/mock/domains'
+require 'heroku/api/mock/dynos'
+require 'heroku/api/mock/dyno_types'
 require 'heroku/api/mock/features'
 require 'heroku/api/mock/keys'
 require 'heroku/api/mock/login'
 require 'heroku/api/mock/logs'
-require 'heroku/api/mock/processes'
 require 'heroku/api/mock/releases'
 require 'heroku/api/mock/stacks'
 require 'heroku/api/mock/user'
@@ -117,21 +118,9 @@ module Heroku
         mock_data[:keys].detect {|key_data| %r{ #{Regexp.escape(key)}$}.match(key_data['contents'])}
       end
 
-      def self.get_mock_processes(mock_data, app)
+      def self.get_mock_dynos(mock_data, app)
         mock_data[:ps][app].map do |ps|
-
-          elapsed = Time.now.to_i - Time.parse(ps['transitioned_at']).to_i
-          ps['elapsed'] = elapsed
-
-          pretty_elapsed = if elapsed < 60
-            "#{elapsed}s"
-          elsif elapsed < (60 * 60)
-            "#{elapsed / 60}m"
-          else
-            "#{elapsed / 60 / 60}h"
-          end
-          ps['pretty_state'] = "#{ps['state']} for #{pretty_elapsed}"
-
+          ps['elapsed'] = Time.now.to_i - Time.parse(ps['transitioned_at']).to_i
           ps
         end
       end

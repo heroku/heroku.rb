@@ -9,8 +9,8 @@ class TestProcesses < MiniTest::Unit::TestCase
 
       assert_equal(200, response.status)
       assert_equal(app_data['id'], ps['app']['id'])
-      assert_equal(nil, ps['attached'])
-      assert_equal('', ps['command'])
+      assert_equal(false, ps['attached'])
+      assert_equal('thin -p $PORT -e $RACK_ENV -R $HEROKU_RACK start', ps['command'])
       # elapsed
       # id
       assert_equal('web.1', ps['name'])

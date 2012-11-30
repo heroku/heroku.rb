@@ -100,24 +100,23 @@ module Heroku
           mock_data[:domains][app] = []
           mock_data[:ps][app] = [{
             'action'          => 'up',
-            'app_name'        => app,
+            'app'             => { 'id' => app_data['id'] },
             'attached'        => false,
             'command'         => nil, # set by stack below
             'elapsed'         => 0,
-            'pretty_state'    => 'created for 0s',
-            'process'         => 'web.1',
+            'name'            => 'web.1',
             'rendezvous_url'  => nil,
             'slug'            => 'NONE',
             'state'           => 'created',
             'transitioned_at' => app_data['created_at'],
-            'type'            => nil, # set by stack below
+            'type'            => { 'name' => nil }, # set by stack below
             'upid'            => rand(99999999).to_s
           }]
           mock_data[:releases][app] = []
 
           if stack == 'cedar'
             mock_data[:ps][app].first['command'] = 'bundle exec thin start -p $PORT'
-            mock_data[:ps][app].first['type'] = 'Ps'
+            mock_data[:ps][app].first['type']['name'] = 'Ps'
           else
             add_mock_app_addon(mock_data, app, 'shared-database:5mb')
             mock_data[:config_vars][app] = {
@@ -125,8 +124,8 @@ module Heroku
               'LANG' => 'en_US.UTF-8',
               'RACK_ENV' => 'production'
             }
-            mock_data[:ps][app].first['command']  = 'thin -p $PORT -e $RACK_ENV -R $HEROKU_RACK start'
-            mock_data[:ps][app].first['type']     = 'Dyno'
+            mock_data[:ps][app].first['command']      = 'thin -p $PORT -e $RACK_ENV -R $HEROKU_RACK start'
+            mock_data[:ps][app].first['type']['name'] = 'web'
           end
 
           {
