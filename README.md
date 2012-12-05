@@ -30,11 +30,11 @@ For additional details about any of the commands, see the [API docs](http://api-
 
 ### Add-ons
 
-    heroku.delete_addon('app', 'addon')     # remove 'addon' add-on from an 'app' app
-    heroku.get_addons                 # see a listing of all available add-ons
-    heroku.get_addons('app')          # see listing of installed add-ons for 'app' app
-    heroku.post_addon('app', 'addon') # add 'addon' add-on to 'app' app
-    heroku.put_addon('app', 'addon')  # update 'addon' add-on on 'app' app
+    heroku.delete_addon('app', 'addon') # remove 'addon' add-on from an 'app' app
+    heroku.get_addons                   # see a listing of all available add-ons
+    heroku.get_addons('app')            # see listing of installed add-ons for 'app' app
+    heroku.post_addon('app', 'addon')   # add 'addon' add-on to 'app' app
+    heroku.put_addon('app', 'addon')    # update 'addon' add-on on 'app' app
 
 ### Apps
 
@@ -62,7 +62,7 @@ For additional details about any of the commands, see the [API docs](http://api-
 
     heroku.delete_domain('app', 'example.com') # remove the 'example.com' domain from the 'app' app
     heroku.get_domains('app')                  # list configured domains for the 'app' app
-    heroku.post_domain('app', 'example.com')  # add 'example.com' domain to the 'app' app
+    heroku.post_domain('app', 'example.com')   # add 'example.com' domain to the 'app' app
 
 ### Keys
 
