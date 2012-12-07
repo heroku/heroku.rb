@@ -7,7 +7,7 @@ class TestUser < MiniTest::Unit::TestCase
     data = File.read("#{File.dirname(__FILE__)}/../lib/heroku/api/mock/cache/get_user.json")
 
     assert_equal(200, response.status)
-    assert_equal(Heroku::API::OkJson.decode(data), response.body)
+    assert_equal(MultiJson.decode(data), response.body)
   end
 
 end

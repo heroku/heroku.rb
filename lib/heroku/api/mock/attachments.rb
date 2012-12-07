@@ -8,7 +8,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do
           {
-            :body   => Heroku::API::OkJson.encode(mock_data[:attachments][app]),
+            :body   => MultiJson.encode(mock_data[:attachments][app]),
             :status => 200
           }
         end

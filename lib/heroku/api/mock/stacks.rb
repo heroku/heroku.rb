@@ -37,7 +37,7 @@ module Heroku
           stack_data = Marshal::load(Marshal.dump(STACKS))
           stack_data.detect {|stack| stack['name'] == app_data['stack']}['current'] = true
           {
-            :body   => Heroku::API::OkJson.encode(stack_data),
+            :body   => MultiJson.encode(stack_data),
             :status => 200
           }
         end
@@ -65,13 +65,13 @@ BODY
               }
             else
               {
-                :body   => Heroku::API::OkJson.encode('error' => 'Stack not found'),
+                :body   => MultiJson.encode('error' => 'Stack not found'),
                 :status => 404
               }
             end
           else
             {
-              :body   => Heroku::API::OkJson.encode('error' => 'Stack migration to/from Cedar is not available. Create a new app with --stack cedar instead.'),
+              :body   => MultiJson.encode('error' => 'Stack migration to/from Cedar is not available. Create a new app with --stack cedar instead.'),
               :status => 422
             }
           end

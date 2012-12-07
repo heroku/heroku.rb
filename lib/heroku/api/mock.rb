@@ -75,7 +75,7 @@ module Heroku
       def self.get_mock_addon(mock_data, addon)
         @addons ||= begin
           data = File.read("#{File.dirname(__FILE__)}/mock/cache/get_addons.json")
-          Heroku::API::OkJson.decode(data)
+          MultiJson.decode(data)
         end
         @addons.detect {|addon_data| addon_data['name'] == addon}
       end
@@ -109,7 +109,7 @@ module Heroku
       def self.get_mock_feature(mock_data, feature)
         @features ||= begin
           data = File.read("#{File.dirname(__FILE__)}/mock/cache/get_features.json")
-          Heroku::API::OkJson.decode(data)
+          MultiJson.decode(data)
         end
         @features.detect {|feature_data| feature_data['name'] == feature}
       end
@@ -130,7 +130,7 @@ module Heroku
 
         parsed = params.dup
         begin # try to JSON decode
-          parsed[:body] &&= Heroku::API::OkJson.decode(parsed[:body])
+          parsed[:body] &&= MultiJson.decode(parsed[:body])
         rescue # else leave as is
         end
 

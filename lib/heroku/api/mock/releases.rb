@@ -8,7 +8,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do |app_data|
           {
-            :body   => Heroku::API::OkJson.encode(mock_data[:releases][app]),
+            :body   => MultiJson.encode(mock_data[:releases][app]),
             :status => 200
           }
         end
@@ -22,7 +22,7 @@ module Heroku
           releases = mock_data[:releases][app]
           if release_data = (release_name == 'current' && releases.last) || releases.detect {|release| release['name'] == release_name}
             {
-              :body   => Heroku::API::OkJson.encode(release_data),
+              :body   => MultiJson.encode(release_data),
               :status => 200
             }
           else
@@ -51,7 +51,7 @@ module Heroku
               }
             else
               {
-                :body   => Heroku::API::OkJson.encode({'error' => 'Cannot rollback to a release that had a different set of addons installed'}),
+                :body   => MultiJson.encode({'error' => 'Cannot rollback to a release that had a different set of addons installed'}),
                 :status => 422
               }
             end

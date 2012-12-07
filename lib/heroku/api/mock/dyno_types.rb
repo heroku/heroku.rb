@@ -43,13 +43,13 @@ module Heroku
               }
             else
               {
-                :body   => Heroku::API::OkJson.encode('error' => "No such type as #{type}") ,
+                :body   => MultiJson.encode('error' => "No such type as #{type}") ,
                 :status => 422
               }
             end
           else
             {
-              :body   => Heroku::API::OkJson.encode('error' => "That feature is not available on this app's stack"),
+              :body   => MultiJson.encode('error' => "That feature is not available on this app's stack"),
               :status => 422
             }
           end

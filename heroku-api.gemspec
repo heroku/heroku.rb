@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency 'excon', '~>0.16.4'
+  s.add_runtime_dependency 'multi_json'
 
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'rake'

@@ -31,7 +31,7 @@ module Heroku
         app, _ = request_params[:captures][:path]
         with_mock_app(mock_data, app) do |app_data|
           {
-            :body   => Heroku::API::OkJson.encode(mock_data[:domains][app]),
+            :body   => MultiJson.encode(mock_data[:domains][app]),
             :status => 200
           }
         end
@@ -53,7 +53,7 @@ module Heroku
             }
           end
           {
-            :body   => Heroku::API::OkJson.encode(mock_data[:domains][app].last),
+            :body   => MultiJson.encode(mock_data[:domains][app].last),
             :status => 201
           }
         end
