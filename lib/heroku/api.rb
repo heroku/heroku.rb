@@ -96,6 +96,28 @@ module Heroku
       # reset (non-persistent) connection
       @connection.reset
 
+      # pagination
+      if response.headers['Link']
+        link_headers = {}
+        response.headers['Link'].split(', ').each do |link|
+          url, rel = %r{<([^>]+)>; rel="([^"]+)"}.match(link).captures
+          link_headers[rel] = url
+        end
+        # FIXME: comparing against body size seems brittle, but cuts out a round trip for the last (empty) page
+        if link_headers['next'] && response.body.size == 200
+          query_params = {}
+          link_headers['next'].split('?').last.split('&').each do |pair|
+            key, value = pair.split('=')
+            query_params[key] = value
+          end
+
+          pagination_params = params.dup
+          pagination_params[:query] = (pagination_params[:query] || {}).merge!(query_params)
+          pagination_response = request(pagination_params, &block)
+          response.body += pagination_response.body
+        end
+      end
+
       response
     end
 
