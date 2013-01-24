@@ -86,6 +86,8 @@ For additional details about any of the commands, see the [API docs](http://api-
     heroku.post_ps_stop('app', 'type' => 'web')      # stop all 'web' processes for 'app' app
     heroku.put_dynos('app', 'dynos')                 # set number of dynos for bamboo app 'app' to 'dynos'
     heroku.put_workers('app', 'workers')             # set number of workers for bamboo app 'app' to 'workers'
+    heroku.post_ps_scale('app', 'worker', 'workers') # set number of workers for cedar app 'app' to 'workers'
+
 
     heroku.post_ps_restart('app', 'ps' => 'web.1')   # restart 'web.1' process for 'app' app
 
