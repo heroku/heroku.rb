@@ -77,7 +77,12 @@ module Heroku
           when 401 then Heroku::API::Errors::Unauthorized
           when 402 then Heroku::API::Errors::VerificationRequired
           when 403 then Heroku::API::Errors::Forbidden
-          when 404 then Heroku::API::Errors::NotFound
+          when 404
+            if error.request[:path].match /\/apps\/\/.*/
+              Heroku::API::Errors::NilApp
+            else
+              Heroku::API::Errors::NotFound
+            end
           when 408 then Heroku::API::Errors::Timeout
           when 422 then Heroku::API::Errors::RequestFailed
           when 423 then Heroku::API::Errors::Locked
