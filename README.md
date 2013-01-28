@@ -31,39 +31,39 @@ For additional details about any of the commands, see the [API docs](http://api-
 
 ### Add-ons
 
-    heroku.delete_addon('app', 'addon') # remove 'addon' add-on from an 'app' app
+    heroku.delete_addon(APP, ADD_ON)    # remove the ADD_ON add-on from the app named APP
+    heroku.post_addon(APP, ADD_ON)      # add ADD_ON add-on to an the app named APP
+    heroku.put_addon(APP, ADD_ON)       # update the ADD_ON add-on on the app named APP
     heroku.get_addons                   # see a listing of all available add-ons
-    heroku.get_addons('app')            # see listing of installed add-ons for 'app' app
-    heroku.post_addon('app', 'addon')   # add 'addon' add-on to 'app' app
-    heroku.put_addon('app', 'addon')    # update 'addon' add-on on 'app' app
+    heroku.get_addons(APP)              # see listing of installed add-ons for the app named APP
 
 ### Apps
 
-    heroku.delete_app('app')                # delete an app named 'app'
+    heroku.delete_app(APP)                  # delete the app named APP
     heroku.get_apps                         # get a list of your apps
-    heroku.get_app('app')                   # get info about an app named 'app'
+    heroku.get_app(APP)                     # get info about the app named APP
     heroku.post_app                         # create an app with a generated name and the default stack
-    heroku.post_app('name' => 'app')        # create an app with a specified name
-    heroku.post_app_maintenance('app', '1') # toggle maintenance mode
+    heroku.post_app_maintenance(APP, '1')   # toggle maintenance mode for the app named APP
+    heroku.post_app('name' => 'app')        # create an app with a specified name, APP
     heroku.put_app('name' => 'myapp')       # update an app to have a different name
 
 ### Collaborators
 
-    heroku.delete_collaborator('app', 'email@example.com') # remove 'email@example.com' collaborator from 'app' app
-    heroku.get_collaborators('app')                        # list collaborators for 'app' app
-    heroku.post_collaborator('app', 'email@example.com')   # add 'email@example.com' collaborator to 'app' app
+    heroku.delete_collaborator(APP, 'email@example.com')   # remove 'email@example.com' collaborator from APP app
+    heroku.get_collaborators(APP)                          # list collaborators for APP app
+    heroku.post_collaborator(APP, 'email@example.com')     # add 'email@example.com' collaborator to APP app
 
 ### Config Variables
 
-    heroku.delete_config_var('app', 'KEY')           # remove 'KEY' key from 'app' app
-    heroku.get_config_vars('app')                    # get list of config vars for 'app' app
-    heroku.put_config_vars('app', 'KEY' => 'value')  # set 'KEY' key to 'value' for 'app' app
+    heroku.delete_config_var(APP, KEY)               # remove KEY key from APP app
+    heroku.get_config_vars(APP)                      # get list of config vars for APP app
+    heroku.put_config_vars(APP, KEY => 'value')      # set KEY key to 'value' for APP app
 
 ### Domains
 
-    heroku.delete_domain('app', 'example.com') # remove the 'example.com' domain from the 'app' app
-    heroku.get_domains('app')                  # list configured domains for the 'app' app
-    heroku.post_domain('app', 'example.com')   # add 'example.com' domain to the 'app' app
+    heroku.delete_domain(APP, 'example.com')   # remove the 'example.com' domain from the APP app
+    heroku.get_domains(APP)                    # list configured domains for the APP app
+    heroku.post_domain(APP, 'example.com')     # add 'example.com' domain to the APP app
 
 ### Keys
 
@@ -74,33 +74,31 @@ For additional details about any of the commands, see the [API docs](http://api-
 
 ### Logs
 
-    heroku.get_logs('app') # return logs information for 'app' app
+    heroku.get_logs(APP) # return logs information for APP app
 
 ### Processes
 
-    heroku.get_ps('app')                             # list current processes for 'app' app
-    heroku.post_ps('app', 'command')                 # run 'command' command in context of 'app' app
-    heroku.post_ps_restart('app')                    # restart all processes for 'app' app
-    heroku.post_ps_scale('app', 'type', 'quantity')  # scale 'type' type processes to 'quantity' for 'app' app
-    heroku.post_ps_stop('app', 'ps' => 'web.1')      # stop 'web.1' process for 'app' app
-    heroku.post_ps_stop('app', 'type' => 'web')      # stop all 'web' processes for 'app' app
-    heroku.put_dynos('app', 'dynos')                 # set number of dynos for bamboo app 'app' to 'dynos'
-    heroku.put_workers('app', 'workers')             # set number of workers for bamboo app 'app' to 'workers'
-    heroku.post_ps_scale('app', 'worker', 'workers') # set number of workers for cedar app 'app' to 'workers'
-
-
-    heroku.post_ps_restart('app', 'ps' => 'web.1')   # restart 'web.1' process for 'app' app
-
+    heroku.get_ps(APP)                               # list current processes for APP app
+    heroku.post_ps(APP, 'command')                   # run 'command' command in context of APP app
+    heroku.post_ps_restart(APP)                      # restart all processes for APP app
+    heroku.post_ps_scale(APP, TYPE, QTY)             # scale TYPE type processes to QTY for APP app
+    heroku.post_ps_stop(APP, 'ps' => 'web.1')        # stop 'web.1' process for APP app
+    heroku.post_ps_stop(APP, 'type' => 'web')        # stop all 'web' processes for APP app
+    heroku.post_ps_restart(APP, 'ps' => 'web.1')     # restart 'web.1' process for APP app
+    heroku.put_dynos(APP, DYNOS)                     # set number of dynos for bamboo app APP to DYNOS
+    heroku.put_workers(APP, WORKERS)                 # set number of workers for bamboo app APP to WORKERS
+    heroku.post_ps_scale(APP, 'worker', WORKERS)     # set number of workers for cedar app APP to WORKERS
+    
 ### Releases
 
-    heroku.get_releases('app')       # list of releases for 'app' app
-    heroku.get_release('app', 'v#')  # get details of 'v#' release for 'app' app
-    heroku.post_release('app', 'v#') # rollback 'app' app to 'v#' release
+    heroku.get_releases(APP)       # list of releases for the APP app
+    heroku.get_release(APP, 'v#')  # get details of 'v#' release for APP app
+    heroku.post_release(APP, 'v#') # rollback APP app to 'v#' release
 
 ### Stacks
 
-    heroku.get_stack('app')          # list available stacks
-    heroku.put_stack('app', 'stack') # migrate 'app' app to 'stack' stack
+    heroku.get_stack(APP)          # list available stacks
+    heroku.put_stack(APP, STACK) # migrate APP app to STACK stack
 
 ### User
 
