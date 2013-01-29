@@ -19,6 +19,8 @@ module Heroku
       class Timeout < ErrorWithResponse; end
       class Locked < ErrorWithResponse; end
       class RequestFailed < ErrorWithResponse; end
+      class NilApp < ErrorWithResponse; end
+
     end
   end
 end
