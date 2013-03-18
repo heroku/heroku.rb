@@ -107,13 +107,15 @@ For additional details about any of the commands, see the [API docs](http://api-
 Mock
 ----
 
-For practice or testing you can also use a simulated Heroku:
+For testing (or practice) you can also use a simulated Heroku account:
 
     require 'heroku-api'
 
     heroku = Heroku::API.new(:api_key => API_KEY, :mock => true)
 
-After that commands should still behave the same, but they will only modify some local data instead of updating the state of things on Heroku.
+Commands will now behave as normal, however, instead of interacting with your actual Heroku account you'll be interacting with a **blank** test account.  Note: test accounts will have NO apps to begin with.  You'll need to create one:
+
+    heroku.post_app(:name => 'my-test-app')
 
 Tests
 -----
