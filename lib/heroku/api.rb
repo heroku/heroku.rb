@@ -86,6 +86,7 @@ module Heroku
           when 408 then Heroku::API::Errors::Timeout
           when 422 then Heroku::API::Errors::RequestFailed
           when 423 then Heroku::API::Errors::Locked
+          when 429 then Heroku::API::Errors::RateLimitExceeded
           when /50./ then Heroku::API::Errors::RequestFailed
           else Heroku::API::Errors::ErrorWithResponse
         end
