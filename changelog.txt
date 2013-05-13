@@ -1,3 +1,11 @@
+0.3.10 05/13/2013
+=================
+
+add exception for rate limiting
+better user/pass handling at login
+avoid dumping user/pass on error
+bump excon dep
+
 0.3.9 04/01/2013
 ================
 
