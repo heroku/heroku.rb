@@ -93,15 +93,14 @@ module Heroku
           else Heroku::API::Errors::ErrorWithResponse
         end
 
+        decompress_response!(error.response)
         reerror = klass.new(error.message, error.response)
         reerror.set_backtrace(error.backtrace)
         raise(reerror)
       end
 
       if response.body && !response.body.empty?
-        if response.headers['Content-Encoding'] == 'gzip'
-          response.body = Zlib::GzipReader.new(StringIO.new(response.body)).read
-        end
+        decompress_response!(response)
         begin
           response.body = Heroku::API::OkJson.decode(response.body)
         rescue
@@ -116,6 +115,11 @@ module Heroku
     end
 
     private
+
+    def decompress_response!(response)
+      return unless response.headers['Content-Encoding'] == 'gzip'
+      response.body = Zlib::GzipReader.new(StringIO.new(response.body)).read
+    end
 
     def app_params(params)
       app_params = {}
