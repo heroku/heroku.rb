@@ -75,7 +75,7 @@ module Heroku
     end
 
     # PUT /apps/:app/formation
-    def put_ps_resize(app, options)
+    def put_formation(app, options)
       options.each { |process, size| options[process] = {'size' => size} }
       request(
         :body     => Heroku::API::OkJson.encode(options),

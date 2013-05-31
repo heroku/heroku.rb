@@ -88,7 +88,7 @@ For additional details about any of the commands, see the [API docs](http://api-
     heroku.put_dynos(APP, DYNOS)                     # set number of dynos for bamboo app APP to DYNOS
     heroku.put_workers(APP, WORKERS)                 # set number of workers for bamboo app APP to WORKERS
     heroku.post_ps_scale(APP, 'worker', WORKERS)     # set number of workers for cedar app APP to WORKERS
-    heroku.put_ps_resize(APP, 'web' => '2X')         # set dyno size to '2X' for all 'web' processes for APP app
+    heroku.put_formation(APP, 'web' => '2X')         # set dyno size to '2X' for all 'web' processes for APP app
 
 ### Releases
 
