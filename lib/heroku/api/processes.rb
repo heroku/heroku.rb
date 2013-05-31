@@ -73,5 +73,17 @@ module Heroku
         :query    => {'workers' => workers}
       )
     end
+
+    # PUT /apps/:app/formation
+    def put_ps_resize(app, options)
+      options.each { |process, size| options[process] = {'size' => size} }
+      request(
+        :body     => Heroku::API::OkJson.encode(options),
+        :expects  => 200,
+        :method   => :put,
+        :path     => "/apps/#{app}/formation"
+      )
+    end
+
   end
 end

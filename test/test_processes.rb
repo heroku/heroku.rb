@@ -242,4 +242,14 @@ class TestProcesses < MiniTest::Unit::TestCase
     end
   end
 
+  def test_put_ps_resize
+    with_app do |app_data|
+      response = heroku.put_ps_resize(app_data['name'], {"web" => "2X"})
+      ps = response.body.first
+
+      assert_equal(200, response.status)
+      assert_equal('2', ps['size'])
+    end
+  end
+
 end

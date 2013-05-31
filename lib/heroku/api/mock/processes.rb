@@ -193,6 +193,22 @@ module Heroku
       end
     end
 
+    # stub PUT /apps/:app/formation
+    Excon.stub(:expects => 200, :method => :put, :path => %r{^/apps/([^/]+)/formation}) do |params|
+      request_params, mock_data = parse_stub_params(params)
+      app, _ = request_params[:captures][:path]
+      with_mock_app(mock_data, app) do
+        new_resize_vars = request_params[:body]
+        process = mock_data[:ps][app].first["process"].split('.')[0]
+        size = new_resize_vars[process]["size"][/(\d+)/]
+        mock_data[:ps][app].first.merge!({'size' => size})
+        {
+          :body   => Heroku::API::OkJson.encode(get_mock_processes(mock_data, app)),
+          :status => 200
+        }
+      end
+    end
+
     end
   end
 end
