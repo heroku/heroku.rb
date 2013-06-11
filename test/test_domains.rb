@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestDomains < MiniTest::Unit::TestCase
+class TestDomains < Minitest::Test
 
   def test_delete_domain_app_not_found
     assert_raises(Heroku::API::Errors::NotFound) do

@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestAddons < MiniTest::Unit::TestCase
+class TestAddons < Minitest::Test
 
   def test_delete_addon_addon_not_found
     with_app do |app_data|

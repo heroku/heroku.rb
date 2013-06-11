@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestSslEndpoints < MiniTest::Unit::TestCase
+class TestSslEndpoints < Minitest::Test
 
   def test_delete_ssl_endpoint
     skip if MOCK

@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestAttachments < MiniTest::Unit::TestCase
+class TestAttachments < Minitest::Test
 
   def test_get_attachments
     with_app do |app_data|

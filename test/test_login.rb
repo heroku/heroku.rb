@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestLogin < MiniTest::Unit::TestCase
+class TestLogin < Minitest::Test
 
   def test_post_login
     # FIXME: user/pass will only work in mock for now, maybe use ENV

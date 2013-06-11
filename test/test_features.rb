@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestFeatures < MiniTest::Unit::TestCase
+class TestFeatures < Minitest::Test
 
   def setup
     @feature_data ||= begin

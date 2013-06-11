@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestLogs < MiniTest::Unit::TestCase
+class TestLogs < Minitest::Test
 
   def test_get_logs
     with_app do |app_data|

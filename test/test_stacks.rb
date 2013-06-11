@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestStacks < MiniTest::Unit::TestCase
+class TestStacks < Minitest::Test
 
   def test_get_stack
     with_app do |app_data|

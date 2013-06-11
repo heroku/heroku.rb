@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestApps < MiniTest::Unit::TestCase
+class TestApps < Minitest::Test
 
   def test_delete_app
     with_app do |app_data|

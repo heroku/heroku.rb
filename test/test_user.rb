@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestUser < MiniTest::Unit::TestCase
+class TestUser < Minitest::Test
 
   def test_get_user
     response = heroku.get_user

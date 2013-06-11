@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/test_helper")
 
-class TestConfigVars < MiniTest::Unit::TestCase
+class TestConfigVars < Minitest::Test
 
   def test_delete_app_config_var
     with_app('stack' => 'cedar') do |app_data|
