@@ -18,6 +18,7 @@ module Heroku
       class NotFound < ErrorWithResponse; end
       class Timeout < ErrorWithResponse; end
       class Locked < ErrorWithResponse; end
+      class RateLimitExceeded < ErrorWithResponse; end
       class RequestFailed < ErrorWithResponse; end
       class NilApp < ErrorWithResponse; end
 
