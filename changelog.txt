@@ -1,3 +1,10 @@
+0.3.13 06/20/2013
+=================
+
+clarify legacy vs platform API usage
+define rate limit specific exception
+bump excon dep
+
 0.3.12 06/11/2013
 =================
 
