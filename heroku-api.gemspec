@@ -5,8 +5,8 @@ require "heroku/api/version"
 Gem::Specification.new do |s|
   s.name        = "heroku-api"
   s.version     = Heroku::API::VERSION
-  s.authors     = ["geemus (Wesley Beary)"]
-  s.email       = ["wesley@heroku.com"]
+  s.authors     = ["geemus (Wesley Beary)", "Pedro Belo"]
+  s.email       = ["wesley@heroku.com", "pedro@heroku.com"]
   s.homepage    = "http://github.com/heroku/heroku.rb"
   s.summary     = %q{Ruby Client for the Heroku API}
   s.description = %q{Ruby Client for the Heroku API}
