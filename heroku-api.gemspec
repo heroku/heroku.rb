@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["geemus (Wesley Beary)", "Pedro Belo"]
   s.email       = ["wesley@heroku.com", "pedro@heroku.com"]
   s.homepage    = "http://github.com/heroku/heroku.rb"
+  s.license     = 'MIT'
   s.summary     = %q{Ruby Client for the Heroku API}
   s.description = %q{Ruby Client for the Heroku API}
 
