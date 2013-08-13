@@ -42,6 +42,7 @@ For additional details about any of the commands, see the [API docs](http://api-
     heroku.delete_app(APP)                  # delete the app named APP
     heroku.get_apps                         # get a list of your apps
     heroku.get_app(APP)                     # get info about the app named APP
+    heroku.get_dyno_types(APP)              # get dyno types for the app named APP    
     heroku.post_app                         # create an app with a generated name and the default stack
     heroku.post_app_maintenance(APP, '1')   # toggle maintenance mode for the app named APP
     heroku.post_app('name' => 'app')        # create an app with a specified name, APP
@@ -78,17 +79,17 @@ For additional details about any of the commands, see the [API docs](http://api-
 
 ### Processes
 
-    heroku.get_ps(APP)                               # list current processes for APP app
+    heroku.get_ps(APP)                               # list current dynos for APP app
     heroku.post_ps(APP, 'command')                   # run 'command' command in context of APP app
-    heroku.post_ps_restart(APP)                      # restart all processes for APP app
-    heroku.post_ps_scale(APP, TYPE, QTY)             # scale TYPE type processes to QTY for APP app
-    heroku.post_ps_stop(APP, 'ps' => 'web.1')        # stop 'web.1' process for APP app
-    heroku.post_ps_stop(APP, 'type' => 'web')        # stop all 'web' processes for APP app
-    heroku.post_ps_restart(APP, 'ps' => 'web.1')     # restart 'web.1' process for APP app
+    heroku.post_ps_restart(APP)                      # restart all dynos for APP app
+    heroku.post_ps_scale(APP, TYPE, QTY)             # scale TYPE type dynos to QTY for APP app
+    heroku.post_ps_stop(APP, 'ps' => 'web.1')        # stop 'web.1' dyno for APP app
+    heroku.post_ps_stop(APP, 'type' => 'web')        # stop all 'web' dynos for APP app
+    heroku.post_ps_restart(APP, 'ps' => 'web.1')     # restart 'web.1' dyno for APP app
     heroku.put_dynos(APP, DYNOS)                     # set number of dynos for bamboo app APP to DYNOS
     heroku.put_workers(APP, WORKERS)                 # set number of workers for bamboo app APP to WORKERS
     heroku.post_ps_scale(APP, 'worker', WORKERS)     # set number of workers for cedar app APP to WORKERS
-    heroku.put_formation(APP, 'web' => '2X')         # set dyno size to '2X' for all 'web' processes for APP app
+    heroku.put_formation(APP, 'web' => '2X')         # set dyno size to '2X' for all 'web' dynos for APP app
 
 ### Releases
 
