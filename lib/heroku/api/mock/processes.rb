@@ -209,6 +209,20 @@ module Heroku
       end
     end
 
+    # stub GET /apps/:app/dyno-types
+    Excon.stub(:expects => 200, :method => :get, :path => %r{^/apps/([^/]+)/dyno-types}) do |params|
+      request_params, mock_data = parse_stub_params(params)
+      app, _ = request_params[:captures][:path]
+      with_mock_app(mock_data, app) do |app_data|
+        {
+          :body   => Heroku::API::OkJson.encode([{"command"=>"bundle exec rails console", "name"=>"console", "quantity"=>0}]),
+          :status => 200
+        }
+      end
+    end
+
+
+
     end
   end
 end
