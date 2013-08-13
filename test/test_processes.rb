@@ -252,9 +252,9 @@ class TestProcesses < Minitest::Test
     end
   end
 
- def test_get_types
+ def test_get_dyno_types
     with_app('stack' => 'cedar') do |app_data|
-      response = heroku.get_types(app_data['name'])
+      response = heroku.get_dyno_types(app_data['name'])
       assert_equal(200, response.status)
       assert_equal(['command' => 'bundle exec rails console',
                     'name' => 'console',

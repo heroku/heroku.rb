@@ -86,7 +86,7 @@ module Heroku
     end
 
     # GET /apps/:app/dyno-types
-    def get_types(app)
+    def get_dyno_types(app)
       request(
         :expects  => 200,
         :method   => :get,

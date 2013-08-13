@@ -1,7 +1,7 @@
 0.3.15 11/03/2013
 =================
 
-add get_types for retrieving process types
+add get__dyno_types for retrieving process types
 
 0.3.14 07/03/2013
 =================

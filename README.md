@@ -42,7 +42,7 @@ For additional details about any of the commands, see the [API docs](http://api-
     heroku.delete_app(APP)                  # delete the app named APP
     heroku.get_apps                         # get a list of your apps
     heroku.get_app(APP)                     # get info about the app named APP
-    heroku.get_types(APP)                   # get process types for the app named APP    
+    heroku.get_dyno_types(APP)              # get dyno types for the app named APP    
     heroku.post_app                         # create an app with a generated name and the default stack
     heroku.post_app_maintenance(APP, '1')   # toggle maintenance mode for the app named APP
     heroku.post_app('name' => 'app')        # create an app with a specified name, APP
