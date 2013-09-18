@@ -13,6 +13,7 @@ module Heroku
       end
 
       class Unauthorized < ErrorWithResponse; end
+      class PaymentRequired < ErrorWithResponse; end
       class VerificationRequired < ErrorWithResponse; end
       class Forbidden < ErrorWithResponse; end
       class NotFound < ErrorWithResponse; end
