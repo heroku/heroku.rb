@@ -1,5 +1,6 @@
 require "base64"
 require "excon"
+require "multi_json"
 require "securerandom"
 require "uri"
 require "zlib"
@@ -8,8 +9,6 @@ __LIB_DIR__ = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 unless $LOAD_PATH.include?(__LIB_DIR__)
   $LOAD_PATH.unshift(__LIB_DIR__)
 end
-
-require "heroku/api/vendor/okjson"
 
 require "heroku/api/errors"
 require "heroku/api/mock"
@@ -102,7 +101,7 @@ module Heroku
       if response.body && !response.body.empty?
         decompress_response!(response)
         begin
-          response.body = Heroku::API::OkJson.decode(response.body)
+          response.body = MultiJson.load(response.body)
         rescue
           # leave non-JSON body as is
         end
