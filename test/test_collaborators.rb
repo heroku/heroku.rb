@@ -70,4 +70,19 @@ class TestCollaborators < Minitest::Test
     end
   end
 
+  def test_delete_collaborator
+    with_app do |app_data|
+      email_address = 'wesley+test@heroku.com'
+      heroku.post_collaborator(app_data['name'], email_address)
+
+      response = heroku.delete_collaborator(app_data['name'], email_address)
+
+      assert_equal(200, response.status)
+      assert_equal(
+        "#{email_address} has been removed as collaborator on #{app_data['name']}",
+        response.body
+      )
+    end
+  end
+
 end
