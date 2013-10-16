@@ -8,7 +8,7 @@ module Heroku
       app, _ = request_params[:captures][:path]
       with_mock_app(mock_data, app) do |app_data|
         {
-          :body   => Heroku::API::OkJson.encode(get_mock_processes(mock_data, app)),
+          :body   => MultiJson.dump(get_mock_processes(mock_data, app)),
           :status => 200
         }
       end
@@ -43,7 +43,7 @@ module Heroku
         }
         mock_data[:ps][app] << data
         {
-          :body   => Heroku::API::OkJson.encode(data),
+          :body   => MultiJson.dump(data),
           :status => 200,
         }
       end
@@ -117,13 +117,13 @@ module Heroku
             }
           else
             {
-              :body   => Heroku::API::OkJson.encode('error' => "No such type as #{type}") ,
+              :body   => MultiJson.dump('error' => "No such type as #{type}") ,
               :status => 422
             }
           end
         else
           {
-            :body   => Heroku::API::OkJson.encode('error' => "That feature is not available on this app's stack"),
+            :body   => MultiJson.dump('error' => "That feature is not available on this app's stack"),
             :status => 422
           }
         end
@@ -139,7 +139,7 @@ module Heroku
         type  = request_params[:query].has_key?('type') && request_params[:query]['type']
         if !ps && !type
           {
-            :body   => Heroku::API::OkJson.encode({'error' => 'Missing process argument'}),
+            :body   => MultiJson.dump({'error' => 'Missing process argument'}),
             :status => 422
           }
         else
@@ -160,12 +160,12 @@ module Heroku
         unless app_data['stack'] == 'cedar'
           app_data['dynos'] = dynos
           {
-            :body   => Heroku::API::OkJson.encode({'name' => app, 'dynos' => dynos}),
+            :body   => MultiJson.dump({'name' => app, 'dynos' => dynos}),
             :status => 200
           }
         else
           {
-            :body   => Heroku::API::OkJson.encode({'error' => "For Cedar apps, use `heroku scale web=#{dynos}`"}),
+            :body   => MultiJson.dump({'error' => "For Cedar apps, use `heroku scale web=#{dynos}`"}),
             :status => 422
           }
         end
@@ -181,12 +181,12 @@ module Heroku
         unless app_data['stack'] == 'cedar'
           app_data['workers'] = workers
           {
-            :body   => Heroku::API::OkJson.encode({'name' => app, 'workers' => workers}),
+            :body   => MultiJson.dump({'name' => app, 'workers' => workers}),
             :status => 200
           }
         else
           {
-            :body   => Heroku::API::OkJson.encode({'error' => "For Cedar apps, use `heroku scale worker=#{workers}`"}),
+            :body   => MultiJson.dump({'error' => "For Cedar apps, use `heroku scale worker=#{workers}`"}),
             :status => 422
           }
         end
@@ -203,7 +203,7 @@ module Heroku
         size = new_resize_vars[process]["size"][/(\d+)/]
         mock_data[:ps][app].first.merge!({'size' => size})
         {
-          :body   => Heroku::API::OkJson.encode(get_mock_processes(mock_data, app)),
+          :body   => MultiJson.dump(get_mock_processes(mock_data, app)),
           :status => 200
         }
       end
@@ -215,7 +215,7 @@ module Heroku
       app, _ = request_params[:captures][:path]
       with_mock_app(mock_data, app) do |app_data|
         {
-          :body   => Heroku::API::OkJson.encode([{"command"=>"bundle exec rails console", "name"=>"console", "quantity"=>0}]),
+          :body   => MultiJson.dump([{"command"=>"bundle exec rails console", "name"=>"console", "quantity"=>0}]),
           :status => 200
         }
       end

@@ -5,7 +5,7 @@ class TestFeatures < Minitest::Test
   def setup
     @feature_data ||= begin
       data = File.read("#{File.dirname(__FILE__)}/../lib/heroku/api/mock/cache/get_features.json")
-      features_data = Heroku::API::OkJson.decode(data)
+      features_data = MultiJson.load(data)
       features_data.detect {|feature| feature['name'] == 'user_env_compile'}
     end
   end
@@ -40,7 +40,7 @@ class TestFeatures < Minitest::Test
       data = File.read("#{File.dirname(__FILE__)}/../lib/heroku/api/mock/cache/get_features.json")
 
       assert_equal(200, response.status)
-      assert_equal(Heroku::API::OkJson.decode(data), response.body)
+      assert_equal(MultiJson.load(data), response.body)
     end
   end
 

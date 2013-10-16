@@ -78,7 +78,7 @@ module Heroku
     def put_formation(app, options)
       options.each { |process, size| options[process] = {'size' => size} }
       request(
-        :body     => Heroku::API::OkJson.encode(options),
+        :body     => MultiJson.dump(options),
         :expects  => 200,
         :method   => :put,
         :path     => "/apps/#{app}/formation"
