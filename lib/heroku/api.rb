@@ -1,4 +1,5 @@
 require "base64"
+require "cgi"
 require "excon"
 require "multi_json"
 require "securerandom"

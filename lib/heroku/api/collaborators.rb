@@ -6,7 +6,7 @@ module Heroku
       request(
         :expects  => 200,
         :method   => :delete,
-        :path     => "/apps/#{app}/collaborators/#{email}"
+        :path     => "/apps/#{app}/collaborators/#{CGI.escape(email)}"
       )
     end
 

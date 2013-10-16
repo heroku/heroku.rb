@@ -6,6 +6,7 @@ module Heroku
       Excon.stub(:expects => 200, :method => :delete, :path => %r{^/apps/([^/]+)/collaborators/([^/]+)$}) do |params|
         request_params, mock_data = parse_stub_params(params)
         app, email, _ = request_params[:captures][:path]
+        email = CGI.unescape(email)
         with_mock_app(mock_data, app) do
           if collaborator_data = get_mock_collaborator(mock_data, app, email)
             mock_data[:collaborators][app].delete(collaborator_data)
