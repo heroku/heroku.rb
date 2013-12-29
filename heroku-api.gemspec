@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency 'excon', '~>0.27.0'
+  s.add_runtime_dependency 'excon', '~>0.27'
   s.add_runtime_dependency 'multi_json', '~>1.8.2'
 
   s.add_development_dependency 'minitest'
