@@ -44,6 +44,7 @@ class TestProcesses < Minitest::Test
       # pretty_state
       assert_equal('run.1', ps['process'])
       assert_nil(ps['rendevous_url'])
+      assert_nil(ps['size'])
       assert_equal('NONE', ps['slug'])
       # depending on timing it will be one of these two states
       assert_includes(['created', 'starting'], ps['state'])
@@ -73,6 +74,66 @@ class TestProcesses < Minitest::Test
       # transitioned_at
       assert_equal(nil, ps['type'])
       # upid
+    end
+  end
+
+  def test_post_ps_with_size
+    with_app do |app_data|
+      command = 'bash'
+      response = heroku.post_ps(app_data['name'], command, 'size' => '2')
+      ps = response.body
+
+      assert_equal(200, response.status)
+      assert_equal('complete', ps['action'])
+      assert_equal('2', ps['size'])
+      assert_equal(command, ps['command'])
+      # elapsed
+      # pretty_state
+      assert_equal('run.1', ps['process'])
+      assert_nil(ps['rendezvous_url'])
+      assert_equal('NONE', ps['slug'])
+      # depending on timing it will be one of these two states
+      assert_includes(['created', 'starting'], ps['state'])
+    end
+  end
+
+  def test_post_ps_with_size_numeric
+    with_app do |app_data|
+      command = 'bash'
+      response = heroku.post_ps(app_data['name'], command, 'size' => 4)
+      ps = response.body
+
+      assert_equal(200, response.status)
+      assert_equal('complete', ps['action'])
+      assert_equal(4, ps['size'])
+      assert_equal(command, ps['command'])
+      # elapsed
+      # pretty_state
+      assert_equal('run.1', ps['process'])
+      assert_nil(ps['rendezvous_url'])
+      assert_equal('NONE', ps['slug'])
+      # depending on timing it will be one of these two states
+      assert_includes(['created', 'starting'], ps['state'])
+    end
+  end
+
+  def test_post_ps_with_size_string
+    with_app do |app_data|
+      command = 'bash'
+      response = heroku.post_ps(app_data['name'], command, 'size' => 'P')
+      ps = response.body
+
+      assert_equal(200, response.status)
+      assert_equal('complete', ps['action'])
+      assert_equal('P', ps['size'])
+      assert_equal(command, ps['command'])
+      # elapsed
+      # pretty_state
+      assert_equal('run.1', ps['process'])
+      assert_nil(ps['rendezvous_url'])
+      assert_equal('NONE', ps['slug'])
+      # depending on timing it will be one of these two states
+      assert_includes(['created', 'starting'], ps['state'])
     end
   end
 

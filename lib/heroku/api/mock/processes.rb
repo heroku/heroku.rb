@@ -22,7 +22,8 @@ module Heroku
         unless attached = request_params[:query].has_key?('attach') && request_params[:query]['attach'].to_s == 'true'
           type = 'Ps'
         end
-        command  = request_params[:query].has_key?('command') && request_params[:query]['command']
+        command = request_params[:query].has_key?('command') && request_params[:query]['command']
+        size    = request_params[:query]['size']
         rendezvous_url = if attached
           "s1.runtime.heroku.com:5000/#{SecureRandom.hex(32)}"
         end
@@ -35,6 +36,7 @@ module Heroku
           'pretty_state'    => 'completed for 0s',
           'process'         => "run.#{max_run_id + 1}",
           'rendezvous_url'  => rendezvous_url,
+          'size'            => size,
           'slug'            => 'NONE',
           'state'           => 'created',
           'transitioned_at' => timestamp,
@@ -200,7 +202,7 @@ module Heroku
       with_mock_app(mock_data, app) do
         new_resize_vars = request_params[:body]
         process = mock_data[:ps][app].first["process"].split('.')[0]
-        size = new_resize_vars[process]["size"][/(\d+)/]
+        size = new_resize_vars[process]["size"][/[(\d+)P]/]
         mock_data[:ps][app].first.merge!({'size' => size})
         {
           :body   => MultiJson.dump(get_mock_processes(mock_data, app)),
