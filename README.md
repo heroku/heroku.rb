@@ -1,7 +1,7 @@
 Heroku Ruby Client
 ==================
 
-The Heroku Ruby Client is used to interact with the [Heroku Legacy API](http://api-docs.heroku.com) from Ruby.
+The Heroku Ruby Client is used to interact with the [Heroku Legacy API](http://legacy-api-docs.herokuapp.com) from Ruby.
 
 Where possible we recommend interacting instead with the [Heroku Platform API](https://devcenter.heroku.com/articles/platform-api-reference). You can use the [Heroics Ruby client](https://github.com/heroku/heroics) with the Platform API.
 
@@ -27,7 +27,7 @@ Requests
 
 What follows is an overview of commands you can run for the client.
 
-For additional details about any of the commands, see the [API docs](http://api-docs.heroku.com).
+For additional details about any of the commands, see the [API docs](http://legacy-api-docs.heroku.com).
 
 ### Add-ons
 
