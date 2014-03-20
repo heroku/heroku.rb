@@ -1,3 +1,9 @@
+0.3.18 03/20/2014
+=================
+
+update heroics links in readme
+relax multi-json dependency
+
 0.3.17 01/20/2014
 =================
 
