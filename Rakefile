@@ -30,6 +30,7 @@ task :cache, [:api_key] do |task, args|
     heroku.delete_app(app_name)
 
     user = heroku.get_user.body
+    user["api_key"] = "0123456789abcdef0123456789abcdef"
     user["email"] = "user@example.com"
     user["id"] = "123456@users.heroku.com"
     user = MultiJson.dump(user)
