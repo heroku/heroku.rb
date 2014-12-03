@@ -52,19 +52,19 @@ class TestAddons < Minitest::Test
 
       assert_equal(200, response.status)
       assert_equal([{
-        'attachable'          => false,
-        'beta'                => false,
-        'configured'          => true,
-        'consumes_dyno_hours' => false,
-        'description'         => 'Shared Database 5MB',
-        'group_description'   => 'Shared Database',
-        'name'                => 'shared-database:5mb',
-        'plan_description'    => '5mb',
-        'price'               => { 'cents' => 0, 'unit' => 'month' },
-        'slug'                => '5mb',
-        'state'               => 'public',
-        'terms_of_service'    => false,
-        'url'                 => nil
+        "attachable"            => true,
+        "beta"                  => false,
+        "configured"            => true,
+        "consumes_dyno_hours"   => false,
+        "description"           => "Heroku Postgres Hobby Dev",
+        "group_description"     => "Heroku Postgresql",
+        "name"                  => "heroku-postgresql:hobby-dev",
+        "plan_description"      => "Hobby Dev",
+        "price"                 => {"cents"=>0, "unit"=>"month"},
+        "slug"                  => "hobby-dev",
+        "state"                 => "public",
+        "terms_of_service"      => false,
+        "url"                   => nil
       }], response.body)
     end
   end
@@ -116,8 +116,8 @@ class TestAddons < Minitest::Test
   def test_post_addon_addon_already_installed
     with_app do |app_data|
       assert_raises(Heroku::API::Errors::RequestFailed) do
-        heroku.post_addon(app_data['name'], 'logging:basic')
-        heroku.post_addon(app_data['name'], 'logging:basic')
+        heroku.post_addon(app_data['name'], 'pgbackups:auto-month')
+        heroku.post_addon(app_data['name'], 'pgbackups:auto-month')
       end
     end
   end
@@ -125,8 +125,8 @@ class TestAddons < Minitest::Test
   def test_post_addon_addon_type_already_installed
     with_app do |app_data|
       assert_raises(Heroku::API::Errors::RequestFailed) do
-        heroku.post_addon(app_data['name'], 'logging:basic')
-        heroku.post_addon(app_data['name'], 'logging:expanded')
+        heroku.post_addon(app_data['name'], 'pgbackups:auto-month')
+        heroku.post_addon(app_data['name'], 'pgbackups:auto-week')
       end
     end
   end
@@ -141,14 +141,14 @@ class TestAddons < Minitest::Test
 
   def test_post_addon_app_not_found
     assert_raises(Heroku::API::Errors::NotFound) do
-      heroku.post_addon(random_name, 'shared-database:5mb')
+      heroku.post_addon(random_name, 'heroku-postgresql:hobby-dev')
     end
   end
 
   def test_put_addon
     with_app do |app_data|
-      response = heroku.post_addon(app_data['name'], 'pgbackups:basic')
-      response = heroku.put_addon(app_data['name'], 'pgbackups:plus')
+      response = heroku.post_addon(app_data['name'], 'pgbackups:auto-month')
+      response = heroku.put_addon(app_data['name'], 'pgbackups:auto-week')
 
       assert_equal(200, response.status)
       assert_equal({
@@ -162,8 +162,8 @@ class TestAddons < Minitest::Test
   def test_put_addon_addon_already_installed
     with_app do |app_data|
       assert_raises(Heroku::API::Errors::RequestFailed) do
-        heroku.post_addon(app_data['name'], 'logging:basic')
-        heroku.put_addon(app_data['name'], 'logging:basic')
+        heroku.post_addon(app_data['name'], 'pgbackups:auto-month')
+        heroku.put_addon(app_data['name'], 'pgbackups:auto-month')
       end
     end
   end
@@ -179,7 +179,7 @@ class TestAddons < Minitest::Test
   def test_put_addon_addon_type_not_installed
     with_app do |app_data|
       assert_raises(Heroku::API::Errors::RequestFailed) do
-        heroku.put_addon(app_data['name'], 'releases:basic')
+        heroku.put_addon(app_data['name'], 'pgbackups:auto-month')
       end
     end
   end

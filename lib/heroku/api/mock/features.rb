@@ -20,9 +20,9 @@ module Heroku
                 :status => 200
               }
             when 'user'
-              mock_data[:features][:user].delete(feature_data.merge('enabled' => false))
+              mock_data[:features][:user].delete(feature_data)
               {
-                :body   => MultiJson.dump(feature_data),
+                :body   => MultiJson.dump(feature_data.merge('enabled' => false)),
                 :status => 200
               }
             end
@@ -91,14 +91,14 @@ module Heroku
                 :status => status
               }
             when 'user'
-              status = if mock_data[:features][:user].include(feature_data)
+              status = if mock_data[:features][:user].include?(feature_data)
                 200
               else
                 mock_data[:features][:user] << feature_data
                 201
               end
               {
-                :body   => '',
+                :body   => MultiJson.dump(feature_data),
                 :status => status
               }
             end

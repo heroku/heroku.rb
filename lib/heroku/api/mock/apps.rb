@@ -118,7 +118,7 @@ module Heroku
             mock_data[:ps][app].first['command'] = 'bundle exec thin start -p $PORT'
             mock_data[:ps][app].first['type'] = 'Ps'
           else
-            add_mock_app_addon(mock_data, app, 'shared-database:5mb')
+            add_mock_app_addon(mock_data, app, 'heroku-postgresql:hobby-dev')
             mock_data[:config_vars][app] = {
               'BUNDLE_WITHOUT' => 'development:test',
               'LANG' => 'en_US.UTF-8',
