@@ -1,3 +1,7 @@
+0.3.22 12/17/2014
+=================
+add two factor capabilities
+
 0.3.21 12/03/2014
 =================
 fix tests/mocks to match new cached data
@@ -5,7 +9,6 @@ fix tests/mocks to match new cached data
 0.3.20 11/18/2014
 =================
 update mock data cache
-
 
 0.3.18 03/20/2014
 =================
