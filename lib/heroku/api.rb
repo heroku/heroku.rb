@@ -52,6 +52,8 @@ module Heroku
       :scheme   => 'https'
     }
 
+    attr_accessor :second_factor
+
     def initialize(options={})
       options = OPTIONS.merge(options)
 
@@ -73,6 +75,11 @@ module Heroku
 
     def request(params, &block)
       begin
+        if @second_factor
+          params[:headers] ||= {}
+          params[:headers]['Heroku-Two-Factor-Code'] = @second_factor
+          @second_factor = nil # don't use the token again
+        end
         response = @connection.request(params, &block)
       rescue Excon::Errors::HTTPStatusError => error
         klass = case error.response.status
