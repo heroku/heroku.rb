@@ -1,6 +1,7 @@
 require 'heroku/api/mock/addons'
 require 'heroku/api/mock/apps'
 require 'heroku/api/mock/attachments'
+require 'heroku/api/mock/buildpacks'
 require 'heroku/api/mock/collaborators'
 require 'heroku/api/mock/config_vars'
 require 'heroku/api/mock/domains'
