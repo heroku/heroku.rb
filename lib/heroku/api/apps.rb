@@ -66,6 +66,5 @@ module Heroku
         :query    => app_params(params)
       )
     end
-
   end
 end
