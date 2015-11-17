@@ -1,5 +1,5 @@
 module Heroku
   class API
-    VERSION = "0.3.23"
+    VERSION = "0.4.0"
   end
 end
