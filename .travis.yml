@@ -15,3 +15,7 @@ rvm:
   - 2.1.0
 
 script: bundle exec rake
+
+before_install:
+  - gem install bundler
+
