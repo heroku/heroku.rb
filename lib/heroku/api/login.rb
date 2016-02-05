@@ -6,7 +6,8 @@ module Heroku
         :expects  => 200,
         :method   => :post,
         :path     => '/login',
-        :query    => { 'username' => username, 'password' => password }
+        :body     => URI.encode_www_form(:username => username, :password => password),
+        :headers  => { "Content-Type" => "application/x-www-form-urlencoded" }
       )
     end
 
