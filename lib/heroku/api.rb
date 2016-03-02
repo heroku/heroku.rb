@@ -112,6 +112,9 @@ module Heroku
         begin
           response.body = MultiJson.load(response.body)
         rescue
+          if response.headers['Content-Type'] === 'application/json'
+            raise
+          end
           # leave non-JSON body as is
         end
       end
