@@ -85,7 +85,7 @@ module Heroku
       rescue Excon::Errors::HTTPStatusError => error
         klass = case error.response.status
           when 401 then Heroku::API::Errors::Unauthorized
-          when 402 then Heroku::API::Errors::VerificationRequired
+          when 402 then Heroku::API::Errors::PaymentRequired
           when 403 then Heroku::API::Errors::Forbidden
           when 404
             if error.request[:path].match /\/apps\/\/.*/
