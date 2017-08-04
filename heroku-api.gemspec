@@ -11,6 +11,11 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
   s.summary     = %q{Ruby Client for the Heroku API}
   s.description = %q{Ruby Client for the Heroku API}
+  s.post_install_message = "
+‼️	The heroku-api gem will not work.
+‼️	You must instead use the platform-api gem.
+‼️	The heroku-api gem communicated with the Legacy API which has been disabled.
+‼️	https://devcenter.heroku.com/changelog-items/118"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
